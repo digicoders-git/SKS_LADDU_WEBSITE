@@ -42,7 +42,7 @@ const Home = () => {
       <section className="flex flex-col md:flex-row items-center justify-between py-16 px-8 md:px-24 min-h-[80vh] bg-[radial-gradient(circle_at_70%_50%,rgba(212,175,55,0.1)_0%,transparent_70%)]" id="home">
         <div className="flex-1 max-w-xl text-center md:text-left z-10">
           <h1 className="text-4xl md:text-6xl text-[var(--color-maroon)] font-bold leading-tight mb-6">
-            The Original Taste of Sandila, <br />Now at Your Home! 👋
+            The Original Taste of Sandila, <br />Now at Your Home!
           </h1>
           <p className="text-lg md:text-xl text-gray-700 mb-10 italic">
             Traditional Sandila Laddus Delivered to Your Doorstep
@@ -142,9 +142,20 @@ const Home = () => {
       <footer className="bg-[#8B1D16] text-white py-16 px-8 md:px-24 text-center" id="contact">
         <h2 className="text-3xl text-[var(--color-secondary)] mb-10 font-bold">Get In Touch</h2>
         <div className="flex justify-center gap-8 md:gap-12 mb-12 flex-wrap text-lg">
-          <div className="opacity-90 flex items-center gap-2"><span>📧</span> sksladdu8313@gmail.com</div>
-          <div className="opacity-90 flex items-center gap-2"><span>📞</span> +91 6307736698</div>
-          <div className="opacity-90 flex items-center gap-2"><span>📍</span> Ahirawan, Sandila, Uttar Pradesh</div>
+          <a href="mailto:sksladdu8313@gmail.com" className="opacity-90 flex items-center gap-2 hover:text-[var(--color-secondary)] transition-colors no-underline text-white">
+            <span>📧</span> sksladdu8313@gmail.com
+          </a>
+          <a href="tel:+916307736698" className="opacity-90 flex items-center gap-2 hover:text-[var(--color-secondary)] transition-colors no-underline text-white">
+            <span>📞</span> +91 6307736698
+          </a>
+          <a
+            href="https://www.google.com/maps/search/?api=1&query=Ahirawan,+Sandila,+Hardoi,+Uttar+Pradesh"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="opacity-90 flex items-center gap-2 hover:text-[var(--color-secondary)] transition-colors no-underline text-white underline decoration-dotted underline-offset-4"
+          >
+            <span>📍</span> Ahirawan, Sandila, Uttar Pradesh
+          </a>
         </div>
         <div className="flex justify-center gap-8 mb-12">
           {['Facebook', 'Instagram', 'WhatsApp'].map(social => (
