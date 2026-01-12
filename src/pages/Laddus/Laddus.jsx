@@ -84,10 +84,67 @@ const Laddus = () => {
 
     return (
         <div className="bg-[var(--color-accent)] text-[var(--color-primary)] font-[var(--font-body)] min-h-screen pb-20 overflow-x-hidden">
-            {/* Header */}
-            <section className="py-16 md:py-20 px-8 text-center bg-[var(--color-maroon)] text-white rounded-b-[40px] md:rounded-b-[50px] shadow-lg">
-                <h1 className="text-3xl md:text-7xl font-bold mb-4">Our Sweet Gallery</h1>
-                <p className="text-base md:text-xl italic opacity-90 max-w-2xl mx-auto">
+            {/* Header with Bubbles */}
+            <section className="py-16 md:py-20 px-8 text-center bg-[var(--color-maroon)] text-white rounded-b-[40px] md:rounded-b-[50px] shadow-lg relative overflow-hidden">
+                {/* Animated Background Bubbles */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div className="laddus-bubble laddus-bubble-1"></div>
+                    <div className="laddus-bubble laddus-bubble-2"></div>
+                    <div className="laddus-bubble laddus-bubble-3"></div>
+                    <div className="laddus-bubble laddus-bubble-4"></div>
+                </div>
+
+                <style dangerouslySetInnerHTML={{
+                    __html: `
+                        .laddus-bubble {
+                            position: absolute;
+                            background: rgba(212, 175, 55, 0.12);
+                            border-radius: 50%;
+                            animation: float-laddus-bubble 20s infinite ease-in-out;
+                        }
+                        .laddus-bubble-1 {
+                            width: 110px;
+                            height: 110px;
+                            left: 15%;
+                            top: 25%;
+                            animation-delay: 0s;
+                        }
+                        .laddus-bubble-2 {
+                            width: 140px;
+                            height: 140px;
+                            right: 20%;
+                            top: 15%;
+                            animation-delay: 4s;
+                        }
+                        .laddus-bubble-3 {
+                            width: 95px;
+                            height: 95px;
+                            left: 60%;
+                            bottom: 25%;
+                            animation-delay: 2s;
+                        }
+                        .laddus-bubble-4 {
+                            width: 120px;
+                            height: 120px;
+                            right: 50%;
+                            bottom: 20%;
+                            animation-delay: 6s;
+                        }
+                        @keyframes float-laddus-bubble {
+                            0%, 100% {
+                                transform: translate(0, 0) scale(1);
+                                opacity: 0.4;
+                            }
+                            50% {
+                                transform: translate(25px, -35px) scale(1.08);
+                                opacity: 0.6;
+                            }
+                        }
+                    `
+                }} />
+
+                <h1 className="text-3xl md:text-7xl font-bold mb-4 relative z-10">Our Sweet Gallery</h1>
+                <p className="text-base md:text-xl italic opacity-90 max-w-2xl mx-auto relative z-10">
                     Explore our diverse collection of authentic Sandila laddus, handcrafted for every palate and occasion.
                 </p>
             </section>

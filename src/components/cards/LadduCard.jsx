@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { ShoppingCart, CheckCircle } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 const LadduCard = ({ product }) => {
     const { addToCart } = useCart();
+    const navigate = useNavigate();
     const [added, setAdded] = useState(false);
 
     const name = product?.name;
@@ -11,11 +14,25 @@ const LadduCard = ({ product }) => {
     const priceStr = product?.priceStr || product?.price;
     const description = product?.description;
     const category = product?.category;
+    const id = product?.id;
 
-    const handleAddToCart = () => {
+    const handleAddToCart = (e) => {
+        e.stopPropagation();
         addToCart(product);
         setAdded(true);
-        setTimeout(() => setAdded(false), 2000); // Reset after 2 seconds
+        toast.success(`${name} added to cart!`, {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+        });
+        setTimeout(() => setAdded(false), 2000);
+    };
+
+    const handleViewDetails = () => {
+        navigate(`/product/${id}`);
     };
 
     return (
@@ -25,22 +42,31 @@ const LadduCard = ({ product }) => {
                     {category}
                 </div>
             )}
-            <div className="w-full h-56 md:h-64 overflow-hidden rounded-[25px] mb-6">
+            <div
+                className="w-full h-56 md:h-64 overflow-hidden rounded-[25px] mb-6 cursor-pointer"
+                onClick={handleViewDetails}
+            >
                 <img
                     src={img}
                     alt={name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
             </div>
-            <h3 className="text-xl md:text-2xl font-bold text-[var(--color-maroon)] mb-2">{name}</h3>
+            <h3
+                className="text-xl md:text-2xl font-bold text-[var(--color-maroon)] mb-2 cursor-pointer hover:text-[var(--color-secondary)] transition-colors"
+                onClick={handleViewDetails}
+            >
+                {name}
+            </h3>
             <p className="text-xs md:text-sm text-gray-500 italic mb-4 line-clamp-2">{description}</p>
             <div className="text-lg md:text-xl font-bold text-[var(--color-secondary)] mb-6">{priceStr}</div>
+
             <button
                 onClick={handleAddToCart}
                 disabled={added}
                 className={`w-full py-3 md:py-4 rounded-2xl font-bold transition-all duration-300 overflow-hidden relative group shadow-md flex items-center justify-center gap-2 ${added
-                        ? 'bg-green-600 text-white scale-95 shadow-inner'
-                        : 'bg-[var(--color-maroon)] text-white hover:bg-[#a5231b]'
+                    ? 'bg-green-600 text-white scale-95 shadow-inner'
+                    : 'bg-[var(--color-maroon)] text-white hover:bg-[#a5231b]'
                     }`}
                 style={!added ? { backgroundColor: '#8B1D16' } : {}}
             >

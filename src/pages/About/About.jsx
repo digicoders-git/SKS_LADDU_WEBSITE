@@ -32,10 +32,67 @@ const About = () => {
   return (
     <div className="bg-[var(--color-accent)] text-[var(--color-primary)] font-[var(--font-body)] min-h-screen">
 
-      {/* About Hero */}
-      <section className="py-20 px-8 md:px-24 bg-[var(--color-maroon)] text-white text-center rounded-b-[50px]">
-        <h1 className="text-4xl md:text-6xl font-bold mb-6">Our Legacy of Sweetness</h1>
-        <p className="text-xl opacity-90 max-w-2xl mx-auto italic">
+      {/* About Hero with Bubbles */}
+      <section className="py-20 px-8 md:px-24 bg-[var(--color-maroon)] text-white text-center rounded-b-[50px] relative overflow-hidden">
+        {/* Animated Background Bubbles */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="about-bubble about-bubble-1"></div>
+          <div className="about-bubble about-bubble-2"></div>
+          <div className="about-bubble about-bubble-3"></div>
+          <div className="about-bubble about-bubble-4"></div>
+        </div>
+
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            .about-bubble {
+              position: absolute;
+              background: rgba(212, 175, 55, 0.12);
+              border-radius: 50%;
+              animation: float-about-bubble 22s infinite ease-in-out;
+            }
+            .about-bubble-1 {
+              width: 120px;
+              height: 120px;
+              left: 10%;
+              top: 20%;
+              animation-delay: 0s;
+            }
+            .about-bubble-2 {
+              width: 150px;
+              height: 150px;
+              right: 15%;
+              top: 30%;
+              animation-delay: 3s;
+            }
+            .about-bubble-3 {
+              width: 100px;
+              height: 100px;
+              left: 70%;
+              bottom: 20%;
+              animation-delay: 6s;
+            }
+            .about-bubble-4 {
+              width: 130px;
+              height: 130px;
+              right: 60%;
+              bottom: 30%;
+              animation-delay: 2s;
+            }
+            @keyframes float-about-bubble {
+              0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.4;
+              }
+              50% {
+                transform: translate(30px, -40px) scale(1.1);
+                opacity: 0.6;
+              }
+            }
+          `
+        }} />
+
+        <h1 className="text-4xl md:text-6xl font-bold mb-6 relative z-10">Our Legacy of Sweetness</h1>
+        <p className="text-xl opacity-90 max-w-2xl mx-auto italic relative z-10">
           Crafting perfection for over a century, SKS Sandila Laddu brings the authentic taste of tradition to your modern lifestyle.
         </p>
       </section>

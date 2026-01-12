@@ -6,6 +6,7 @@ import Laddus from "../pages/Laddus/Laddus";
 import Testimonials from "../pages/Testimonials/Testimonials";
 import Contact from "../pages/Contact/Contact";
 import NotFound from "../pages/NotFound/NotFound";
+import ProductDetail from "../pages/ProductDetail/ProductDetail";
 
 import Shop from "../pages/Shop/Shop";
 import ReturnPolicy from "../pages/Policies/ReturnPolicy";
@@ -21,6 +22,7 @@ export const router = createBrowserRouter([
       { path: "shop", element: <Shop /> },
       { path: "about", element: <About /> },
       { path: "laddus", element: <Laddus /> },
+      { path: "product/:id", element: <ProductDetail /> },
       { path: "testimonials", element: <Testimonials /> },
       { path: "contact", element: <Contact /> },
       { path: "return-policy", element: <ReturnPolicy /> },

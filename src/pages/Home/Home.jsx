@@ -36,44 +36,100 @@ const Home = () => {
   };
 
   return (
-    <div className="bg-[var(--color-accent)] text-[var(--color-primary)] font-[var(--font-body)] overflow-x-hidden">
+    <div className="bg-[var(--color-accent)] text-[var(--color-primary)] font-[var(--font-body)]">
 
       {/* Hero Section */}
-      <section className="flex flex-col md:flex-row items-center justify-between py-16 px-8 md:px-24 min-h-[80vh] bg-[radial-gradient(circle_at_70%_50%,rgba(212,175,55,0.1)_0%,transparent_70%)]" id="home">
+      <section className="flex flex-col md:flex-row items-center justify-between py-10 px-8 md:px-24 min-h-[50vh] bg-[radial-gradient(circle_at_70%_50%,rgba(212,175,55,0.1)_0%,transparent_70%)]" id="home">
         <div className="flex-1 max-w-xl text-center md:text-left z-10">
-          <h1 className="text-4xl md:text-6xl text-[var(--color-maroon)] font-bold leading-tight mb-6">
+          <h1 className="text-3xl md:text-5xl text-[var(--color-maroon)] font-bold leading-tight mb-4">
             The Original Taste of Sandila, <br />Now at Your Home!
           </h1>
-          <p className="text-lg md:text-xl text-gray-700 mb-10 italic">
+          <p className="text-base md:text-lg text-gray-700 mb-8 italic">
             Traditional Sandila Laddus Delivered to Your Doorstep
           </p>
           <Link
             to="/shop"
-            className="hero-btn px-10 py-4 bg-[var(--color-maroon)] text-white no-underline rounded-md text-lg font-semibold inline-block transition-all duration-300 shadow-[0_4px_15px_rgba(139,29,22,0.3)] hover:bg-[#a5231b] hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(139,29,22,0.4)]"
+            className="hero-btn px-8 py-3 bg-[var(--color-maroon)] text-white no-underline rounded-md text-base font-semibold inline-block transition-all duration-300 shadow-[0_4px_15px_rgba(139,29,22,0.3)] hover:bg-[#a5231b] hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(139,29,22,0.4)]"
             style={{ backgroundColor: '#8B1D16' }}
           >
             Order Now ›
           </Link>
         </div>
-        <div className="flex-1 flex justify-center mt-12 md:mt-0 relative">
+        <div className="flex-1 flex justify-center mt-8 md:mt-0 relative">
           <img
             src={heroLaddus}
             alt="Traditional Laddus"
-            className="max-w-full rounded-3xl drop-shadow-[0_20px_30px_rgba(0,0,0,0.15)] animate-[float_6s_ease-in-out_infinite]"
+            className="max-w-xs md:max-w-md w-full rounded-3xl drop-shadow-[0_20px_30px_rgba(0,0,0,0.15)] animate-[float_6s_ease-in-out_infinite]"
             style={{ animation: 'float 6s ease-in-out infinite' }}
           />
           <style dangerouslySetInnerHTML={{
             __html: `
             @keyframes float {
               0%, 100% { transform: translateY(0); }
-              50% { transform: translateY(-20px); }
+              50% { transform: translateY(-15px); }
             }
           ` }} />
         </div>
       </section>
 
       {/* Our Story Section */}
-      <section ref={addToRefs} className="scroll-section bg-[#8B1D16] text-white py-24 px-8 md:px-24 relative rounded-t-[50px] md:rounded-t-[100px] -mt-12 z-20" id="about">
+      <section ref={addToRefs} className="scroll-section bg-[#8B1D16] text-white py-24 px-8 md:px-24 relative rounded-t-[50px] md:rounded-t-[100px] mt-8 z-20 overflow-hidden" id="about">
+        {/* Animated Background Bubbles */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="story-bubble story-bubble-1"></div>
+          <div className="story-bubble story-bubble-2"></div>
+          <div className="story-bubble story-bubble-3"></div>
+          <div className="story-bubble story-bubble-4"></div>
+        </div>
+
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            .story-bubble {
+              position: absolute;
+              background: rgba(212, 175, 55, 0.12);
+              border-radius: 50%;
+              animation: float-story-bubble 23s infinite ease-in-out;
+            }
+            .story-bubble-1 {
+              width: 120px;
+              height: 120px;
+              left: 5%;
+              top: 10%;
+              animation-delay: 0s;
+            }
+            .story-bubble-2 {
+              width: 150px;
+              height: 150px;
+              right: 10%;
+              top: 20%;
+              animation-delay: 4.5s;
+            }
+            .story-bubble-3 {
+              width: 100px;
+              height: 100px;
+              left: 15%;
+              bottom: 15%;
+              animation-delay: 2.5s;
+            }
+            .story-bubble-4 {
+              width: 130px;
+              height: 130px;
+              right: 20%;
+              bottom: 10%;
+              animation-delay: 6.5s;
+            }
+            @keyframes float-story-bubble {
+              0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.4;
+              }
+              50% {
+                transform: translate(30px, -40px) scale(1.1);
+                opacity: 0.6;
+              }
+            }
+          `
+        }} />
         <div className="flex flex-col md:flex-row gap-16 items-center">
           <div className="flex-1">
             <h2 className="text-4xl text-[var(--color-secondary)] mb-8 flex items-center before:content-['::'] before:mr-3 before:opacity-50">
@@ -113,6 +169,64 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Auto-Scrolling Video Reviews Section */}
+      <section className="py-16 bg-white overflow-hidden">
+        <div className="relative w-full">
+          <div className="flex w-max gap-8 animate-scroll hover:[animation-play-state:paused]">
+            {/* Original Set */}
+            {[1, 2, 3, 4, 5, 6].map((num) => (
+              <div key={`v-${num}`} className="w-[280px] h-[400px] bg-gray-900 rounded-3xl overflow-hidden shadow-xl relative group cursor-pointer flex-shrink-0 border-4 border-[var(--color-maroon)]/10">
+                {/* Video Placeholder (Simulated) */}
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-black opacity-90 group-hover:opacity-100 transition-opacity"></div>
+
+                {/* Play Button */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 pointer-events-none border border-white/30">
+                    <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1"></div>
+                  </div>
+                </div>
+
+                {/* Simulated Video UI */}
+                <div className="absolute top-4 right-4 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded">LIVE</div>
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                  <div className="h-1 bg-white/30 rounded-full overflow-hidden">
+                    <div className="h-full w-1/3 bg-red-600"></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+            {/* Duplicate Set for Seamless Loop */}
+            {[1, 2, 3, 4, 5, 6].map((num) => (
+              <div key={`v-dup-${num}`} className="w-[280px] h-[400px] bg-gray-900 rounded-3xl overflow-hidden shadow-xl relative group cursor-pointer flex-shrink-0 border-4 border-[var(--color-maroon)]/10">
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-black opacity-90 group-hover:opacity-100 transition-opacity"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 pointer-events-none border border-white/30">
+                    <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1"></div>
+                  </div>
+                </div>
+                <div className="absolute top-4 right-4 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded">LIVE</div>
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                  <div className="h-1 bg-white/30 rounded-full overflow-hidden">
+                    <div className="h-full w-1/3 bg-red-600"></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            @keyframes scroll {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+            .animate-scroll {
+              animation: scroll 30s linear infinite;
+            }
+          `
+        }} />
+      </section>
+
       {/* Testimonials Section */}
       <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-gradient-to-b from-white to-[var(--color-accent)] text-center" id="testimonials">
         <h2 className="text-4xl text-[var(--color-maroon)] mb-16 font-bold">What Our Customers Say</h2>
@@ -137,40 +251,6 @@ const Home = () => {
           ))}
         </div>
       </section>
-
-      {/* Footer Section */}
-      <footer className="bg-[#8B1D16] text-white py-16 px-8 md:px-24 text-center" id="contact">
-        <h2 className="text-3xl text-[var(--color-secondary)] mb-10 font-bold">Get In Touch</h2>
-        <div className="flex justify-center gap-8 md:gap-12 mb-12 flex-wrap text-lg">
-          <a href="mailto:sksladdu8313@gmail.com" className="opacity-90 flex items-center gap-2 hover:text-[var(--color-secondary)] transition-colors no-underline text-white">
-            <span>📧</span> sksladdu8313@gmail.com
-          </a>
-          <a href="tel:+916307736698" className="opacity-90 flex items-center gap-2 hover:text-[var(--color-secondary)] transition-colors no-underline text-white">
-            <span>📞</span> +91 6307736698
-          </a>
-          <a
-            href="https://www.google.com/maps/search/?api=1&query=Ahirawan,+Sandila,+Hardoi,+Uttar+Pradesh"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="opacity-90 flex items-center gap-2 hover:text-[var(--color-secondary)] transition-colors no-underline text-white underline decoration-dotted underline-offset-4"
-          >
-            <span>📍</span> Ahirawan, Sandila, Uttar Pradesh
-          </a>
-        </div>
-        <div className="flex justify-center gap-8 mb-12">
-          {['Facebook', 'Instagram', 'WhatsApp'].map(social => (
-            <span key={social} className="cursor-pointer transition-colors duration-300 hover:text-[var(--color-secondary)] font-semibold">{social}</span>
-          ))}
-        </div>
-        <div className="flex justify-center gap-8 mb-12 flex-wrap">
-          <a href="/shipping-policy" className="hover:text-[var(--color-secondary)] transition-colors">Shipping Policy</a>
-          <a href="/return-policy" className="hover:text-[var(--color-secondary)] transition-colors">Return Policy</a>
-          <a href="/terms-of-service" className="hover:text-[var(--color-secondary)] transition-colors">Terms of Service</a>
-        </div>
-        <div className="border-t border-white/10 pt-8 text-sm opacity-60">
-          © 2024 SKS Sandila Laddu. All Rights Reserved.
-        </div>
-      </footer>
     </div>
   );
 };

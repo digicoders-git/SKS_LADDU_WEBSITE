@@ -49,14 +49,67 @@ const Testimonials = () => {
 
     return (
         <div className="bg-[var(--color-accent)] text-[var(--color-primary)] font-[var(--font-body)] min-h-screen pb-20 overflow-x-hidden">
-            {/* Testimonials Hero */}
-            <section className="py-16 md:py-20 px-8 text-center bg-[var(--color-maroon)] text-white rounded-b-[40px] md:rounded-b-[50px] shadow-2xl relative">
-                <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-                    <div className="absolute top-10 left-10 w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white"></div>
-                    <div className="absolute bottom-10 right-10 w-32 h-32 md:w-48 md:h-48 rounded-full border-4 border-white"></div>
+            {/* Testimonials Hero with Bubbles */}
+            <section className="py-16 md:py-20 px-8 text-center bg-[var(--color-maroon)] text-white rounded-b-[40px] md:rounded-b-[50px] shadow-2xl relative overflow-hidden">
+                {/* Animated Background Bubbles */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div className="testimonial-bubble testimonial-bubble-1"></div>
+                    <div className="testimonial-bubble testimonial-bubble-2"></div>
+                    <div className="testimonial-bubble testimonial-bubble-3"></div>
+                    <div className="testimonial-bubble testimonial-bubble-4"></div>
                 </div>
-                <h1 className="text-3xl md:text-7xl font-bold mb-4 md:mb-6 tracking-tight">Voices of Joy</h1>
-                <p className="text-base md:text-2xl italic opacity-90 max-w-3xl mx-auto leading-relaxed px-4">
+
+                <style dangerouslySetInnerHTML={{
+                    __html: `
+                        .testimonial-bubble {
+                            position: absolute;
+                            background: rgba(212, 175, 55, 0.12);
+                            border-radius: 50%;
+                            animation: float-testimonial-bubble 23s infinite ease-in-out;
+                        }
+                        .testimonial-bubble-1 {
+                            width: 118px;
+                            height: 118px;
+                            left: 14%;
+                            top: 24%;
+                            animation-delay: 0s;
+                        }
+                        .testimonial-bubble-2 {
+                            width: 148px;
+                            height: 148px;
+                            right: 16%;
+                            top: 18%;
+                            animation-delay: 4.5s;
+                        }
+                        .testimonial-bubble-3 {
+                            width: 102px;
+                            height: 102px;
+                            left: 68%;
+                            bottom: 24%;
+                            animation-delay: 2.5s;
+                        }
+                        .testimonial-bubble-4 {
+                            width: 128px;
+                            height: 128px;
+                            right: 58%;
+                            bottom: 26%;
+                            animation-delay: 6.5s;
+                        }
+                        @keyframes float-testimonial-bubble {
+                            0%, 100% {
+                                transform: translate(0, 0) scale(1);
+                                opacity: 0.4;
+                            }
+                            50% {
+                                transform: translate(32px, -42px) scale(1.1);
+                                opacity: 0.6;
+                            }
+                        }
+                    `
+                }} />
+
+                <h1 className="text-3xl md:text-7xl font-bold mb-4 md:mb-6 tracking-tight relative z-10">Voices of Joy</h1>
+                <p className="text-base md:text-2xl italic opacity-90 max-w-3xl mx-auto leading-relaxed px-4 relative z-10">
                     Over 10,000+ families across India trust us for their sweetest moments. Hear their stories.
                 </p>
             </section>
