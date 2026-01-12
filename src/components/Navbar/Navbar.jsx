@@ -1,0 +1,117 @@
+import React, { useState, useEffect } from 'react';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { useCart } from '../../context/CartContext';
+import { ShoppingCart, User, Menu, X } from 'lucide-react';
+
+const Navbar = () => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { cart } = useCart();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // Close menu when route changes
+    useEffect(() => {
+        setIsMenuOpen(false);
+    }, [location.pathname]);
+
+    const activeLink = "no-underline text-[var(--color-secondary)] font-semibold text-base transition-all duration-300 border-b-2 border-[var(--color-secondary)] pb-1";
+    const normalLink = "no-underline text-[var(--color-primary)] font-semibold text-base transition-all duration-300 hover:text-[var(--color-secondary)] border-b-2 border-transparent hover:border-[var(--color-secondary)] pb-1";
+
+    const navLinks = [
+        { to: "/", label: "Home" },
+        { to: "/laddus", label: "Our Laddus" },
+        { to: "/shop", label: "Our Orders" },
+        { to: "/about", label: "About Us" },
+        { to: "/testimonials", label: "Testimonials" },
+        { to: "/contact", label: "Contact" },
+    ];
+
+    return (
+        <nav className="flex justify-between items-center py-6 px-4 md:px-16 bg-[var(--color-accent)] font-[var(--font-body)] sticky top-0 z-[1000] shadow-md transition-all duration-300 border-b border-[var(--color-secondary)]/10">
+            {/* Logo Section */}
+            <div className="flex items-center gap-3">
+                <img src="/sks-logo.jpeg" alt="SKS Logo" className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-[var(--color-secondary)] shadow-sm object-cover" />
+                <div className="flex flex-col">
+                    <span className="text-xl md:text-2xl font-bold text-[var(--color-maroon)] italic leading-none font-[var(--font-heading)]">SKS</span>
+                    <span className="text-[10px] md:text-xs font-serif text-[var(--color-maroon)] font-bold">Sandila Laddu</span>
+                </div>
+            </div>
+
+            {/* Desktop Menu */}
+            <ul className="hidden lg:flex list-none gap-8 m-0 p-0">
+                {navLinks.map(link => (
+                    <li key={link.to}>
+                        <NavLink to={link.to} className={({ isActive }) => isActive ? activeLink : normalLink}>
+                            {link.label}
+                        </NavLink>
+                    </li>
+                ))}
+            </ul>
+
+            {/* Actions & Mobile Toggle */}
+            <div className="flex items-center gap-4 md:gap-6">
+                {/* Cart Icon */}
+                <div
+                    onClick={() => navigate('/shop')}
+                    className="flex items-center text-[var(--color-maroon)] cursor-pointer transition-transform duration-200 hover:scale-110 relative"
+                    title="View Order"
+                >
+                    <ShoppingCart size={24} className="md:w-7 md:h-7" />
+                    {cart.length > 0 && (
+                        <span className="absolute -top-2 -right-2 bg-[var(--color-secondary)] text-[var(--color-maroon)] text-[10px] font-extrabold w-4 h-4 md:w-5 md:h-5 flex items-center justify-center rounded-full shadow-md animate-bounce">
+                            {cart.length}
+                        </span>
+                    )}
+                </div>
+
+                <div className="hidden sm:flex items-center text-[var(--color-maroon)] cursor-pointer transition-transform duration-200 hover:scale-110" title="Customer Profile">
+                    <User size={24} className="md:w-7 md:h-7" />
+                </div>
+
+                {/* Hamburger Button */}
+                <button
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    className="lg:hidden flex flex-col justify-center text-[var(--color-maroon)] focus:outline-none z-[1001] bg-[var(--color-accent)] p-2 rounded-xl shadow-sm border border-[var(--color-secondary)]/10 transition-transform active:scale-95"
+                    aria-label="Toggle Menu"
+                >
+                    {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+            </div>
+
+            {/* Mobile Sidebar - 70% height, background blur, top right positioning */}
+            <div
+                className={`lg:hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-[999] transition-opacity duration-500 ease-in-out ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+                onClick={() => setIsMenuOpen(false)}
+            ></div>
+
+            <div className={`lg:hidden fixed top-24 right-4 h-[85vh] w-[80%] max-w-[300px] bg-white/95 backdrop-blur-2xl z-[1000] shadow-2xl transition-all duration-500 ease-in-out rounded-[45px] border border-white/50 overflow-hidden ${isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-[120%] opacity-0'}`}>
+                <div className="flex flex-col h-full p-8 py-10 gap-3">
+                    <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mb-4 px-2">Navigation Menu</p>
+                    {navLinks.map((link, idx) => (
+                        <NavLink
+                            key={link.to}
+                            to={link.to}
+                            onClick={() => setIsMenuOpen(false)}
+                            className={({ isActive }) => `text-base font-bold no-underline py-3 px-6 rounded-2xl transition-all duration-300 ${isActive ? 'bg-[var(--color-secondary)]/20 text-[var(--color-maroon)] shadow-sm' : 'text-[var(--color-maroon)]/80 hover:bg-[var(--color-accent)]'}`}
+                            style={{ transitionDelay: `${idx * 40}ms` }}
+                        >
+                            {link.label}
+                        </NavLink>
+                    ))}
+
+                    <div className="mt-auto pt-6 border-t border-gray-100 flex items-center justify-between">
+                        <div className="flex items-center gap-3 text-[var(--color-maroon)] font-bold">
+                            <User size={18} />
+                            <span className="text-sm uppercase tracking-wider">Profile</span>
+                        </div>
+                        <div className="flex gap-4">
+                            {/* Social icons could go here */}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    );
+};
+
+export default Navbar;
