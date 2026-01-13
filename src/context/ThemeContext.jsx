@@ -7,12 +7,15 @@ export const ThemeProvider = ({ children }) => {
   useEffect(() => {
     const root = document.documentElement;
 
-    root.style.setProperty("--color-primary", theme.colors.primary);
-    root.style.setProperty("--color-secondary", theme.colors.secondary);
-    root.style.setProperty("--color-accent", theme.colors.accent);
-    root.style.setProperty("--color-maroon", theme.colors.maroon);
-    root.style.setProperty("--color-white", theme.colors.white);
-    root.style.setProperty("--font-main", theme.font);
+    // Set Colors
+    Object.keys(theme.colors).forEach((key) => {
+      root.style.setProperty(`--color-${key}`, theme.colors[key]);
+    });
+
+    // Set Fonts
+    Object.keys(theme.fonts).forEach((key) => {
+      root.style.setProperty(`--font-${key}`, theme.fonts[key]);
+    });
   }, []);
 
   return (

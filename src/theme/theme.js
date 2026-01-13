@@ -1,10 +1,14 @@
 export const theme = {
   colors: {
-    primary: "#0B0B0B",
-    secondary: "#D4AF37",
-    accent: "#F5EEDC",
-    maroon: "#8B1D16",
-    white: "#FFFFFF",
+    primary: "#0B0B0B",     // Royal Black (background)
+    secondary: "#FFD400",   // Laddu Yellow / Gold (logo match)
+    accent: "#FFF2B2",      // Soft gold highlight
+    text: "#FFFFFF",       // Clean white text
+    muted: "#2A2A2A",       // Cards / borders
   },
-  font: "'Playfair Display', serif",
+  fonts: {
+    heading: "'Playfair Display', serif",
+    body: "'Poppins', sans-serif",
+    accent: "'Montserrat', sans-serif"
+  }
 };

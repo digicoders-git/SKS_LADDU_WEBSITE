@@ -64,21 +64,21 @@ const Home = () => {
   };
 
   return (
-    <div className="bg-[var(--color-accent)] text-[var(--color-primary)] font-[var(--font-body)] overflow-x-hidden">
+    <div className="bg-[var(--color-primary)] -mt-10 text-[var(--color-text)] font-[var(--font-body)] overflow-x-hidden">
 
       {/* Hero Section */}
-      <section className="flex flex-col md:flex-row items-center justify-between py-12 px-8 md:px-24 min-h-[70vh] bg-[radial-gradient(circle_at_70%_50%,rgba(212,175,55,0.1)_0%,transparent_70%)]" id="home">
+      <section className="flex flex-col md:flex-row items-center justify-between pt-24 pb-12 px-8 md:px-24 min-h-[70vh] bg-[linear-gradient(0deg,rgba(255,212,0,0.2)_0%,transparent_70%)] mt-0 relative z-10 shadow-2xl mb-8" id="home">
         <div className="flex-1 max-w-xl text-center md:text-left z-10">
-          <h1 className="text-4xl md:text-6xl text-[var(--color-maroon)] font-bold leading-tight mb-6">
+          <h1 className="text-4xl md:text-6xl text-[var(--color-secondary)] font-bold leading-tight mb-6">
             The Original Taste of Sandila, <br />Now at Your Home!
           </h1>
-          <p className="text-lg md:text-xl text-gray-700 mb-10 italic">
+          <p className="text-lg md:text-xl text-gray-300 mb-10 italic">
             Traditional Sandila Laddus Delivered to Your Doorstep
           </p>
           <Link
             to="/shop"
-            className="hero-btn px-10 py-4 bg-[var(--color-maroon)] text-white no-underline rounded-md text-lg font-semibold inline-block transition-all duration-300 shadow-[0_4px_15px_rgba(139,29,22,0.3)] hover:bg-[#a5231b] hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(139,29,22,0.4)]"
-            style={{ backgroundColor: '#8B1D16' }}
+            className="hero-btn px-10 py-4 bg-[var(--color-secondary)] text-[var(--color-primary)] no-underline rounded-md text-lg font-semibold inline-block transition-all duration-300 shadow-[0_4px_15px_rgba(255,212,0,0.3)] hover:opacity-90 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(255,212,0,0.4)]"
+            style={{ backgroundColor: 'var(--color-secondary)' }}
           >
             Order Now ›
           </Link>
@@ -101,7 +101,48 @@ const Home = () => {
       </section>
 
       {/* Our Story Section */}
-      <section ref={addToRefs} className="scroll-section bg-[#8B1D16] text-white py-24 px-8 md:px-24 relative rounded-t-[50px] md:rounded-t-[100px] -mt-12 z-20" id="about">
+      <section ref={addToRefs} className="scroll-section bg-[var(--color-primary)] text-[var(--color-secondary)] py-24 px-8 md:px-24 relative z-20 overflow-hidden shadow-2xl mb-8 border-t border-[var(--color-secondary)]/5" id="about">
+        {/* Animated Background Bubbles */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="home-bubble home-bubble-1"></div>
+          <div className="home-bubble home-bubble-2"></div>
+          <div className="home-bubble home-bubble-3"></div>
+        </div>
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            .home-bubble {
+              position: absolute;
+              background: rgba(255, 212, 0, 0.2);
+              border-radius: 50%;
+              animation: float-home-bubble 20s infinite ease-in-out;
+            }
+            .home-bubble-1 {
+              width: 150px;
+              height: 150px;
+              left: 5%;
+              top: 10%;
+              animation-delay: 0s;
+            }
+            .home-bubble-2 {
+              width: 100px;
+              height: 100px;
+              right: 10%;
+              bottom: 20%;
+              animation-delay: 5s;
+            }
+            .home-bubble-3 {
+              width: 80px;
+              height: 80px;
+              left: 40%;
+              bottom: 10%;
+              animation-delay: 10s;
+            }
+            @keyframes float-home-bubble {
+              0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+              50% { transform: translateY(-30px) scale(1.1); opacity: 0.6; }
+            }
+          `
+        }} />
         <div className="flex flex-col md:flex-row gap-16 items-center">
           <div className="flex-1">
             <h2 className="text-4xl text-[var(--color-secondary)] mb-8 flex items-center">
@@ -124,73 +165,9 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Founder Section */}
-      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-white" id="founders">
-        <h2 className="text-4xl text-[var(--color-maroon)] mb-16 font-bold text-center">Meet Our Founders</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 max-w-6xl mx-auto">
-          <div className="text-center">
-            <div className="w-48 h-64 mx-auto mb-6 rounded-3xl overflow-hidden border-4 border-[var(--color-secondary)] shadow-lg">
-              <img src={storyMaker} alt="Satish Kumar - Founder" className="w-full h-full object-cover" />
-            </div>
-            <h3 className="text-2xl font-bold text-[var(--color-maroon)] mb-2">Satish Kumar</h3>
-            <p className="text-[var(--color-secondary)] font-semibold mb-4">Founder & Master Craftsman</p>
-            <p className="text-gray-700 leading-relaxed">
-              Born and raised in Sandila, Satish has been perfecting the art of laddu making for over 25 years. 
-              His passion for preserving traditional recipes and bringing authentic flavors to modern homes drives our mission.
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="w-48 h-64 mx-auto mb-6 rounded-3xl overflow-hidden border-4 border-[var(--color-secondary)] shadow-lg">
-              <img src={storyMaker} alt="Co-Founder" className="w-full h-full object-cover" />
-            </div>
-            <h3 className="text-2xl font-bold text-[var(--color-maroon)] mb-2">Priya Kumar</h3>
-            <p className="text-[var(--color-secondary)] font-semibold mb-4">Co-Founder & Quality Head</p>
-            <p className="text-gray-700 leading-relaxed">
-              With a background in food technology, Priya ensures every batch meets our highest quality standards. 
-              She oversees packaging, hygiene protocols, and customer satisfaction to maintain our legacy of excellence.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Our Priorities Section */}
-      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-[var(--color-accent)]" id="priorities">
-        <h2 className="text-4xl text-[var(--color-maroon)] mb-16 font-bold text-center">Our Priorities</h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
-          <div className="text-center p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Shield className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-lg font-bold text-[var(--color-maroon)] mb-2">Health First</h3>
-            <p className="text-sm text-gray-600">No artificial preservatives, colors, or flavors. Pure and natural ingredients only.</p>
-          </div>
-          <div className="text-center p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Droplets className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-lg font-bold text-[var(--color-maroon)] mb-2">Hygiene Standards</h3>
-            <p className="text-sm text-gray-600">FSSAI certified kitchen with strict hygiene protocols and regular quality checks.</p>
-          </div>
-          <div className="text-center p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Leaf className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-lg font-bold text-[var(--color-maroon)] mb-2">Fresh Daily</h3>
-            <p className="text-sm text-gray-600">Made fresh every day and delivered within 24-48 hours to ensure maximum freshness.</p>
-          </div>
-          <div className="text-center p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <HeartIcon className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-lg font-bold text-[var(--color-maroon)] mb-2">Made with Love</h3>
-            <p className="text-sm text-gray-600">Every laddu is handcrafted with care, carrying forward our family's century-old tradition.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Special Laddus Section */}
-      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 text-center bg-white" id="laddus">
-        <h2 className="text-4xl text-[var(--color-maroon)] mb-2 font-bold">Our Special Laddus</h2>
+      {/* Special Laddus Section (Moved Up) */}
+      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 text-center bg-[var(--color-primary)] relative z-10 shadow-xl mb-8" id="laddus">
+        <h2 className="text-4xl text-[var(--color-secondary)] mb-2 font-bold">Our Special Laddus</h2>
         <p className="italic text-gray-500 mb-16">Pure and Delicious</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {[
@@ -206,23 +183,58 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Our Priorities Section (Moved Down) */}
+      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-[var(--color-accent)]/5 relative z-10 shadow-xl mb-8" id="priorities">
+        <h2 className="text-4xl text-[var(--color-secondary)] mb-16 font-bold text-center">Our Priorities</h2>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+          <div className="text-center p-6 bg-[var(--color-muted)] rounded-xl shadow-md hover:shadow-lg transition-shadow">
+            <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Shield className="w-8 h-8 text-white" />
+            </div>
+            <h3 className="text-lg font-bold text-[var(--color-secondary)] mb-2">Health First</h3>
+            <p className="text-sm text-[var(--color-text)]">No artificial preservatives, colors, or flavors. Pure and natural ingredients only.</p>
+          </div>
+          <div className="text-center p-6 bg-[var(--color-muted)] rounded-xl shadow-md hover:shadow-lg transition-shadow">
+            <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Droplets className="w-8 h-8 text-white" />
+            </div>
+            <h3 className="text-lg font-bold text-[var(--color-secondary)] mb-2">Hygiene Standards</h3>
+            <p className="text-sm text-[var(--color-text)]">FSSAI certified kitchen with strict hygiene protocols and regular quality checks.</p>
+          </div>
+          <div className="text-center p-6 bg-[var(--color-muted)] rounded-xl shadow-md hover:shadow-lg transition-shadow">
+            <div className="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Leaf className="w-8 h-8 text-white" />
+            </div>
+            <h3 className="text-lg font-bold text-[var(--color-secondary)] mb-2">Fresh Daily</h3>
+            <p className="text-sm text-[var(--color-text)]">Made fresh every day and delivered within 24-48 hours to ensure maximum freshness.</p>
+          </div>
+          <div className="text-center p-6 bg-[var(--color-muted)] rounded-xl shadow-md hover:shadow-lg transition-shadow">
+            <div className="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <HeartIcon className="w-8 h-8 text-white" />
+            </div>
+            <h3 className="text-lg font-bold text-[var(--color-secondary)] mb-2">Made with Love</h3>
+            <p className="text-sm text-[var(--color-text)]">Every laddu is handcrafted with care, carrying forward our family's century-old tradition.</p>
+          </div>
+        </div>
+      </section>
+
       {/* Video Reviews Section */}
-      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-gradient-to-b from-white to-[var(--color-accent)] text-center" id="testimonials">
-        <h2 className="text-4xl text-[var(--color-maroon)] mb-16 font-bold">Customer Video Reviews</h2>
+      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-muted)] text-center relative z-10 shadow-xl mb-8" id="testimonials">
+        <h2 className="text-4xl text-[var(--color-secondary)] mb-16 font-bold">Customer Video Reviews</h2>
         <div className="relative overflow-hidden">
-          <div 
+          <div
             ref={scrollRef}
             className="flex gap-8 overflow-x-hidden"
             style={{ width: 'calc(100% + 320px)' }}
           >
             {[...videoReviews, ...videoReviews].map((video, index) => (
-              <div 
+              <div
                 key={`${video.id}-${index}`}
-                className="flex-shrink-0 w-80 bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer hover:scale-105 transition-transform"
+                className="flex-shrink-0 w-80 bg-[var(--color-muted)] rounded-xl shadow-lg overflow-hidden cursor-pointer hover:scale-105 transition-transform"
                 onClick={() => setSelectedVideo(video)}
               >
                 <div className="relative">
-                  <video 
+                  <video
                     src={video.videoUrl}
                     className="w-full h-56 object-cover"
                     muted
@@ -244,14 +256,14 @@ const Home = () => {
       {selectedVideo && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-40 p-4 pt-32">
           <div className="bg-white rounded-lg max-w-3xl w-full max-h-[70vh] overflow-hidden relative">
-            <button 
+            <button
               onClick={() => setSelectedVideo(null)}
               className="absolute bottom-4 right-4 p-1 md:p-2 bg-black text-white rounded-full transition-colors z-10 hover:bg-gray-800"
             >
               <X className="w-4 h-4 md:w-6 md:h-6" />
             </button>
             <div className="p-6">
-              <video 
+              <video
                 src={selectedVideo.videoUrl}
                 className="w-full aspect-video rounded-lg"
                 controls
@@ -269,6 +281,44 @@ const Home = () => {
           </div>
         </div>
       )}
+
+      {/* Founder Section (Moved to Bottom) */}
+      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-[var(--color-primary)] relative z-10 shadow-xl mb-8" id="founders">
+        <h2 className="text-4xl text-[var(--color-secondary)] mb-16 font-bold text-center">Meet Our Founders</h2>
+        <div className="flex flex-col gap-16 max-w-6xl mx-auto">
+          {/* Founder 1: Satish Kumar */}
+          <div className="flex flex-col md:flex-row gap-12 items-center bg-[var(--color-muted)] p-8 rounded-3xl shadow-lg border border-[var(--color-secondary)]/10 text-left">
+            <div className="w-48 h-64 flex-shrink-0 rounded-2xl overflow-hidden border-4 border-[var(--color-secondary)] shadow-lg">
+              <img src={storyMaker} alt="Satish Kumar - Founder" className="w-full h-full object-cover" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-3xl font-bold text-[var(--color-secondary)] mb-2">Satish Kumar</h3>
+              <p className="text-[var(--color-accent)] font-semibold mb-4 text-xl">Founder & Master Craftsman</p>
+              <p className="text-[var(--color-text)] leading-relaxed text-lg">
+                Born and raised in Sandila, Satish has been perfecting the art of laddu making for over 25 years.
+                His passion for preserving traditional recipes and bringing authentic flavors to modern homes drives our mission.
+                He personally selects every ingredient to ensure the authentic taste of Sandila remains strictly preserved.
+              </p>
+            </div>
+          </div>
+
+          {/* Founder 2: Priya Kumar */}
+          <div className="flex flex-col md:flex-row gap-12 items-center bg-[var(--color-muted)] p-8 rounded-3xl shadow-lg border border-[var(--color-secondary)]/10 text-left">
+            <div className="w-48 h-64 flex-shrink-0 rounded-2xl overflow-hidden border-4 border-[var(--color-secondary)] shadow-lg">
+              <img src={storyMaker} alt="Co-Founder" className="w-full h-full object-cover" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-3xl font-bold text-[var(--color-secondary)] mb-2">Priya Kumar</h3>
+              <p className="text-[var(--color-accent)] font-semibold mb-4 text-xl">Co-Founder & Quality Head</p>
+              <p className="text-[var(--color-text)] leading-relaxed text-lg">
+                With a background in food technology, Priya ensures every batch meets our highest quality standards.
+                She oversees packaging, hygiene protocols, and customer satisfaction to maintain our legacy of excellence.
+                Her vision brings our traditional heritage to the digital world.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <Footer />
     </div>

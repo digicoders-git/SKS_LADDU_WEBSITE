@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="bg-[#8B1D16] text-white py-16 px-8 md:px-24 relative overflow-hidden">
+    <footer className="bg-[var(--color-primary)] text-white py-16 px-8 md:px-24 relative overflow-hidden">
       {/* Animated Background Bubbles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="footer-bubble footer-bubble-1"></div>

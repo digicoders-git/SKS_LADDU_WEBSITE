@@ -2,10 +2,10 @@
 
 :root {
   --color-primary: #0B0B0B;
-  --color-secondary: #D4AF37;
-  --color-accent: #F5EEDC;
-  --color-maroon: #8B1D16;
-  --color-white: #FFFFFF;
+  --color-secondary: #FFD400;
+  --color-accent: #FFF2B2;
+  --color-text: #FFFFFF;
+  --color-muted: #2A2A2A;
 
   /* Fonts */
   --font-heading: 'Playfair Display', serif;
@@ -21,8 +21,8 @@ body {
 
 body {
   font-family: var(--font-body);
-  background-color: var(--color-accent);
-  color: var(--color-primary);
+  background-color: var(--color-primary);
+  color: var(--color-text);
   overflow-x: hidden;
 }
 
