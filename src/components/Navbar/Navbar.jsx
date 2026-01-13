@@ -30,11 +30,7 @@ const Navbar = () => {
         <nav className="flex justify-between items-center py-6 px-4 md:px-16 bg-[var(--color-primary)] font-[var(--font-body)] fixed top-0 left-0 right-0 w-full z-[1000] shadow-md transition-all duration-300 border-b border-[var(--color-secondary)]/10">
             {/* Logo Section */}
             <div className="flex items-center gap-3">
-                <img src="/sks-logo.jpeg" alt="SKS Logo" className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-[var(--color-secondary)] shadow-sm object-cover" />
-                <div className="flex flex-col">
-                    <span className="text-xl md:text-2xl font-bold text-[var(--color-secondary)] italic leading-none font-[var(--font-heading)]">SKS</span>
-                    <span className="text-[10px] md:text-xs font-serif text-[var(--color-secondary)] font-bold">Sandila Laddu</span>
-                </div>
+                <img src="/sks-logo.png" alt="SKS Logo" className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-[var(--color-secondary)] shadow-sm object-cover hover:scale-105 transition-transform cursor-pointer" onClick={() => navigate('/')} />
             </div>
 
             {/* Desktop Menu */}

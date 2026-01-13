@@ -3,22 +3,22 @@ import { Star } from 'lucide-react';
 
 const TestimonialCard = ({ quote, name, color, initial, location, rating = 5 }) => {
     return (
-        <div className="bg-white p-6 md:p-10 rounded-[35px] shadow-lg border border-black/5 hover:shadow-2xl transition-all duration-300 flex flex-col h-full group">
-            <div className="text-4xl text-[var(--color-secondary)] mb-6 opacity-30 italic font-serif leading-none">"</div>
+        <div className="bg-white p-5 md:p-8 rounded-[30px] shadow-lg border border-black/5 hover:shadow-2xl transition-all duration-300 flex flex-col h-full group">
+            <div className="text-3xl text-[var(--color-secondary)] mb-4 opacity-30 italic font-serif leading-none">"</div>
 
             {/* Rating System */}
-            <div className="flex gap-1 mb-6 text-[var(--color-secondary)]">
+            <div className="flex gap-1 mb-4 text-[var(--color-secondary)]">
                 {[...Array(5)].map((_, i) => (
                     <Star
                         key={i}
-                        size={16}
+                        size={14}
                         fill={i < rating ? "currentColor" : "none"}
                         className={i < rating ? "" : "text-gray-200"}
                     />
                 ))}
             </div>
 
-            <p className="text-base md:text-lg text-gray-700 italic leading-relaxed mb-8 flex-grow -mt-4">
+            <p className="text-sm md:text-base text-gray-700 italic leading-relaxed mb-6 flex-grow -mt-2">
                 {quote}
             </p>
 

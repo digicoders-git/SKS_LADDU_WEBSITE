@@ -34,10 +34,10 @@ const About = () => {
   };
 
   return (
-    <div className="bg-[var(--color-accent)] text-[var(--color-primary)] font-[var(--font-body)] min-h-screen">
+    <div className="bg-[var(--color-primary)] text-[var(--color-text)] font-[var(--font-body)] min-h-screen">
 
       {/* About Hero with Bubbles */}
-      <section className="py-20 px-8 md:px-24 bg-[var(--color-maroon)] text-white text-center rounded-b-[50px] relative overflow-hidden">
+      <section className="py-20 px-8 md:px-24 bg-[linear-gradient(0deg,rgba(255,212,0,0.1)_0%,transparent_70%)] text-center relative overflow-hidden mb-12">
         {/* Animated Background Bubbles */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="about-bubble about-bubble-1"></div>
@@ -50,7 +50,7 @@ const About = () => {
           __html: `
             .about-bubble {
               position: absolute;
-              background: rgba(212, 175, 55, 0.12);
+              background: rgba(255, 212, 0, 0.15);
               border-radius: 50%;
               animation: float-about-bubble 22s infinite ease-in-out;
             }
@@ -95,34 +95,34 @@ const About = () => {
           `
         }} />
 
-        <h1 className="text-4xl md:text-6xl font-bold mb-6 relative z-10">Our Legacy of Sweetness</h1>
-        <p className="text-xl opacity-90 max-w-2xl mx-auto italic relative z-10">
+        <h1 className="text-4xl md:text-6xl font-bold mb-6 relative z-10 text-[var(--color-secondary)]">Our Legacy of Sweetness</h1>
+        <p className="text-xl md:text-2xl opacity-90 max-w-2xl mx-auto italic relative z-10 text-gray-300">
           Crafting perfection for over a century, SKS Sandila Laddu brings the authentic taste of tradition to your modern lifestyle.
         </p>
       </section>
 
       {/* Our Journey */}
-      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24">
+      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-[var(--color-primary)] relative z-20 shadow-2xl mb-12">
         <div className="flex flex-col md:flex-row gap-16 items-center">
           <div className="flex-1">
-            <h2 className="text-3xl font-bold text-[var(--color-maroon)] mb-6">A Journey Through Time</h2>
-            <p className="text-lg text-gray-700 leading-relaxed mb-6">
+            <h2 className="text-4xl font-bold text-[var(--color-secondary)] mb-6">A Journey Through Time</h2>
+            <p className="text-lg text-gray-300 leading-relaxed mb-6">
               Sandila, a hidden gem in Uttar Pradesh, has always been synonymous with its world-famous Laddus. At SKS, we carry a legacy that dates back over 100 years. What started as a passion for preserving traditional flavors has now blossomed into a brand that stands for quality, authenticity, and love.
             </p>
-            <p className="text-lg text-gray-700 leading-relaxed">
+            <p className="text-lg text-gray-300 leading-relaxed">
               Every single Laddu is handcrafted with precision, using recipes handed down through generations. From the selection of premium ingredients to the slow-roasting process, we ensure that every bite transports you back to the golden era of Nawabs and their grand feasts.
             </p>
           </div>
           <div className="flex-1 grid grid-cols-2 gap-4">
-            <img src={sksShop} alt="SKS Laddu Shop" className="w-full rounded-2xl shadow-lg border-4 border-white/50" />
+            <img src={sksShop} alt="SKS Laddu Shop" className="w-full rounded-2xl shadow-lg border border-[var(--color-secondary)]/20" />
             <div className="flex flex-col gap-4 justify-center">
-              <div className="bg-white p-6 rounded-2xl shadow-md border-l-4 border-[var(--color-secondary)]">
-                <h4 className="font-bold text-[var(--color-maroon)] text-2xl">100+</h4>
-                <p className="text-sm text-gray-600">Years of Heritage</p>
+              <div className="bg-[var(--color-muted)] p-6 rounded-2xl shadow-md border-l-4 border-[var(--color-secondary)]">
+                <h4 className="font-bold text-[var(--color-secondary)] text-2xl">100+</h4>
+                <p className="text-sm text-gray-400">Years of Heritage</p>
               </div>
-              <div className="bg-white p-6 rounded-2xl shadow-md border-l-4 border-[var(--color-secondary)]">
-                <h4 className="font-bold text-[var(--color-maroon)] text-2xl">100%</h4>
-                <p className="text-sm text-gray-600">Natural Ingredients</p>
+              <div className="bg-[var(--color-muted)] p-6 rounded-2xl shadow-md border-l-4 border-[var(--color-secondary)]">
+                <h4 className="font-bold text-[var(--color-secondary)] text-2xl">100%</h4>
+                <p className="text-sm text-gray-400">Natural Ingredients</p>
               </div>
             </div>
           </div>
@@ -130,38 +130,38 @@ const About = () => {
       </section>
 
       {/* Why Us */}
-      <section ref={addToRefs} className="scroll-section py-20 px-8 md:px-24 bg-white">
-        <h2 className="text-3xl font-bold text-center text-[var(--color-maroon)] mb-16">Why SKS Sandila Laddu?</h2>
+      <section ref={addToRefs} className="scroll-section py-20 px-8 md:px-24 bg-[var(--color-muted)]/50 shadow-xl mb-12">
+        <h2 className="text-4xl font-bold text-center text-[var(--color-secondary)] mb-16">Why SKS Sandila Laddu?</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          <div className="text-center p-8 rounded-3xl bg-[var(--color-accent)]/30 border border-[var(--color-secondary)]/20">
-            <div className="w-16 h-16 bg-[var(--color-secondary)] rounded-full flex items-center justify-center mx-auto mb-6">
-              <Heart className="w-8 h-8 text-white" />
+          <div className="text-center p-8 rounded-3xl bg-[var(--color-muted)] border border-[var(--color-secondary)]/20 shadow-lg hover:-translate-y-2 transition-transform duration-300">
+            <div className="w-16 h-16 bg-[var(--color-secondary)] rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_15px_rgba(255,212,0,0.4)]">
+              <Heart className="w-8 h-8 text-[var(--color-primary)]" />
             </div>
-            <h3 className="text-xl font-bold mb-4">Pure Desi Ghee</h3>
-            <p className="text-gray-600 italic">We use only the finest clarified butter, ensuring a rich aroma and melt-in-the-mouth texture.</p>
+            <h3 className="text-xl font-bold mb-4 text-[var(--color-secondary)]">Pure Desi Ghee</h3>
+            <p className="text-gray-400 italic">We use only the finest clarified butter, ensuring a rich aroma and melt-in-the-mouth texture.</p>
           </div>
-          <div className="text-center p-8 rounded-3xl bg-[var(--color-accent)]/30 border border-[var(--color-secondary)]/20">
-            <div className="w-16 h-16 bg-[var(--color-secondary)] rounded-full flex items-center justify-center mx-auto mb-6">
-              <Users className="w-8 h-8 text-white" />
+          <div className="text-center p-8 rounded-3xl bg-[var(--color-muted)] border border-[var(--color-secondary)]/20 shadow-lg hover:-translate-y-2 transition-transform duration-300">
+            <div className="w-16 h-16 bg-[var(--color-secondary)] rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_15px_rgba(255,212,0,0.4)]">
+              <Users className="w-8 h-8 text-[var(--color-primary)]" />
             </div>
-            <h3 className="text-xl font-bold mb-4">Artisanal Craft</h3>
-            <p className="text-gray-600 italic">No machines here. Every Laddu is hand-rolled by experienced artisans to maintain the perfect density.</p>
+            <h3 className="text-xl font-bold mb-4 text-[var(--color-secondary)]">Artisanal Craft</h3>
+            <p className="text-gray-400 italic">No machines here. Every Laddu is hand-rolled by experienced artisans to maintain the perfect density.</p>
           </div>
-          <div className="text-center p-8 rounded-3xl bg-[var(--color-accent)]/30 border border-[var(--color-secondary)]/20">
-            <div className="w-16 h-16 bg-[var(--color-secondary)] rounded-full flex items-center justify-center mx-auto mb-6">
-              <Leaf className="w-8 h-8 text-white" />
+          <div className="text-center p-8 rounded-3xl bg-[var(--color-muted)] border border-[var(--color-secondary)]/20 shadow-lg hover:-translate-y-2 transition-transform duration-300">
+            <div className="w-16 h-16 bg-[var(--color-secondary)] rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_15px_rgba(255,212,0,0.4)]">
+              <Leaf className="w-8 h-8 text-[var(--color-primary)]" />
             </div>
-            <h3 className="text-xl font-bold mb-4">No Preservatives</h3>
-            <p className="text-gray-600 italic">Freshly made, packed with care, and delivered to you without any artificial additives or chemicals.</p>
+            <h3 className="text-xl font-bold mb-4 text-[var(--color-secondary)]">No Preservatives</h3>
+            <p className="text-gray-400 italic">Freshly made, packed with care, and delivered to you without any artificial additives or chemicals.</p>
           </div>
         </div>
       </section>
 
       {/* Policies Section - BALANCED FOCUS */}
-      <section ref={addToRefs} className="scroll-section py-20 px-8 md:px-24 bg-white">
+      <section ref={addToRefs} className="scroll-section py-20 px-8 md:px-24 bg-[var(--color-primary)] shadow-2xl relative z-10">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-[var(--color-maroon)] mb-4 inline-block relative after:content-[''] after:absolute after:-bottom-2 after:left-1/2 after:-translate-x-1/2 after:w-16 after:h-1 after:bg-[var(--color-secondary)]">
+            <h2 className="text-3xl font-bold text-[var(--color-secondary)] mb-4 inline-block relative after:content-[''] after:absolute after:-bottom-2 after:left-1/2 after:-translate-x-1/2 after:w-16 after:h-1 after:bg-[var(--color-secondary)]">
               Our Commitments
             </h2>
           </div>
@@ -177,13 +177,13 @@ const About = () => {
                 <a
                   key={policy.title}
                   href={policy.link}
-                  className="bg-[var(--color-accent)]/20 p-8 rounded-[30px] shadow-sm hover:shadow-lg transition-all duration-300 text-center group border border-transparent hover:border-[var(--color-secondary)]/30 flex flex-col items-center"
+                  className="bg-[var(--color-muted)] p-8 rounded-[30px] shadow-lg hover:shadow-[0_0_20px_rgba(255,212,0,0.15)] transition-all duration-300 text-center group border border-[var(--color-secondary)]/10 hover:border-[var(--color-secondary)]/50 flex flex-col items-center"
                 >
-                  <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform">
-                    <IconComponent className="w-8 h-8 text-[var(--color-maroon)]" />
+                  <div className="w-16 h-16 bg-[var(--color-primary)] rounded-2xl flex items-center justify-center mb-6 shadow-inset group-hover:scale-110 transition-transform border border-[var(--color-secondary)]/20">
+                    <IconComponent className="w-8 h-8 text-[var(--color-secondary)]" />
                   </div>
-                  <h4 className="font-bold text-[var(--color-maroon)] text-lg mb-2">{policy.title}</h4>
-                  <p className="text-xs text-gray-500 leading-relaxed italic">{policy.desc}</p>
+                  <h4 className="font-bold text-[var(--color-secondary)] text-lg mb-2">{policy.title}</h4>
+                  <p className="text-xs text-gray-400 leading-relaxed italic">{policy.desc}</p>
                   <span className="mt-4 text-[var(--color-secondary)] font-bold text-[10px] uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">Discover More</span>
                 </a>
               );

@@ -65,10 +65,9 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* About Section */}
           <div className="col-span-1 md:col-span-2">
-            <h3 className="text-2xl font-bold text-[var(--color-secondary)] mb-4 flex items-center gap-2">
-              <Heart className="w-6 h-6" />
-              SKS Laddu
-            </h3>
+            <div className="mb-4">
+              <img src="/sks-logo.png" alt="SKS Logo" className="w-20 h-20 rounded-full border-2 border-[var(--color-secondary)] shadow-sm object-cover" />
+            </div>
             <p className="text-gray-300 mb-4 leading-relaxed">
               Bringing you the authentic taste of Sandila's traditional laddus for over 100 years.
               Made with pure ingredients and lots of love, our laddus carry the legacy of the Nawabs of Lucknow.
@@ -170,8 +169,8 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="border-t border-white/20 pt-6 text-center">
-          <p className="text-gray-400 text-sm">
-            © 2026 SKS Laddu. All rights reserved. Made with <Heart className="w-4 h-4 inline text-red-400" /> in Sandila
+          <p className="text-gray-400 text-sm flex items-center justify-center gap-2">
+            © 2026 SKS Laddu. All rights reserved. Made in Sandila
           </p>
         </div>
       </div>

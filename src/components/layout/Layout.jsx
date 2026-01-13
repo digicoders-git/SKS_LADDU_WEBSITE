@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Layout = () => {
     return (
-        <div className="min-h-screen bg-[var(--color-accent)] font-[var(--font-main)] pt-24 md:pt-28">
+        <div className="min-h-screen bg-[var(--color-primary)] font-[var(--font-main)] pt-24 md:pt-28">
             <ScrollToTop />
             <Navbar />
             <main>

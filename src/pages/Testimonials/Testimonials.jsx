@@ -51,7 +51,7 @@ const Testimonials = () => {
     return (
         <div className="bg-[var(--color-primary)] text-[var(--color-text)] font-[var(--font-body)] min-h-screen overflow-x-hidden">
             {/* Testimonials Hero with Bubbles */}
-            <section className="py-16 md:py-20 px-8 text-center bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-b-[40px] md:rounded-b-[50px] shadow-2xl relative overflow-hidden">
+            <section className="py-16 md:py-20 px-8 text-center bg-[linear-gradient(0deg,rgba(255,212,0,0.1)_0%,transparent_70%)] rounded-b-[40px] md:rounded-b-[50px] shadow-2xl relative overflow-hidden">
                 {/* Animated Background Bubbles */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                     <div className="testimonial-bubble testimonial-bubble-1"></div>
@@ -64,53 +64,23 @@ const Testimonials = () => {
                     __html: `
                         .testimonial-bubble {
                             position: absolute;
-                            background: rgba(212, 175, 55, 0.12);
+                            background: rgba(255, 212, 0, 0.1);
                             border-radius: 50%;
                             animation: float-testimonial-bubble 23s infinite ease-in-out;
                         }
-                        .testimonial-bubble-1 {
-                            width: 118px;
-                            height: 118px;
-                            left: 14%;
-                            top: 24%;
-                            animation-delay: 0s;
-                        }
-                        .testimonial-bubble-2 {
-                            width: 148px;
-                            height: 148px;
-                            right: 16%;
-                            top: 18%;
-                            animation-delay: 4.5s;
-                        }
-                        .testimonial-bubble-3 {
-                            width: 102px;
-                            height: 102px;
-                            left: 68%;
-                            bottom: 24%;
-                            animation-delay: 2.5s;
-                        }
-                        .testimonial-bubble-4 {
-                            width: 128px;
-                            height: 128px;
-                            right: 58%;
-                            bottom: 26%;
-                            animation-delay: 6.5s;
-                        }
+                        .testimonial-bubble-1 { width: 118px; height: 118px; left: 14%; top: 24%; animation-delay: 0s; }
+                        .testimonial-bubble-2 { width: 148px; height: 148px; right: 16%; top: 18%; animation-delay: 4.5s; }
+                        .testimonial-bubble-3 { width: 102px; height: 102px; left: 68%; bottom: 24%; animation-delay: 2.5s; }
+                        .testimonial-bubble-4 { width: 128px; height: 128px; right: 58%; bottom: 26%; animation-delay: 6.5s; }
                         @keyframes float-testimonial-bubble {
-                            0%, 100% {
-                                transform: translate(0, 0) scale(1);
-                                opacity: 0.4;
-                            }
-                            50% {
-                                transform: translate(32px, -42px) scale(1.1);
-                                opacity: 0.6;
-                            }
+                            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+                            50% { transform: translate(32px, -42px) scale(1.1); opacity: 0.6; }
                         }
                     `
                 }} />
 
-                <h1 className="text-3xl md:text-7xl font-bold mb-4 md:mb-6 tracking-tight relative z-10">Voices of Joy</h1>
-                <p className="text-base md:text-2xl italic opacity-90 max-w-3xl mx-auto leading-relaxed px-4 relative z-10">
+                <h1 className="text-3xl md:text-7xl font-bold mb-4 md:mb-6 tracking-tight relative z-10 text-[var(--color-secondary)] font-[var(--font-heading)]">Voices of Joy</h1>
+                <p className="text-base md:text-2xl italic opacity-90 max-w-3xl mx-auto leading-relaxed px-4 relative z-10 text-gray-300">
                     Over 10,000+ families across India trust us for their sweetest moments. Hear their stories.
                 </p>
             </section>

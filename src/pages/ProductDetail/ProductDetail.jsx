@@ -33,10 +33,10 @@ const ProductDetail = () => {
 
     if (!product) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-[var(--color-accent)]">
+            <div className="min-h-screen flex items-center justify-center bg-[var(--color-primary)]">
                 <div className="text-center">
-                    <h2 className="text-3xl font-bold text-[var(--color-maroon)] mb-4">Product Not Found</h2>
-                    <Link to="/laddus" className="text-[var(--color-secondary)] hover:underline">
+                    <h2 className="text-3xl font-bold text-[var(--color-secondary)] mb-4">Product Not Found</h2>
+                    <Link to="/laddus" className="text-white hover:text-[var(--color-secondary)] hover:underline transition-colors">
                         ← Back to Products
                     </Link>
                 </div>
@@ -57,78 +57,79 @@ const ProductDetail = () => {
     };
 
     return (
-        <div className="bg-[var(--color-accent)] min-h-screen py-12 px-6 md:px-24">
+        <div className="bg-[var(--color-primary)] min-h-screen py-12 px-6 md:px-24 font-[var(--font-body)]">
             {/* Back Button */}
             <button
                 onClick={() => navigate(-1)}
-                className="flex items-center gap-2 text-[var(--color-maroon)] hover:text-[var(--color-secondary)] mb-8 font-semibold transition-colors"
+                className="flex items-center gap-2 text-[var(--color-secondary)] hover:text-white mb-8 font-semibold transition-colors"
             >
                 <ArrowLeft size={20} />
                 Back
             </button>
 
-            <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
+            <div className="max-w-6xl mx-auto bg-[var(--color-muted)] rounded-3xl shadow-2xl overflow-hidden border border-[var(--color-secondary)]/10">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                     {/* Product Image */}
-                    <div className="p-8 md:p-12 flex items-center justify-center bg-gradient-to-br from-[var(--color-accent)] to-white">
+                    <div className="p-8 md:p-12 flex items-center justify-center bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-muted)] relative">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,212,0,0.1)_0%,transparent_70%)] opacity-50"></div>
                         <img
                             src={product.img}
                             alt={product.name}
-                            className="w-full max-w-md rounded-2xl shadow-xl transform hover:scale-105 transition-transform duration-300"
+                            className="w-full max-w-md rounded-2xl shadow-xl transform hover:scale-105 transition-transform duration-300 relative z-10"
                         />
                     </div>
 
                     {/* Product Details */}
                     <div className="p-8 md:p-12 flex flex-col justify-center">
-                        <div className="inline-block px-4 py-1 bg-[var(--color-maroon)]/10 text-[var(--color-maroon)] rounded-full text-sm font-bold mb-4 w-fit">
+                        <div className="inline-block px-4 py-1 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-full text-sm font-bold mb-4 w-fit">
                             {product.category}
                         </div>
 
-                        <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-maroon)] mb-4">
+                        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 font-[var(--font-heading)]">
                             {product.name}
                         </h1>
 
                         <div className="flex items-center gap-2 mb-6">
                             {[...Array(5)].map((_, i) => (
-                                <Star key={i} size={20} className="fill-yellow-400 text-yellow-400" />
+                                <Star key={i} size={20} className="fill-[var(--color-secondary)] text-[var(--color-secondary)]" />
                             ))}
-                            <span className="text-gray-500 text-sm ml-2">(4.9/5 from 120 reviews)</span>
+                            <span className="text-gray-400 text-sm ml-2">(4.9/5 from 120 reviews)</span>
                         </div>
 
-                        <p className="text-gray-700 text-lg leading-relaxed mb-6">
+                        <p className="text-gray-300 text-lg leading-relaxed mb-6">
                             {product.description}
                         </p>
 
-                        <div className="bg-[var(--color-accent)]/30 rounded-2xl p-6 mb-6">
-                            <h3 className="font-bold text-[var(--color-maroon)] mb-3 flex items-center gap-2">
+                        <div className="bg-[var(--color-primary)]/50 rounded-2xl p-6 mb-6 border border-[var(--color-secondary)]/10">
+                            <h3 className="font-bold text-[var(--color-secondary)] mb-3 flex items-center gap-2">
                                 <Package size={20} />
                                 Product Details
                             </h3>
-                            <div className="space-y-2 text-sm">
-                                <p><span className="font-semibold">Ingredients:</span> {product.ingredients}</p>
-                                <p><span className="font-semibold">Shelf Life:</span> {product.shelfLife}</p>
-                                <p><span className="font-semibold">Net Weight:</span> 1 kg</p>
+                            <div className="space-y-2 text-sm text-gray-300">
+                                <p><span className="font-semibold text-white">Ingredients:</span> {product.ingredients}</p>
+                                <p><span className="font-semibold text-white">Shelf Life:</span> {product.shelfLife}</p>
+                                <p><span className="font-semibold text-white">Net Weight:</span> 1 kg</p>
                             </div>
                         </div>
 
                         <div className="flex items-center justify-between mb-8">
                             <div>
-                                <p className="text-sm text-gray-500 mb-1">Price per kg</p>
-                                <p className="text-4xl font-bold text-[var(--color-maroon)]">₹{product.price}</p>
+                                <p className="text-sm text-gray-400 mb-1">Price per kg</p>
+                                <p className="text-4xl font-bold text-[var(--color-secondary)]">₹{product.price}</p>
                             </div>
                         </div>
 
                         <div className="flex gap-4 mb-8">
                             <button
                                 onClick={handleAddToCart}
-                                className="flex-1 bg-[var(--color-maroon)] text-white py-2 md:py-4 rounded-xl font-bold text-sm md:text-lg hover:bg-[#a5231b] transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                                className="flex-1 bg-[var(--color-secondary)] text-[var(--color-primary)] py-2 md:py-4 rounded-xl font-bold text-sm md:text-lg hover:bg-[#ffe033] transition-all shadow-[0_4px_15px_rgba(255,212,0,0.3)] hover:shadow-[0_6px_20px_rgba(255,212,0,0.4)] flex items-center justify-center gap-2"
                             >
                                 <ShoppingCart size={18} className="md:w-[22px] md:h-[22px]" />
                                 <span className="text-xs md:text-base">Add to Cart</span>
                             </button>
                             <Link
                                 to="/shop"
-                                className="px-4 md:px-8 py-2 md:py-4 border-2 border-[var(--color-maroon)] text-[var(--color-maroon)] rounded-xl font-bold hover:bg-[var(--color-maroon)] hover:text-white transition-all flex items-center justify-center no-underline text-xs md:text-base"
+                                className="px-4 md:px-8 py-2 md:py-4 border-2 border-[var(--color-secondary)] text-[var(--color-secondary)] rounded-xl font-bold hover:bg-[var(--color-secondary)] hover:text-[var(--color-primary)] transition-all flex items-center justify-center no-underline text-xs md:text-base"
                             >
                                 View Cart
                             </Link>
@@ -136,13 +137,13 @@ const ProductDetail = () => {
 
                         {/* Features */}
                         <div className="grid grid-cols-2 gap-4">
-                            <div className="flex items-center gap-3 text-sm">
+                            <div className="flex items-center gap-3 text-sm text-gray-400">
                                 <Truck className="text-[var(--color-secondary)]" size={20} />
-                                <span>Fast Delivery</span>
+                                <span className="text-gray-300">Fast Delivery</span>
                             </div>
-                            <div className="flex items-center gap-3 text-sm">
+                            <div className="flex items-center gap-3 text-sm text-gray-400">
                                 <Shield className="text-[var(--color-secondary)]" size={20} />
-                                <span>100% Authentic</span>
+                                <span className="text-gray-300">100% Authentic</span>
                             </div>
                         </div>
                     </div>
