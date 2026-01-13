@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Mail, Phone, MapPin } from 'lucide-react';
+import Footer from '../../components/layout/Footer';
 
 const Contact = () => {
     const sectionRefs = useRef([]);
@@ -99,43 +100,45 @@ const Contact = () => {
             <section className="py-24 px-8 md:px-24 -mt-16 z-20 relative">
                 <div className="flex flex-col md:flex-row gap-12 max-w-6xl mx-auto">
                     {/* Contact Info */}
-                    <div ref={addToRefs} className="scroll-section flex-1 bg-white p-12 rounded-[40px] shadow-2xl border border-black/5">
-                        <h2 className="text-3xl font-bold text-[var(--color-maroon)] mb-10">Get In Touch</h2>
+                    <div ref={addToRefs} className="scroll-section flex-1 bg-white p-6 md:p-12 rounded-[40px] shadow-2xl border border-black/5">
+                        <h2 className="text-2xl md:text-3xl font-bold text-[var(--color-maroon)] mb-6 md:mb-10">Get In Touch</h2>
 
-                        <div className="space-y-8">
-                            <div className="flex items-start gap-6">
-                                <div className="p-4 bg-[var(--color-accent)] rounded-2xl text-[var(--color-maroon)]">
-                                    <Mail size={24} />
+                        <div className="space-y-6 md:space-y-8">
+                            <div className="flex items-start gap-3 md:gap-6">
+                                <div className="p-2 md:p-4 bg-[var(--color-accent)] rounded-2xl text-[var(--color-maroon)] flex-shrink-0">
+                                    <Mail size={18} className="md:w-6 md:h-6" />
                                 </div>
-                                <div>
-                                    <h4 className="font-bold text-gray-800">Email Us</h4>
-                                    <a href="mailto:sksladdu8313@gmail.com" className="text-gray-600 hover:text-[var(--color-secondary)] transition-colors">sksladdu8313@gmail.com</a>
+                                <div className="min-w-0 flex-1">
+                                    <h4 className="font-bold text-gray-800 text-sm md:text-base">Email Us</h4>
+                                    <a href="mailto:sksladdu8313@gmail.com" className="text-gray-600 hover:text-[var(--color-secondary)] transition-colors text-xs md:text-sm break-all">sksladdu8313@gmail.com</a>
                                 </div>
                             </div>
 
-                            <div className="flex items-start gap-6">
-                                <div className="p-4 bg-[var(--color-accent)] rounded-2xl text-[var(--color-maroon)]">
-                                    <Phone size={24} />
+                            <div className="flex items-start gap-3 md:gap-6">
+                                <div className="p-2 md:p-4 bg-[var(--color-accent)] rounded-2xl text-[var(--color-maroon)] flex-shrink-0">
+                                    <Phone size={18} className="md:w-6 md:h-6" />
                                 </div>
-                                <div>
-                                    <h4 className="font-bold text-gray-800">Call Us</h4>
-                                    <a href="tel:+916307736698" className="text-gray-600 hover:text-[var(--color-secondary)] transition-colors inline-block">+91 6307736698</a>
-                                    <span className="text-gray-600">, </span>
-                                    <a href="tel:+918467831372" className="text-gray-600 hover:text-[var(--color-secondary)] transition-colors inline-block">8467831372</a>
+                                <div className="min-w-0 flex-1">
+                                    <h4 className="font-bold text-gray-800 text-sm md:text-base">Call Us</h4>
+                                    <div className="text-xs md:text-sm">
+                                        <a href="tel:+916307736698" className="text-gray-600 hover:text-[var(--color-secondary)] transition-colors inline-block">+91 6307736698</a>
+                                        <span className="text-gray-600">, </span>
+                                        <a href="tel:+918467831372" className="text-gray-600 hover:text-[var(--color-secondary)] transition-colors inline-block">8467831372</a>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="flex items-start gap-6">
-                                <div className="p-4 bg-[var(--color-accent)] rounded-2xl text-[var(--color-maroon)]">
-                                    <MapPin size={24} />
+                            <div className="flex items-start gap-3 md:gap-6">
+                                <div className="p-2 md:p-4 bg-[var(--color-accent)] rounded-2xl text-[var(--color-maroon)] flex-shrink-0">
+                                    <MapPin size={18} className="md:w-6 md:h-6" />
                                 </div>
-                                <div>
-                                    <h4 className="font-bold text-gray-800">Visit Us</h4>
+                                <div className="min-w-0 flex-1">
+                                    <h4 className="font-bold text-gray-800 text-sm md:text-base">Visit Us</h4>
                                     <a
                                         href="https://www.google.com/maps/search/?api=1&query=Ahirawan,+Sandila,+Hardoi,+Uttar+Pradesh"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-gray-600 hover:text-[var(--color-maroon)] transition-colors underline decoration-dotted underline-offset-4"
+                                        className="text-gray-600 hover:text-[var(--color-maroon)] transition-colors underline decoration-dotted underline-offset-4 text-xs md:text-sm break-words"
                                     >
                                         Ahirawan, Sandila, Hardoi, Uttar Pradesh
                                     </a>
@@ -143,7 +146,7 @@ const Contact = () => {
                             </div>
                         </div>
 
-                        <div className="mt-12 pt-12 border-t border-gray-100 italic text-gray-500">
+                        <div className="mt-8 md:mt-12 pt-8 md:pt-12 border-t border-gray-100 italic text-gray-500 text-xs md:text-sm">
                             "Bringing the warmth of Sandila to your home since the 1920s."
                         </div>
                     </div>
@@ -155,11 +158,11 @@ const Contact = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <label className="text-sm font-bold text-gray-600 uppercase tracking-wider">Full Name</label>
-                                    <input type="text" placeholder="John Doe" className="w-full px-6 py-4 bg-[var(--color-accent)]/50 rounded-xl outline-none border-2 border-transparent focus:border-[var(--color-secondary)] transition-all" />
+                                    <input type="text" placeholder="Your Name" className="w-full px-6 py-4 bg-[var(--color-accent)]/50 rounded-xl outline-none border-2 border-transparent focus:border-[var(--color-secondary)] transition-all" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-bold text-gray-600 uppercase tracking-wider">Email Address</label>
-                                    <input type="email" placeholder="john@example.com" className="w-full px-6 py-4 bg-[var(--color-accent)]/50 rounded-xl outline-none border-2 border-transparent focus:border-[var(--color-secondary)] transition-all" />
+                                    <input type="email" placeholder="Your Email" className="w-full px-6 py-4 bg-[var(--color-accent)]/50 rounded-xl outline-none border-2 border-transparent focus:border-[var(--color-secondary)] transition-all" />
                                 </div>
                             </div>
                             <div className="space-y-2">
@@ -177,6 +180,8 @@ const Contact = () => {
                     </div>
                 </div>
             </section>
+
+            <Footer />
         </div>
     );
 };

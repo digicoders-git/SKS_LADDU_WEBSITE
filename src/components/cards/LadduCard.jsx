@@ -64,7 +64,7 @@ const LadduCard = ({ product }) => {
             <button
                 onClick={handleAddToCart}
                 disabled={added}
-                className={`w-full py-3 md:py-4 rounded-2xl font-bold transition-all duration-300 overflow-hidden relative group shadow-md flex items-center justify-center gap-2 ${added
+                className={`w-full py-2 md:py-4 rounded-2xl font-bold transition-all duration-300 overflow-hidden relative group shadow-md flex items-center justify-center gap-2 ${added
                     ? 'bg-green-600 text-white scale-95 shadow-inner'
                     : 'bg-[var(--color-maroon)] text-white hover:bg-[#a5231b]'
                     }`}
@@ -72,13 +72,13 @@ const LadduCard = ({ product }) => {
             >
                 {added ? (
                     <>
-                        <CheckCircle size={18} />
-                        <span className="text-sm md:text-base">Added!</span>
+                        <CheckCircle size={16} />
+                        <span className="text-xs md:text-base">Added!</span>
                     </>
                 ) : (
                     <>
-                        <ShoppingCart size={18} />
-                        <span className="text-sm md:text-base">Add To Cart</span>
+                        <ShoppingCart size={16} />
+                        <span className="text-xs md:text-base">Add To Cart</span>
                     </>
                 )}
             </button>

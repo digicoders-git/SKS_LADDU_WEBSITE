@@ -22,14 +22,20 @@ export const CartProvider = ({ children }) => {
         setCart(prev => prev.filter(item => item.uniqueId !== uniqueId));
     };
 
+    const updateQuantity = (uniqueId, quantity) => {
+        setCart(prev => prev.map(item => 
+            item.uniqueId === uniqueId ? { ...item, quantity } : item
+        ));
+    };
+
     const clearCart = () => {
         setCart([]);
     };
 
-    const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
+    const totalAmount = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
 
     return (
-        <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, totalAmount }}>
+        <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart, totalAmount }}>
             {children}
         </CartContext.Provider>
     );

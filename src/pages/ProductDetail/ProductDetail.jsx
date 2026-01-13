@@ -121,14 +121,14 @@ const ProductDetail = () => {
                         <div className="flex gap-4 mb-8">
                             <button
                                 onClick={handleAddToCart}
-                                className="flex-1 bg-[var(--color-maroon)] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#a5231b] transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                                className="flex-1 bg-[var(--color-maroon)] text-white py-2 md:py-4 rounded-xl font-bold text-sm md:text-lg hover:bg-[#a5231b] transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
                             >
-                                <ShoppingCart size={22} />
-                                Add to Cart
+                                <ShoppingCart size={18} className="md:w-[22px] md:h-[22px]" />
+                                <span className="text-xs md:text-base">Add to Cart</span>
                             </button>
                             <Link
                                 to="/shop"
-                                className="px-8 py-4 border-2 border-[var(--color-maroon)] text-[var(--color-maroon)] rounded-xl font-bold hover:bg-[var(--color-maroon)] hover:text-white transition-all flex items-center justify-center no-underline"
+                                className="px-4 md:px-8 py-2 md:py-4 border-2 border-[var(--color-maroon)] text-[var(--color-maroon)] rounded-xl font-bold hover:bg-[var(--color-maroon)] hover:text-white transition-all flex items-center justify-center no-underline text-xs md:text-base"
                             >
                                 View Cart
                             </Link>

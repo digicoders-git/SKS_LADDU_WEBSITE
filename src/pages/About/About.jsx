@@ -1,5 +1,9 @@
 import React, { useEffect, useRef } from 'react';
+import { Heart, Users, Leaf, Truck, RotateCcw, FileText } from 'lucide-react';
+import Footer from '../../components/layout/Footer';
 import storyMaker from '../../assets/images/story-maker.png';
+import sksShop from '../../assets/images/sks-laddu-shop.jpeg';
+import ladduTypes from '../../assets/images/laddu-types.png';
 
 const About = () => {
   const sectionRefs = useRef([]);
@@ -110,7 +114,7 @@ const About = () => {
             </p>
           </div>
           <div className="flex-1 grid grid-cols-2 gap-4">
-            <img src={storyMaker} alt="Traditional Maker" className="w-full rounded-2xl shadow-lg border-4 border-white/50" />
+            <img src={sksShop} alt="SKS Laddu Shop" className="w-full rounded-2xl shadow-lg border-4 border-white/50" />
             <div className="flex flex-col gap-4 justify-center">
               <div className="bg-white p-6 rounded-2xl shadow-md border-l-4 border-[var(--color-secondary)]">
                 <h4 className="font-bold text-[var(--color-maroon)] text-2xl">100+</h4>
@@ -130,17 +134,23 @@ const About = () => {
         <h2 className="text-3xl font-bold text-center text-[var(--color-maroon)] mb-16">Why SKS Sandila Laddu?</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div className="text-center p-8 rounded-3xl bg-[var(--color-accent)]/30 border border-[var(--color-secondary)]/20">
-            <div className="text-4xl mb-6">🍯</div>
+            <div className="w-16 h-16 bg-[var(--color-secondary)] rounded-full flex items-center justify-center mx-auto mb-6">
+              <Heart className="w-8 h-8 text-white" />
+            </div>
             <h3 className="text-xl font-bold mb-4">Pure Desi Ghee</h3>
             <p className="text-gray-600 italic">We use only the finest clarified butter, ensuring a rich aroma and melt-in-the-mouth texture.</p>
           </div>
           <div className="text-center p-8 rounded-3xl bg-[var(--color-accent)]/30 border border-[var(--color-secondary)]/20">
-            <div className="text-4xl mb-6">👴</div>
+            <div className="w-16 h-16 bg-[var(--color-secondary)] rounded-full flex items-center justify-center mx-auto mb-6">
+              <Users className="w-8 h-8 text-white" />
+            </div>
             <h3 className="text-xl font-bold mb-4">Artisanal Craft</h3>
             <p className="text-gray-600 italic">No machines here. Every Laddu is hand-rolled by experienced artisans to maintain the perfect density.</p>
           </div>
           <div className="text-center p-8 rounded-3xl bg-[var(--color-accent)]/30 border border-[var(--color-secondary)]/20">
-            <div className="text-4xl mb-6">🌿</div>
+            <div className="w-16 h-16 bg-[var(--color-secondary)] rounded-full flex items-center justify-center mx-auto mb-6">
+              <Leaf className="w-8 h-8 text-white" />
+            </div>
             <h3 className="text-xl font-bold mb-4">No Preservatives</h3>
             <p className="text-gray-600 italic">Freshly made, packed with care, and delivered to you without any artificial additives or chemicals.</p>
           </div>
@@ -158,26 +168,31 @@ const About = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { title: 'Shipping Policy', icon: '🚚', link: '/shipping-policy', desc: 'Secure Pan-India delivery with real-time tracking.' },
-              { title: 'Return Policy', icon: '🔄', link: '/return-policy', desc: 'Simple 24-hour claim window for damaged orders.' },
-              { title: 'Terms of Service', icon: '📜', link: '/terms-of-service', desc: 'Defining our transparent rules of engagement.' }
-            ].map((policy) => (
-              <a
-                key={policy.title}
-                href={policy.link}
-                className="bg-[var(--color-accent)]/20 p-8 rounded-[30px] shadow-sm hover:shadow-lg transition-all duration-300 text-center group border border-transparent hover:border-[var(--color-secondary)]/30 flex flex-col items-center"
-              >
-                <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
-                  {policy.icon}
-                </div>
-                <h4 className="font-bold text-[var(--color-maroon)] text-lg mb-2">{policy.title}</h4>
-                <p className="text-xs text-gray-500 leading-relaxed italic">{policy.desc}</p>
-                <span className="mt-4 text-[var(--color-secondary)] font-bold text-[10px] uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">Discover More</span>
-              </a>
-            ))}
+              { title: 'Shipping Policy', icon: Truck, link: '/shipping-policy', desc: 'Secure Pan-India delivery with real-time tracking.' },
+              { title: 'Return Policy', icon: RotateCcw, link: '/return-policy', desc: 'Simple 24-hour claim window for damaged orders.' },
+              { title: 'Terms of Service', icon: FileText, link: '/terms-of-service', desc: 'Defining our transparent rules of engagement.' }
+            ].map((policy) => {
+              const IconComponent = policy.icon;
+              return (
+                <a
+                  key={policy.title}
+                  href={policy.link}
+                  className="bg-[var(--color-accent)]/20 p-8 rounded-[30px] shadow-sm hover:shadow-lg transition-all duration-300 text-center group border border-transparent hover:border-[var(--color-secondary)]/30 flex flex-col items-center"
+                >
+                  <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform">
+                    <IconComponent className="w-8 h-8 text-[var(--color-maroon)]" />
+                  </div>
+                  <h4 className="font-bold text-[var(--color-maroon)] text-lg mb-2">{policy.title}</h4>
+                  <p className="text-xs text-gray-500 leading-relaxed italic">{policy.desc}</p>
+                  <span className="mt-4 text-[var(--color-secondary)] font-bold text-[10px] uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">Discover More</span>
+                </a>
+              );
+            })}
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 };

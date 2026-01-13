@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import TestimonialCard from '../../components/cards/TestimonialCard';
 import VideoReviewCard from '../../components/cards/VideoReviewCard';
+import Footer from '../../components/layout/Footer';
 
 const Testimonials = () => {
     const [activeTab, setActiveTab] = useState('text');
@@ -48,7 +49,7 @@ const Testimonials = () => {
     ];
 
     return (
-        <div className="bg-[var(--color-accent)] text-[var(--color-primary)] font-[var(--font-body)] min-h-screen pb-20 overflow-x-hidden">
+        <div className="bg-[var(--color-accent)] text-[var(--color-primary)] font-[var(--font-body)] min-h-screen overflow-x-hidden">
             {/* Testimonials Hero with Bubbles */}
             <section className="py-16 md:py-20 px-8 text-center bg-[var(--color-maroon)] text-white rounded-b-[40px] md:rounded-b-[50px] shadow-2xl relative overflow-hidden">
                 {/* Animated Background Bubbles */}
@@ -180,6 +181,10 @@ const Testimonials = () => {
                 <button className="px-10 md:px-12 py-4 md:py-5 rounded-2xl bg-white border-2 border-[var(--color-maroon)] text-[var(--color-maroon)] font-bold text-lg md:text-xl hover:bg-[var(--color-maroon)] hover:text-white transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 w-full md:w-auto">
                     Write Your Review
                 </button>
+            </div>
+
+            <div className="mt-16">
+                <Footer />
             </div>
         </div>
     );

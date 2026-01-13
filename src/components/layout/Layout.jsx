@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
-import Footer from "./Footer";
 import ScrollToTop from "../../utils/ScrollToTop";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,7 +12,6 @@ const Layout = () => {
             <main>
                 <Outlet />
             </main>
-            <Footer />
             <ToastContainer
                 position="bottom-right"
                 autoClose={3000}

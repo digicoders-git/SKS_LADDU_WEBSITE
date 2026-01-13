@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronDown, Filter } from 'lucide-react';
+import { ChevronDown, Filter, Shield, Truck, Package } from 'lucide-react';
 import LadduCard from '../../components/cards/LadduCard';
+import Footer from '../../components/layout/Footer';
 import besanLaddu from '../../assets/images/besan-laddu.png';
 import kesarLaddu from '../../assets/images/kesar-laddu.png';
 import nariyalLaddu from '../../assets/images/nariyal-laddu.png';
@@ -83,7 +84,7 @@ const Laddus = () => {
     });
 
     return (
-        <div className="bg-[var(--color-accent)] text-[var(--color-primary)] font-[var(--font-body)] min-h-screen pb-20 overflow-x-hidden">
+        <div className="bg-[var(--color-accent)] text-[var(--color-primary)] font-[var(--font-body)] min-h-screen overflow-x-hidden">
             {/* Header with Bubbles */}
             <section className="py-16 md:py-20 px-8 text-center bg-[var(--color-maroon)] text-white rounded-b-[40px] md:rounded-b-[50px] shadow-lg relative overflow-hidden">
                 {/* Animated Background Bubbles */}
@@ -266,22 +267,32 @@ const Laddus = () => {
                 <h2 className="text-2xl md:text-3xl font-bold text-[var(--color-maroon)] mb-8 md:mb-12 relative z-10 font-[var(--font-heading)]">The SKS Quality Promise</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 relative z-10">
                     <div className="group text-center">
-                        <div className="text-4xl md:text-5xl mb-4 transform group-hover:scale-110 transition-transform">🛡️</div>
+                        <div className="w-16 h-16 bg-[var(--color-secondary)] rounded-full flex items-center justify-center mx-auto mb-4 transform group-hover:scale-110 transition-transform">
+                            <Shield className="w-8 h-8 text-white" />
+                        </div>
                         <h4 className="font-bold mb-2 text-base md:text-lg">Hygienically Packed</h4>
                         <p className="text-xs md:text-sm text-gray-500 leading-relaxed italic">Double-sealed airtight containers to maintain freshness.</p>
                     </div>
                     <div className="group text-center">
-                        <div className="text-4xl md:text-5xl mb-4 transform group-hover:scale-110 transition-transform">🚛</div>
+                        <div className="w-16 h-16 bg-[var(--color-secondary)] rounded-full flex items-center justify-center mx-auto mb-4 transform group-hover:scale-110 transition-transform">
+                            <Truck className="w-8 h-8 text-white" />
+                        </div>
                         <h4 className="font-bold mb-2 text-base md:text-lg">Pan-India Shipping</h4>
                         <p className="text-xs md:text-sm text-gray-500 leading-relaxed italic">Fast delivery to any corner within 3-5 business days.</p>
                     </div>
                     <div className="group text-center">
-                        <div className="text-4xl md:text-5xl mb-4 transform group-hover:scale-110 transition-transform">📦</div>
+                        <div className="w-16 h-16 bg-[var(--color-secondary)] rounded-full flex items-center justify-center mx-auto mb-4 transform group-hover:scale-110 transition-transform">
+                            <Package className="w-8 h-8 text-white" />
+                        </div>
                         <h4 className="font-bold mb-2 text-base md:text-lg">Bulk Orders</h4>
                         <p className="text-xs md:text-sm text-gray-500 leading-relaxed italic">Special customization for weddings and corporate events.</p>
                     </div>
                 </div>
             </section>
+
+            <div className="mt-16">
+                <Footer />
+            </div>
         </div>
     );
 };
