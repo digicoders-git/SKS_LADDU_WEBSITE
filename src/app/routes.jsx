@@ -9,6 +9,7 @@ import NotFound from "../pages/NotFound/NotFound";
 import ProductDetail from "../pages/ProductDetail/ProductDetail";
 import Login from "../pages/auth/Login";
 import Registration from "../pages/auth/Registration";
+import Profile from "../pages/auth/Profile";
 
 import Shop from "../pages/Shop/Shop";
 import ReturnPolicy from "../pages/Policies/ReturnPolicy";
@@ -29,6 +30,7 @@ export const router = createBrowserRouter([
       { path: "product/:id", element: <ProductDetail /> },
       { path: "testimonials", element: <Testimonials /> },
       { path: "contact", element: <Contact /> },
+      { path: "profile", element: <Profile /> },
       { path: "return-policy", element: <ReturnPolicy /> },
       { path: "shipping-policy", element: <ShippingPolicy /> },
       { path: "terms-of-service", element: <TermsOfService /> },

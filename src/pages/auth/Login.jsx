@@ -31,24 +31,24 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[var(--color-accent)] flex items-center justify-center py-12 px-4">
-            <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8">
+        <div className="min-h-screen bg-[var(--color-primary)] flex items-center justify-center py-12 px-4">
+            <div className="max-w-md w-full bg-[var(--color-muted)] rounded-3xl shadow-2xl p-8 border border-[var(--color-secondary)]/20">
                 <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-[var(--color-maroon)] mb-2">Welcome Back</h2>
-                    <p className="text-gray-600">Sign in to your account</p>
+                    <h2 className="text-3xl font-bold text-[var(--color-secondary)] mb-2">Welcome Back</h2>
+                    <p className="text-gray-400">Sign in to your account</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label className="block text-sm font-bold text-gray-700 mb-2">Email Address</label>
+                        <label className="block text-sm font-bold text-gray-300 mb-2">Email Address</label>
                         <div className="relative">
-                            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
                             <input
                                 type="email"
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all"
+                                className="w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all"
                                 placeholder="Enter your email"
                             />
                         </div>
@@ -56,21 +56,21 @@ const Login = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-bold text-gray-700 mb-2">Password</label>
+                        <label className="block text-sm font-bold text-gray-300 mb-2">Password</label>
                         <div className="relative">
-                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 name="password"
                                 value={formData.password}
                                 onChange={handleChange}
-                                className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all"
+                                className="w-full pl-12 pr-12 py-3 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all"
                                 placeholder="Enter your password"
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300"
                             >
                                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                             </button>
@@ -80,16 +80,16 @@ const Login = () => {
 
                     <button
                         type="submit"
-                        className="w-full bg-[var(--color-maroon)] text-white py-3 rounded-xl font-bold hover:bg-[#a5231b] transition-all shadow-lg"
+                        className="w-full bg-[var(--color-secondary)] text-[var(--color-primary)] py-3 rounded-xl font-bold hover:opacity-90 transition-all shadow-lg"
                     >
                         Login
                     </button>
                 </form>
 
                 <div className="mt-6 text-center">
-                    <p className="text-gray-600">
+                    <p className="text-gray-400">
                         Don't have an account?{' '}
-                        <Link to="/registration" className="text-[var(--color-maroon)] font-bold hover:underline">
+                        <Link to="/registration" className="text-[var(--color-secondary)] font-bold hover:underline">
                             Create Account
                         </Link>
                     </p>

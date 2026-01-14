@@ -60,7 +60,11 @@ const Navbar = () => {
                     )}
                 </div>
 
-                <div className="hidden sm:flex items-center text-[var(--color-secondary)] cursor-pointer transition-transform duration-200 hover:scale-110" title="Customer Profile">
+                <div 
+                    onClick={() => navigate('/profile')}
+                    className="hidden sm:flex items-center text-[var(--color-secondary)] cursor-pointer transition-transform duration-200 hover:scale-110" 
+                    title="Customer Profile"
+                >
                     <User size={24} className="md:w-7 md:h-7" />
                 </div>
 
@@ -96,7 +100,10 @@ const Navbar = () => {
                     ))}
 
                     <div className="mt-auto pt-6 border-t border-gray-100/10 flex items-center justify-between">
-                        <div className="flex items-center gap-3 text-[var(--color-secondary)] font-bold">
+                        <div 
+                            onClick={() => navigate('/profile')}
+                            className="flex items-center gap-3 text-[var(--color-secondary)] font-bold cursor-pointer hover:bg-[var(--color-accent)]/20 p-2 rounded-xl transition-all duration-300"
+                        >
                             <User size={18} />
                             <span className="text-sm uppercase tracking-wider">Profile</span>
                         </div>

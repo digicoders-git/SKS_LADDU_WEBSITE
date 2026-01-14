@@ -86,153 +86,153 @@ const Registration = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[var(--color-accent)] flex items-center justify-center py-12 px-4">
-            <div className="max-w-2xl w-full bg-white rounded-3xl shadow-2xl p-8">
+        <div className="min-h-screen bg-[var(--color-primary)] flex items-center justify-center py-12 px-4">
+            <div className="max-w-2xl w-full bg-[var(--color-muted)] rounded-3xl shadow-2xl p-8 border border-[var(--color-secondary)]/20">
                 <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-[var(--color-maroon)] mb-2">Create Account</h2>
-                    <p className="text-gray-600">Join us for sweet experiences</p>
+                    <h2 className="text-3xl font-bold text-[var(--color-secondary)] mb-2">Create Account</h2>
+                    <p className="text-gray-400">Join us for sweet experiences</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2">Full Name</label>
+                            <label className="block text-sm font-bold text-gray-300 mb-2">Full Name</label>
                             <div className="relative">
-                                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
                                 <input
                                     type="text"
                                     name="fullName"
                                     value={formData.fullName}
                                     onChange={handleChange}
-                                    className={`w-full pl-12 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.fullName ? 'border-red-500' : 'border-gray-300'}`}
+                                    className={`w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.fullName ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
                                     placeholder="Enter your full name"
                                 />
                             </div>
-                            {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>}
+                            {errors.fullName && <p className="text-red-400 text-sm mt-1">{errors.fullName}</p>}
                         </div>
 
                         <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2">Email Address</label>
+                            <label className="block text-sm font-bold text-gray-300 mb-2">Email Address</label>
                             <div className="relative">
-                                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
                                 <input
                                     type="email"
                                     name="email"
                                     value={formData.email}
                                     onChange={handleChange}
-                                    className={`w-full pl-12 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
+                                    className={`w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.email ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
                                     placeholder="Enter your email"
                                 />
                             </div>
-                            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                            {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2">Password</label>
+                            <label className="block text-sm font-bold text-gray-300 mb-2">Password</label>
                             <div className="relative">
-                                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
                                 <input
                                     type={showPassword ? 'text' : 'password'}
                                     name="password"
                                     value={formData.password}
                                     onChange={handleChange}
-                                    className={`w-full pl-12 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
+                                    className={`w-full pl-12 pr-12 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.password ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
                                     placeholder="Enter password"
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300"
                                 >
                                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                                 </button>
                             </div>
-                            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+                            {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password}</p>}
                         </div>
 
                         <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2">Confirm Password</label>
+                            <label className="block text-sm font-bold text-gray-300 mb-2">Confirm Password</label>
                             <div className="relative">
-                                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
                                 <input
                                     type={showConfirmPassword ? 'text' : 'password'}
                                     name="confirmPassword"
                                     value={formData.confirmPassword}
                                     onChange={handleChange}
-                                    className={`w-full pl-12 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'}`}
+                                    className={`w-full pl-12 pr-12 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.confirmPassword ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
                                     placeholder="Confirm password"
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300"
                                 >
                                     {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                                 </button>
                             </div>
-                            {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
+                            {errors.confirmPassword && <p className="text-red-400 text-sm mt-1">{errors.confirmPassword}</p>}
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-bold text-gray-700 mb-2">Phone Number</label>
+                        <label className="block text-sm font-bold text-gray-300 mb-2">Phone Number</label>
                         <div className="relative">
-                            <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                            <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
                             <input
                                 type="tel"
                                 name="phone"
                                 value={formData.phone}
                                 onChange={handleChange}
-                                className={`w-full pl-12 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.phone ? 'border-red-500' : 'border-gray-300'}`}
+                                className={`w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.phone ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
                                 placeholder="Enter 10-digit phone number"
                                 maxLength="10"
                             />
                         </div>
-                        {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
+                        {errors.phone && <p className="text-red-400 text-sm mt-1">{errors.phone}</p>}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2">City</label>
+                            <label className="block text-sm font-bold text-gray-300 mb-2">City</label>
                             <div className="relative">
-                                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
                                 <input
                                     type="text"
                                     name="city"
                                     value={formData.city}
                                     onChange={handleChange}
-                                    className={`w-full pl-12 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.city ? 'border-red-500' : 'border-gray-300'}`}
+                                    className={`w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.city ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
                                     placeholder="Enter city"
                                 />
                             </div>
-                            {errors.city && <p className="text-red-500 text-sm mt-1">{errors.city}</p>}
+                            {errors.city && <p className="text-red-400 text-sm mt-1">{errors.city}</p>}
                         </div>
 
                         <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2">Landmark</label>
+                            <label className="block text-sm font-bold text-gray-300 mb-2">Landmark</label>
                             <input
                                 type="text"
                                 name="landmark"
                                 value={formData.landmark}
                                 onChange={handleChange}
-                                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.landmark ? 'border-red-500' : 'border-gray-300'}`}
+                                className={`w-full px-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.landmark ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
                                 placeholder="Enter landmark"
                             />
-                            {errors.landmark && <p className="text-red-500 text-sm mt-1">{errors.landmark}</p>}
+                            {errors.landmark && <p className="text-red-400 text-sm mt-1">{errors.landmark}</p>}
                         </div>
 
                         <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2">House No. (Optional)</label>
+                            <label className="block text-sm font-bold text-gray-300 mb-2">House No. (Optional)</label>
                             <div className="relative">
-                                <Home className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                                <Home className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
                                 <input
                                     type="text"
                                     name="houseNo"
                                     value={formData.houseNo}
                                     onChange={handleChange}
-                                    className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all"
+                                    className="w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all"
                                     placeholder="House/Flat No."
                                 />
                             </div>
@@ -240,29 +240,29 @@ const Registration = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-bold text-gray-700 mb-2">Additional Address Details</label>
+                        <label className="block text-sm font-bold text-gray-300 mb-2">Additional Address Details</label>
                         <textarea
                             name="address"
                             value={formData.address}
                             onChange={handleChange}
                             rows="3"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all resize-none"
+                            className="w-full px-4 py-3 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all resize-none"
                             placeholder="Street, Area, Additional details..."
                         ></textarea>
                     </div>
 
                     <button
                         type="submit"
-                        className="w-full bg-[var(--color-maroon)] text-white py-3 rounded-xl font-bold hover:bg-[#a5231b] transition-all shadow-lg"
+                        className="w-full bg-[var(--color-secondary)] text-[var(--color-primary)] py-3 rounded-xl font-bold hover:opacity-90 transition-all shadow-lg"
                     >
                         Create Account
                     </button>
                 </form>
 
                 <div className="mt-6 text-center">
-                    <p className="text-gray-600">
+                    <p className="text-gray-400">
                         Already have an account?{' '}
-                        <Link to="/login" className="text-[var(--color-maroon)] font-bold hover:underline">
+                        <Link to="/login" className="text-[var(--color-secondary)] font-bold hover:underline">
                             Sign In
                         </Link>
                     </p>

@@ -102,27 +102,27 @@ const About = () => {
       </section>
 
       {/* Our Journey */}
-      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-[var(--color-primary)] relative z-20 shadow-2xl mb-12">
-        <div className="flex flex-col md:flex-row gap-16 items-center">
+      <section ref={addToRefs} className="scroll-section py-16 px-8 md:px-24 bg-[var(--color-primary)] relative z-20 shadow-2xl mb-12">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-start md:items-center">
           <div className="flex-1">
-            <h2 className="text-4xl font-bold text-[var(--color-secondary)] mb-6">A Journey Through Time</h2>
-            <p className="text-lg text-gray-300 leading-relaxed mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-secondary)] mb-4 md:mb-6">A Journey Through Time</h2>
+            <p className="text-base md:text-lg text-gray-300 leading-relaxed mb-4 md:mb-6">
               Sandila, a hidden gem in Uttar Pradesh, has always been synonymous with its world-famous Laddus. At SKS, we carry a legacy that dates back over 100 years. What started as a passion for preserving traditional flavors has now blossomed into a brand that stands for quality, authenticity, and love.
             </p>
-            <p className="text-lg text-gray-300 leading-relaxed">
+            <p className="text-base md:text-lg text-gray-300 leading-relaxed">
               Every single Laddu is handcrafted with precision, using recipes handed down through generations. From the selection of premium ingredients to the slow-roasting process, we ensure that every bite transports you back to the golden era of Nawabs and their grand feasts.
             </p>
           </div>
-          <div className="flex-1 grid grid-cols-2 gap-4">
-            <img src={sksShop} alt="SKS Laddu Shop" className="w-full rounded-2xl shadow-lg border border-[var(--color-secondary)]/20" />
-            <div className="flex flex-col gap-4 justify-center">
-              <div className="bg-[var(--color-muted)] p-6 rounded-2xl shadow-md border-l-4 border-[var(--color-secondary)]">
-                <h4 className="font-bold text-[var(--color-secondary)] text-2xl">100+</h4>
-                <p className="text-sm text-gray-400">Years of Heritage</p>
+          <div className="flex-1 grid grid-cols-2 gap-3 md:gap-4 w-full">
+            <img src={sksShop} alt="SKS Laddu Shop" className="w-full h-48 md:h-auto object-cover rounded-2xl shadow-lg border border-[var(--color-secondary)]/20" />
+            <div className="flex flex-col gap-3 md:gap-4 justify-center">
+              <div className="bg-[var(--color-muted)] p-4 md:p-6 rounded-2xl shadow-md border-l-4 border-[var(--color-secondary)]">
+                <h4 className="font-bold text-[var(--color-secondary)] text-xl md:text-2xl">100+</h4>
+                <p className="text-xs md:text-sm text-gray-400">Years of Heritage</p>
               </div>
-              <div className="bg-[var(--color-muted)] p-6 rounded-2xl shadow-md border-l-4 border-[var(--color-secondary)]">
-                <h4 className="font-bold text-[var(--color-secondary)] text-2xl">100%</h4>
-                <p className="text-sm text-gray-400">Natural Ingredients</p>
+              <div className="bg-[var(--color-muted)] p-4 md:p-6 rounded-2xl shadow-md border-l-4 border-[var(--color-secondary)]">
+                <h4 className="font-bold text-[var(--color-secondary)] text-xl md:text-2xl">100%</h4>
+                <p className="text-xs md:text-sm text-gray-400">Natural Ingredients</p>
               </div>
             </div>
           </div>
