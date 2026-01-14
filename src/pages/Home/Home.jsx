@@ -67,7 +67,7 @@ const Home = () => {
     <div className="bg-[var(--color-primary)] -mt-10 text-[var(--color-text)] font-[var(--font-body)] overflow-x-hidden">
 
       {/* Hero Section */}
-      <section className="flex flex-col md:flex-row items-center justify-between pt-24 pb-12 px-8 md:px-24 min-h-[70vh] bg-[linear-gradient(0deg,rgba(255,212,0,0.2)_0%,transparent_70%)] mt-0 relative z-10 shadow-2xl mb-8" id="home">
+      <section className="flex flex-col md:flex-row items-center justify-between pt-24 pb-12 px-8 md:px-24 min-h-[70vh] bg-[linear-gradient(0deg,rgba(255,212,0,0.2)_0%,transparent_70%)] mt-0 relative z-10 shadow-2xl mb-1" id="home">
         <div className="flex-1 max-w-xl text-center md:text-left z-10">
           <h1 className="text-4xl md:text-6xl text-[var(--color-secondary)] font-bold leading-tight mb-6">
             The Original Taste of Sandila, <br />Now at Your Home!
@@ -101,7 +101,7 @@ const Home = () => {
       </section>
 
       {/* Our Story Section */}
-      <section ref={addToRefs} className="scroll-section bg-[var(--color-primary)] text-[var(--color-secondary)] py-24 px-8 md:px-24 relative z-20 overflow-hidden shadow-2xl mb-8 border-t border-[var(--color-secondary)]/5" id="about">
+      <section ref={addToRefs} className="scroll-section bg-[var(--color-primary)] text-[var(--color-secondary)] py-24 px-8 md:px-24 relative z-20 overflow-hidden mb-2 border-t border-[var(--color-secondary)]/5 shadow-[0_10px_32px_-10px_rgba(255,255,255,0.24),0_-4px_16px_-6px_rgba(0,0,0,0.1)]" id="about">
         {/* Animated Background Bubbles */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="home-bubble home-bubble-1"></div>
@@ -166,7 +166,7 @@ const Home = () => {
       </section>
 
       {/* Special Laddus Section (Moved Up) */}
-      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 text-center bg-[var(--color-primary)] relative z-10 shadow-xl mb-8" id="laddus">
+      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 text-center bg-[var(--color-primary)] relative z-10 shadow-[0_10px_32px_-10px_rgba(255,255,255,0.24),0_-4px_16px_-6px_rgba(0,0,0,0.1)] mb-2" id="laddus">
         <h2 className="text-4xl text-[var(--color-secondary)] mb-2 font-bold">Our Special Laddus</h2>
         <p className="italic text-gray-500 mb-16">Pure and Delicious</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -184,7 +184,7 @@ const Home = () => {
       </section>
 
       {/* Our Priorities Section (Moved Down) */}
-      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-[var(--color-accent)]/5 relative z-10 shadow-xl mb-8" id="priorities">
+      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-[var(--color-accent)]/5 relative z-10 shadow-[0_10px_32px_-10px_rgba(255,255,255,0.24),0_-4px_16px_-6px_rgba(0,0,0,0.1)] mb-2" id="priorities">
         <h2 className="text-4xl text-[var(--color-secondary)] mb-16 font-bold text-center">Our Priorities</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
           <div className="text-center p-6 bg-[var(--color-muted)] rounded-xl shadow-md hover:shadow-lg transition-shadow">
@@ -219,7 +219,7 @@ const Home = () => {
       </section>
 
       {/* Video Reviews Section */}
-      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-muted)] text-center relative z-10 shadow-xl mb-8" id="testimonials">
+      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-muted)] text-center relative z-10 shadow-[0_10px_32px_-10px_rgba(255,255,255,0.24),0_-4px_16px_-6px_rgba(0,0,0,0.1)] mb-2" id="testimonials">
         <h2 className="text-4xl text-[var(--color-secondary)] mb-16 font-bold">Customer Video Reviews</h2>
         <div className="relative overflow-hidden">
           <div
@@ -283,7 +283,8 @@ const Home = () => {
       )}
 
       {/* Founder Section (Moved to Bottom) */}
-      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-[var(--color-primary)] relative z-10 shadow-xl mb-8" id="founders">
+      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-[var(--color-primary)] relative z-10 shadow-[0_10px_32px_-10px_rgba(255,255,255,0.24),0_-4px_16px_-6px_rgba(0,0,0,0.1)]
+" id="founders">
         <h2 className="text-4xl text-[var(--color-secondary)] mb-16 font-bold text-center">Meet Our Founders</h2>
         <div className="flex flex-col gap-16 max-w-6xl mx-auto">
           {/* Founder 1: Satish Kumar */}

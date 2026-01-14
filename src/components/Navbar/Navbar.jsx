@@ -27,7 +27,7 @@ const Navbar = () => {
     ];
 
     return (
-        <nav className="flex justify-between items-center py-6 px-4 md:px-16 bg-[var(--color-primary)] font-[var(--font-body)] fixed top-0 left-0 right-0 w-full z-[1000] shadow-md transition-all duration-300 border-b border-[var(--color-secondary)]/10">
+        <nav className="flex justify-between items-center py-2 px-4 md:px-16 bg-[var(--color-primary)] font-[var(--font-body)] fixed top-0 left-0 right-0 w-full z-[1000] shadow-[0_10px_32px_-10px_rgba(255,255,255,0.24),0_-4px_16px_-6px_rgba(0,0,0,0.1)] transition-all duration-300 border-b border-[var(--color-secondary)]/10">
             {/* Logo Section */}
             <div className="flex items-center gap-3">
                 <img src="/sks-logo.png" alt="SKS Logo" className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-[var(--color-secondary)] shadow-sm object-cover hover:scale-105 transition-transform cursor-pointer" onClick={() => navigate('/')} />

@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="bg-[var(--color-primary)] text-white py-16 px-8 md:px-24 relative overflow-hidden">
+    <footer className="bg-[var(--color-primary)] text-white py-16 px-8 md:px-24 relative overflow-hidden border-t-1 border-[var(--color-secondary)]">
+      {/* Decorative Top Border */}
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[var(--color-secondary)] to-transparent"></div>
       {/* Animated Background Bubbles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="footer-bubble footer-bubble-1"></div>
@@ -170,7 +172,7 @@ const Footer = () => {
         {/* Copyright */}
         <div className="border-t border-white/20 pt-6 text-center">
           <p className="text-gray-400 text-sm flex items-center justify-center gap-2">
-            © 2026 SKS Laddu. All rights reserved. Made in Sandila
+            © 2026 SKS Laddu. Designed and Developed by <a href="https://digicoders.in/" target="_blank" rel="noopener noreferrer" className="text-[var(--color-secondary)] hover:underline font-semibold">#TeamDigicoders</a>
           </p>
         </div>
       </div>

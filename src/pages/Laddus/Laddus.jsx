@@ -198,7 +198,7 @@ const Laddus = () => {
             </section>
 
             {/* Quality Promise */}
-            <section ref={addToRefs} className="scroll-section mt-16 md:mt-24 mx-6 md:mx-24 p-8 md:p-12 bg-[var(--color-muted)] rounded-[40px] md:rounded-[50px] shadow-lg text-center relative overflow-hidden border border-[var(--color-secondary)]/10">
+            <section ref={addToRefs} className="scroll-section mt-16 md:mt-24 mx-6 md:mx-24 p-8 md:p-12 bg-[var(--color-muted)] rounded-[40px] md:rounded-[50px] shadow-lg text-center relative overflow-hidden border border-[var(--color-secondary)]/10 ">
                 <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-[var(--color-secondary)] rounded-full -mr-12 -mt-12 md:-mr-16 md:-mt-16 opacity-10"></div>
                 <h2 className="text-2xl md:text-3xl font-bold text-[var(--color-secondary)] mb-8 md:mb-12 relative z-10 font-[var(--font-heading)]">The SKS Quality Promise</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 relative z-10">
