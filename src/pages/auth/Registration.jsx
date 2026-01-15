@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { User, Mail, Lock, Phone, MapPin, Home, Eye, EyeOff } from 'lucide-react';
+import { User, Mail, Lock, Phone, Calendar, Eye, EyeOff, ChevronDown } from 'lucide-react';
 
 const Registration = () => {
     const [formData, setFormData] = useState({
-        fullName: '',
+        firstName: '',
+        lastName: '',
+        phone: '',
+        dob: '',
+        gender: '',
         email: '',
         password: '',
-        confirmPassword: '',
-        phone: '',
-        city: '',
-        landmark: '',
-        houseNo: '',
-        address: ''
+        confirmPassword: ''
     });
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [showGenderDropdown, setShowGenderDropdown] = useState(false);
     const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {
@@ -34,8 +34,26 @@ const Registration = () => {
     const validateForm = () => {
         const newErrors = {};
         
-        if (!formData.fullName.trim()) {
-            newErrors.fullName = 'Full name is required';
+        if (!formData.firstName.trim()) {
+            newErrors.firstName = 'First name is required';
+        }
+        
+        if (!formData.lastName.trim()) {
+            newErrors.lastName = 'Last name is required';
+        }
+        
+        if (!formData.phone) {
+            newErrors.phone = 'Phone number is required';
+        } else if (!/^[6-9]\d{9}$/.test(formData.phone)) {
+            newErrors.phone = 'Phone must start with 6,7,8,9 and be 10 digits';
+        }
+        
+        if (!formData.dob) {
+            newErrors.dob = 'Date of birth is required';
+        }
+        
+        if (!formData.gender) {
+            newErrors.gender = 'Gender is required';
         }
         
         if (!formData.email) {
@@ -54,20 +72,6 @@ const Registration = () => {
             newErrors.confirmPassword = 'Confirm password is required';
         } else if (formData.password !== formData.confirmPassword) {
             newErrors.confirmPassword = 'Passwords do not match';
-        }
-        
-        if (!formData.phone) {
-            newErrors.phone = 'Phone number is required';
-        } else if (!/^[6-9]\d{9}$/.test(formData.phone)) {
-            newErrors.phone = 'Phone must start with 6,7,8,9 and be 10 digits';
-        }
-        
-        if (!formData.city.trim()) {
-            newErrors.city = 'City is required';
-        }
-        
-        if (!formData.landmark.trim()) {
-            newErrors.landmark = 'Landmark is required';
         }
         
         return newErrors;
@@ -96,35 +100,35 @@ const Registration = () => {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label className="block text-sm font-bold text-gray-300 mb-2">Full Name</label>
+                            <label className="block text-sm font-bold text-gray-300 mb-2">First Name</label>
                             <div className="relative">
                                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
                                 <input
                                     type="text"
-                                    name="fullName"
-                                    value={formData.fullName}
+                                    name="firstName"
+                                    value={formData.firstName}
                                     onChange={handleChange}
-                                    className={`w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.fullName ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
-                                    placeholder="Enter your full name"
+                                    className={`w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.firstName ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
+                                    placeholder="Enter first name"
                                 />
                             </div>
-                            {errors.fullName && <p className="text-red-400 text-sm mt-1">{errors.fullName}</p>}
+                            {errors.firstName && <p className="text-red-400 text-sm mt-1">{errors.firstName}</p>}
                         </div>
 
                         <div>
-                            <label className="block text-sm font-bold text-gray-300 mb-2">Email Address</label>
+                            <label className="block text-sm font-bold text-gray-300 mb-2">Last Name</label>
                             <div className="relative">
-                                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
+                                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
                                 <input
-                                    type="email"
-                                    name="email"
-                                    value={formData.email}
+                                    type="text"
+                                    name="lastName"
+                                    value={formData.lastName}
                                     onChange={handleChange}
-                                    className={`w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.email ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
-                                    placeholder="Enter your email"
+                                    className={`w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.lastName ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
+                                    placeholder="Enter last name"
                                 />
                             </div>
-                            {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
+                            {errors.lastName && <p className="text-red-400 text-sm mt-1">{errors.lastName}</p>}
                         </div>
                     </div>
 
@@ -176,79 +180,93 @@ const Registration = () => {
                         </div>
                     </div>
 
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label className="block text-sm font-bold text-gray-300 mb-2">Phone Number</label>
+                            <div className="relative">
+                                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
+                                <input
+                                    type="tel"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    className={`w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.phone ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
+                                    placeholder="Enter 10-digit phone number"
+                                    maxLength="10"
+                                />
+                            </div>
+                            {errors.phone && <p className="text-red-400 text-sm mt-1">{errors.phone}</p>}
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-bold text-gray-300 mb-2">Date of Birth</label>
+                            <div className="relative">
+                                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
+                                <input
+                                    type="date"
+                                    name="dob"
+                                    value={formData.dob}
+                                    onChange={handleChange}
+                                    className={`w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.dob ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
+                                />
+                            </div>
+                            {errors.dob && <p className="text-red-400 text-sm mt-1">{errors.dob}</p>}
+                        </div>
+                    </div>
+
                     <div>
-                        <label className="block text-sm font-bold text-gray-300 mb-2">Phone Number</label>
+                        <label className="block text-sm font-bold text-gray-300 mb-2">Gender</label>
                         <div className="relative">
-                            <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
-                            <input
-                                type="tel"
-                                name="phone"
-                                value={formData.phone}
-                                onChange={handleChange}
-                                className={`w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.phone ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
-                                placeholder="Enter 10-digit phone number"
-                                maxLength="10"
-                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowGenderDropdown(!showGenderDropdown)}
+                                className={`w-full px-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all text-left flex items-center justify-between ${
+                                    errors.gender ? 'border-red-500' : 'border-[var(--color-secondary)]/20'
+                                }`}
+                            >
+                                <span className={formData.gender ? 'text-white' : 'text-gray-500'}>
+                                    {formData.gender || 'Select gender'}
+                                </span>
+                                <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform ${showGenderDropdown ? 'rotate-180' : ''}`} />
+                            </button>
+                            {showGenderDropdown && (
+                                <div className="absolute z-10 w-full mt-2 bg-[var(--color-muted)] border border-[var(--color-secondary)]/20 rounded-xl shadow-lg overflow-hidden">
+                                    {['Male', 'Female', 'Other'].map((option) => (
+                                        <button
+                                            key={option}
+                                            type="button"
+                                            onClick={() => {
+                                                setFormData({ ...formData, gender: option });
+                                                setShowGenderDropdown(false);
+                                                if (errors.gender) {
+                                                    setErrors({ ...errors, gender: '' });
+                                                }
+                                            }}
+                                            className="w-full px-4 py-3 text-left text-white hover:bg-[var(--color-secondary)] hover:text-[var(--color-primary)] transition-all"
+                                        >
+                                            {option}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
                         </div>
-                        {errors.phone && <p className="text-red-400 text-sm mt-1">{errors.phone}</p>}
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div>
-                            <label className="block text-sm font-bold text-gray-300 mb-2">City</label>
-                            <div className="relative">
-                                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
-                                <input
-                                    type="text"
-                                    name="city"
-                                    value={formData.city}
-                                    onChange={handleChange}
-                                    className={`w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.city ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
-                                    placeholder="Enter city"
-                                />
-                            </div>
-                            {errors.city && <p className="text-red-400 text-sm mt-1">{errors.city}</p>}
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-bold text-gray-300 mb-2">Landmark</label>
-                            <input
-                                type="text"
-                                name="landmark"
-                                value={formData.landmark}
-                                onChange={handleChange}
-                                className={`w-full px-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.landmark ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
-                                placeholder="Enter landmark"
-                            />
-                            {errors.landmark && <p className="text-red-400 text-sm mt-1">{errors.landmark}</p>}
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-bold text-gray-300 mb-2">House No. (Optional)</label>
-                            <div className="relative">
-                                <Home className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
-                                <input
-                                    type="text"
-                                    name="houseNo"
-                                    value={formData.houseNo}
-                                    onChange={handleChange}
-                                    className="w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all"
-                                    placeholder="House/Flat No."
-                                />
-                            </div>
-                        </div>
+                        {errors.gender && <p className="text-red-400 text-sm mt-1">{errors.gender}</p>}
                     </div>
 
                     <div>
-                        <label className="block text-sm font-bold text-gray-300 mb-2">Additional Address Details</label>
-                        <textarea
-                            name="address"
-                            value={formData.address}
-                            onChange={handleChange}
-                            rows="3"
-                            className="w-full px-4 py-3 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all resize-none"
-                            placeholder="Street, Area, Additional details..."
-                        ></textarea>
+                        <label className="block text-sm font-bold text-gray-300 mb-2">Email Address</label>
+                        <div className="relative">
+                            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
+                            <input
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                className={`w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.email ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
+                                placeholder="Enter your email"
+                            />
+                        </div>
+                        {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
                     </div>
 
                     <button
