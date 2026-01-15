@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import { getProfileApi } from '../../api/user';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Mail, Phone, MapPin, Home, Lock, Eye, EyeOff, LogOut, Edit2, Save, X } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Home, Lock, Eye, EyeOff, LogOut, Edit2, Save, X, Calendar } from 'lucide-react';
 import { toast } from 'react-toastify';
 import Footer from '../../components/layout/Footer';
 
@@ -12,14 +13,48 @@ const Profile = () => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const [profileData, setProfileData] = useState({
-        fullName: 'Satish Kumar',
-        email: 'satish@example.com',
-        phone: '9876543210',
-        city: 'Sandila',
-        landmark: 'Near Railway Station',
-        houseNo: '123',
-        address: 'Main Road, Ahirawan'
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        dateOfBirth: '',
+        gender: '',
+        city: '',
+        landmark: '',
+        houseNo: '',
+        address: ''
     });
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const data = await getProfileApi();
+                const user = data.user;
+                if (user) {
+                    setProfileData(prev => ({
+                        ...prev,
+                        firstName: user.firstName || '',
+                        lastName: user.lastName || '',
+                        email: user.email || '',
+                        phone: user.phone || '',
+                        dateOfBirth: user.dateOfBirth ? new Date(user.dateOfBirth).toISOString().split('T')[0] : '',
+                        gender: user.gender || ''
+                        // Address fields left as is since they are not in the top-level user object shown
+                    }));
+                }
+            } catch (error) {
+                console.error("Failed to fetch profile:", error);
+
+                // If unauthorized, maybe redirect to login?
+                if (error.response && error.response.status === 401) {
+                    toast.error("Session expired. Please login again.");
+                    navigate('/login');
+                }
+            }
+        };
+
+        fetchProfile();
+    }, [navigate]);
 
     const [passwordData, setPasswordData] = useState({
         currentPassword: '',
@@ -61,6 +96,7 @@ const Profile = () => {
     };
 
     const handleLogout = () => {
+        localStorage.removeItem('userToken'); // Clear token
         toast.success('Logged out successfully!');
         navigate('/login');
     };
@@ -110,13 +146,13 @@ const Profile = () => {
                         <div className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-bold text-gray-300 mb-2">Full Name</label>
+                                    <label className="block text-sm font-bold text-gray-300 mb-2">First Name</label>
                                     <div className="relative">
                                         <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
                                         <input
                                             type="text"
-                                            name="fullName"
-                                            value={profileData.fullName}
+                                            name="firstName"
+                                            value={profileData.firstName}
                                             onChange={handleProfileChange}
                                             disabled={!isEditing}
                                             className="w-full pl-10 pr-4 py-2.5 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-lg outline-none transition-all text-sm disabled:opacity-60"
@@ -124,6 +160,23 @@ const Profile = () => {
                                     </div>
                                 </div>
 
+                                <div>
+                                    <label className="block text-sm font-bold text-gray-300 mb-2">Last Name</label>
+                                    <div className="relative">
+                                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
+                                        <input
+                                            type="text"
+                                            name="lastName"
+                                            value={profileData.lastName}
+                                            onChange={handleProfileChange}
+                                            disabled={!isEditing}
+                                            className="w-full pl-10 pr-4 py-2.5 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-lg outline-none transition-all text-sm disabled:opacity-60"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-bold text-gray-300 mb-2">Email</label>
                                     <div className="relative">
@@ -137,21 +190,56 @@ const Profile = () => {
                                         />
                                     </div>
                                 </div>
+
+                                <div>
+                                    <label className="block text-sm font-bold text-gray-300 mb-2">Gender</label>
+                                    <div className="relative">
+                                        <select
+                                            name="gender"
+                                            value={profileData.gender}
+                                            onChange={handleProfileChange}
+                                            disabled={!isEditing}
+                                            className="w-full px-4 py-2.5 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-lg outline-none transition-all text-sm disabled:opacity-60"
+                                        >
+                                            <option value="">Select Gender</option>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-bold text-gray-300 mb-2">Phone Number</label>
-                                <div className="relative">
-                                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
-                                    <input
-                                        type="tel"
-                                        name="phone"
-                                        value={profileData.phone}
-                                        onChange={handleProfileChange}
-                                        disabled={!isEditing}
-                                        className="w-full pl-10 pr-4 py-2.5 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-lg outline-none transition-all text-sm disabled:opacity-60"
-                                        maxLength="10"
-                                    />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-bold text-gray-300 mb-2">Phone Number</label>
+                                    <div className="relative">
+                                        <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
+                                        <input
+                                            type="tel"
+                                            name="phone"
+                                            value={profileData.phone}
+                                            onChange={handleProfileChange}
+                                            disabled={!isEditing}
+                                            className="w-full pl-10 pr-4 py-2.5 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-lg outline-none transition-all text-sm disabled:opacity-60"
+                                            maxLength="10"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-bold text-gray-300 mb-2">Date of Birth</label>
+                                    <div className="relative">
+                                        <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
+                                        <input
+                                            type="date"
+                                            name="dateOfBirth"
+                                            value={profileData.dateOfBirth}
+                                            onChange={handleProfileChange}
+                                            disabled={!isEditing}
+                                            className="w-full pl-10 pr-4 py-2.5 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-lg outline-none transition-all text-sm disabled:opacity-60"
+                                        />
+                                    </div>
                                 </div>
                             </div>
 

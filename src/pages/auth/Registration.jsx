@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { User, Mail, Lock, Phone, Calendar, Eye, EyeOff, ChevronDown } from 'lucide-react';
+import { createUserApi } from '../../api/user';
 
 const Registration = () => {
     const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ const Registration = () => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [showGenderDropdown, setShowGenderDropdown] = useState(false);
     const [errors, setErrors] = useState({});
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({
@@ -33,57 +35,78 @@ const Registration = () => {
 
     const validateForm = () => {
         const newErrors = {};
-        
+
         if (!formData.firstName.trim()) {
             newErrors.firstName = 'First name is required';
         }
-        
+
         if (!formData.lastName.trim()) {
             newErrors.lastName = 'Last name is required';
         }
-        
+
         if (!formData.phone) {
             newErrors.phone = 'Phone number is required';
         } else if (!/^[6-9]\d{9}$/.test(formData.phone)) {
             newErrors.phone = 'Phone must start with 6,7,8,9 and be 10 digits';
         }
-        
+
         if (!formData.dob) {
             newErrors.dob = 'Date of birth is required';
         }
-        
+
         if (!formData.gender) {
             newErrors.gender = 'Gender is required';
         }
-        
+
         if (!formData.email) {
             newErrors.email = 'Email is required';
         } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
             newErrors.email = 'Email is invalid';
         }
-        
+
         if (!formData.password) {
             newErrors.password = 'Password is required';
         } else if (formData.password.length < 6) {
             newErrors.password = 'Password must be at least 6 characters';
         }
-        
+
         if (!formData.confirmPassword) {
             newErrors.confirmPassword = 'Confirm password is required';
         } else if (formData.password !== formData.confirmPassword) {
             newErrors.confirmPassword = 'Passwords do not match';
         }
-        
+
         return newErrors;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const newErrors = validateForm();
-        
+
         if (Object.keys(newErrors).length === 0) {
-            console.log('Registration data:', formData);
-            alert('Registration successful!');
+            try {
+                const payload = {
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    email: formData.email,
+                    phone: formData.phone,
+                    password: formData.password,
+                    dateOfBirth: formData.dob,
+                    gender: formData.gender.toLowerCase()
+                };
+
+                const response = await createUserApi(payload);
+
+                if (response.token) {
+                    localStorage.setItem('userToken', response.token);
+                    alert('Registration successful!');
+                    navigate('/');
+                }
+            } catch (error) {
+                console.error('Registration failed:', error);
+                const errorMessage = error.response?.data?.message || 'Registration failed. Please try again.';
+                alert(errorMessage);
+            }
         } else {
             setErrors(newErrors);
         }
@@ -220,9 +243,8 @@ const Registration = () => {
                             <button
                                 type="button"
                                 onClick={() => setShowGenderDropdown(!showGenderDropdown)}
-                                className={`w-full px-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all text-left flex items-center justify-between ${
-                                    errors.gender ? 'border-red-500' : 'border-[var(--color-secondary)]/20'
-                                }`}
+                                className={`w-full px-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all text-left flex items-center justify-between ${errors.gender ? 'border-red-500' : 'border-[var(--color-secondary)]/20'
+                                    }`}
                             >
                                 <span className={formData.gender ? 'text-white' : 'text-gray-500'}>
                                     {formData.gender || 'Select gender'}

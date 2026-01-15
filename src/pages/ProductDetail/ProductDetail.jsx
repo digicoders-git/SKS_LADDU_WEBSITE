@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ShoppingCart, ArrowLeft, Star, Package, Truck, Shield } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
@@ -8,30 +8,59 @@ import kesarLaddu from '../../assets/images/kesar-laddu.png';
 import nariyalLaddu from '../../assets/images/nariyal-laddu.png';
 import heroLaddus from '../../assets/images/hero-laddus.png';
 
+import { getProductApi } from '../../api/product';
+
+
 const ProductDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { addToCart } = useCart();
+    const [product, setProduct] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
 
-    // All products data
-    const allProducts = [
-        { id: 1, name: 'Classic Besan Laddu', img: besanLaddu, price: 480, priceStr: '₹480 / kg', description: 'Hand-roasted gram flour blended with pure desi ghee. A timeless tradition.', category: 'Classic', ingredients: 'Gram Flour, Desi Ghee, Sugar, Cardamom', shelfLife: '15 days' },
-        { id: 2, name: 'Kesar Dry Fruit Laddu', img: kesarLaddu, price: 750, priceStr: '₹750 / kg', description: 'Rich saffron infusion with premium cashews, almonds, and pistachios.', category: 'Dry Fruit', ingredients: 'Cashews, Almonds, Pistachios, Saffron, Sugar, Ghee', shelfLife: '20 days' },
-        { id: 3, name: 'Nariyal Laddu', img: nariyalLaddu, price: 380, priceStr: '₹380 / kg', description: 'Juicy coconut crumbles bound with condensed milk and cardamom.', category: 'Exotic', ingredients: 'Fresh Coconut, Condensed Milk, Sugar, Cardamom', shelfLife: '10 days' },
-        { id: 4, name: 'Motichoor Laddu', img: heroLaddus, price: 520, priceStr: '₹520 / kg', description: 'Tiny pearls of gram flour deep-fried and soaked in flavored syrup.', category: 'Classic', ingredients: 'Gram Flour, Sugar Syrup, Ghee, Cardamom', shelfLife: '12 days' },
-        { id: 5, name: 'Mixed Nut Laddu', img: kesarLaddu, price: 820, priceStr: '₹820 / kg', description: 'A powerhouse of energy made entirely of crushed dried fruits and honey.', category: 'Dry Fruit', ingredients: 'Mixed Nuts, Dates, Honey, Dried Fruits', shelfLife: '25 days' },
-        { id: 6, name: 'Rose Petal Laddu', img: nariyalLaddu, price: 550, priceStr: '₹550 / kg', description: 'Elegant laddus infused with organic rose water and edible petals.', category: 'Exotic', ingredients: 'Rose Petals, Rose Water, Khoya, Sugar, Ghee', shelfLife: '8 days' },
-        { id: 7, name: 'Sugar-Free Dates Laddu', img: besanLaddu, price: 680, priceStr: '₹680 / kg', description: 'Naturally sweetened with premium dates and no added refined sugar.', category: 'Sugar-Free', ingredients: 'Dates, Almonds, Cashews, Ghee', shelfLife: '18 days' },
-        { id: 8, name: 'Gond Laddu', img: heroLaddus, price: 700, priceStr: '₹700 / kg', description: 'Traditional winter special made with edible gum and whole wheat.', category: 'Seasonal', ingredients: 'Edible Gum, Wheat Flour, Jaggery, Ghee, Dry Fruits', shelfLife: '30 days' },
-        { id: 9, name: 'Flax Seed Laddu', img: besanLaddu, price: 600, priceStr: '₹600 / kg', description: 'Healthy oats and flax seeds for a guilt-free sweet experience.', category: 'Sugar-Free', ingredients: 'Flax Seeds, Oats, Jaggery, Ghee, Sesame', shelfLife: '22 days' },
-        { id: 101, name: 'Classic Besan Laddu', img: besanLaddu, price: 480, priceStr: '₹480 / kg', description: 'Hand-roasted gram flour blended with pure desi ghee.', category: 'Classic', ingredients: 'Gram Flour, Desi Ghee, Sugar, Cardamom', shelfLife: '15 days' },
-        { id: 102, name: 'Kesar Dry Fruit Laddu', img: kesarLaddu, price: 750, priceStr: '₹750 / kg', description: 'Rich saffron infusion with premium dry fruits.', category: 'Dry Fruit', ingredients: 'Cashews, Almonds, Pistachios, Saffron, Sugar, Ghee', shelfLife: '20 days' },
-        { id: 103, name: 'Nariyal Laddu', img: nariyalLaddu, price: 380, priceStr: '₹380 / kg', description: 'Soft coconut crumbles with a hint of cardamom.', category: 'Exotic', ingredients: 'Fresh Coconut, Condensed Milk, Sugar, Cardamom', shelfLife: '10 days' }
-    ];
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const data = await getProductApi(id);
+                // Map API response to component structure
+                const p = data.product;
+                setProduct({
+                    id: p._id,
+                    name: p.name,
+                    img: p.mainImage?.url || besanLaddu,
+                    price: p.price,
+                    finalPrice: p.finalPrice,
+                    discountPercent: p.discountPercent,
+                    priceStr: `₹${p.finalPrice} / kg`,
+                    description: p.description,
+                    category: p.category?.name || 'Special',
+                    ingredients: p.about?.ingredients || 'N/A',
+                    shelfLife: p.about?.shelfLife || 'N/A',
+                    netWeight: p.about?.netWeight || '1kg'
+                });
+                setLoading(false);
+            } catch (err) {
+                console.error("Failed to fetch product:", err);
+                setError(true);
+                setLoading(false);
+            }
+        };
 
-    const product = allProducts.find(p => p.id === parseInt(id));
+        if (id) {
+            fetchProduct();
+        }
+    }, [id]);
 
-    if (!product) {
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-[var(--color-primary)]">
+                <p className="text-[var(--color-secondary)] text-xl animate-pulse">Loading delicious details...</p>
+            </div>
+        );
+    }
+
+    if (error || !product) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-[var(--color-primary)]">
                 <div className="text-center">
@@ -108,14 +137,24 @@ const ProductDetail = () => {
                             <div className="space-y-2 text-sm text-gray-300">
                                 <p><span className="font-semibold text-white">Ingredients:</span> {product.ingredients}</p>
                                 <p><span className="font-semibold text-white">Shelf Life:</span> {product.shelfLife}</p>
-                                <p><span className="font-semibold text-white">Net Weight:</span> 1 kg</p>
+                                <p><span className="font-semibold text-white">Net Weight:</span> {product.netWeight}</p>
                             </div>
                         </div>
 
                         <div className="flex items-center justify-between mb-8">
                             <div>
                                 <p className="text-sm text-gray-400 mb-1">Price per kg</p>
-                                <p className="text-4xl font-bold text-[var(--color-secondary)]">₹{product.price}</p>
+                                <div className="flex items-center gap-3">
+                                    <p className="text-4xl font-bold text-[var(--color-secondary)]">₹{product.finalPrice}</p>
+                                    {product.discountPercent > 0 && (
+                                        <>
+                                            <p className="text-xl text-gray-500 line-through">₹{product.price}</p>
+                                            <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">
+                                                {product.discountPercent}% OFF
+                                            </span>
+                                        </>
+                                    )}
+                                </div>
                             </div>
                         </div>
 

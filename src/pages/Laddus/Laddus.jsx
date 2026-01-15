@@ -7,81 +7,78 @@ import kesarLaddu from '../../assets/images/kesar-laddu.png';
 import nariyalLaddu from '../../assets/images/nariyal-laddu.png';
 import heroLaddus from '../../assets/images/hero-laddus.png';
 
+import { listCategoriesApi } from '../../api/categories';
+
+import { listProductsApi, listProductsByCategoryApi } from '../../api/product';
+
 const Laddus = () => {
-    const [activeCategory, setActiveCategory] = useState('All');
+    const [activeCategory, setActiveCategory] = useState({ name: 'All', id: 'all' });
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
+    const [categories, setCategories] = useState([{ name: 'All', id: 'all' }]);
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const sectionRefs = useRef([]);
     const dropdownRef = useRef(null);
 
-    // Auto-close dropdown when clicking outside
+    // Fetch categories on mount
     useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setIsDropdownOpen(false);
+        const fetchCategories = async () => {
+            try {
+                const data = await listCategoriesApi();
+                // Store full category objects, ensuring id is present
+                setCategories([{ name: 'All', id: 'all' }, ...data.categories.map(c => ({ ...c, id: c._id || c.id }))]);
+            } catch (error) {
+                console.error("Failed to fetch categories:", error);
             }
         };
 
-        if (isDropdownOpen) {
-            document.addEventListener('mousedown', handleClickOutside);
-        } else {
-            document.removeEventListener('mousedown', handleClickOutside);
-        }
-
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isDropdownOpen]);
-
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            },
-            { threshold: 0.1 }
-        );
-
-        sectionRefs.current.forEach((ref) => {
-            if (ref) observer.observe(ref);
-        });
-
-        return () => observer.disconnect();
+        fetchCategories();
     }, []);
+
+    // Fetch products when activeCategory changes
+    useEffect(() => {
+        const fetchProducts = async () => {
+            setLoading(true);
+            try {
+                let data;
+                if (activeCategory.id === 'all') {
+                    // Response: { products: [...] }
+                    data = await listProductsApi();
+                    setProducts(data.products || []);
+                } else {
+                    // Response: { category: {...}, products: [...] }
+                    data = await listProductsByCategoryApi(activeCategory.id);
+                    setProducts(data.products || []);
+                }
+            } catch (error) {
+                console.error("Failed to fetch products:", error);
+                setProducts([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, [activeCategory]);
+
+    // Local filtering for price
+    const filteredLaddus = products.filter(laddu => {
+        const price = laddu.finalPrice || laddu.price || 0; // Default to 0 if missing
+        const min = minPrice === '' ? 0 : parseInt(minPrice);
+        const max = maxPrice === '' ? 10000 : parseInt(maxPrice);
+        const matchesPrice = price >= min && price <= max;
+        return matchesPrice;
+    });
+
 
     const addToRefs = (el) => {
         if (el && !sectionRefs.current.includes(el)) {
             sectionRefs.current.push(el);
         }
     };
-
-    const allLaddus = [
-        { id: 1, name: 'Classic Besan Laddu', img: besanLaddu, price: 480, priceStr: '₹480 / kg', description: 'Hand-roasted gram flour blended with pure desi ghee. A timeless tradition.', category: 'Classic' },
-        { id: 2, name: 'Kesar Dry Fruit Laddu', img: kesarLaddu, price: 750, priceStr: '₹750 / kg', description: 'Rich saffron infusion with premium cashews, almonds, and pistachios.', category: 'Dry Fruit' },
-        { id: 3, name: 'Nariyal Laddu', img: nariyalLaddu, price: 380, priceStr: '₹380 / kg', description: 'Juicy coconut crumbles bound with condensed milk and cardamom.', category: 'Exotic' },
-        { id: 4, name: 'Motichoor Laddu', img: heroLaddus, price: 520, priceStr: '₹520 / kg', description: 'Tiny pearls of gram flour deep-fried and soaked in flavored syrup.', category: 'Classic' },
-        { id: 5, name: 'Mixed Nut Laddu', img: kesarLaddu, price: 820, priceStr: '₹820 / kg', description: 'A powerhouse of energy made entirely of crushed dried fruits and honey.', category: 'Dry Fruit' },
-        { id: 6, name: 'Rose Petal Laddu', img: nariyalLaddu, price: 550, priceStr: '₹550 / kg', description: 'Elegant laddus infused with organic rose water and edible petals.', category: 'Exotic' },
-        { id: 7, name: 'Sugar-Free Dates Laddu', img: besanLaddu, price: 680, priceStr: '₹680 / kg', description: 'Naturally sweetened with premium dates and no added refined sugar.', category: 'Sugar-Free' },
-        { id: 8, name: 'Gond Laddu', img: heroLaddus, price: 700, priceStr: '₹700 / kg', description: 'Traditional winter special made with edible gum and whole wheat.', category: 'Seasonal' },
-        { id: 9, name: 'Flax Seed Laddu', img: besanLaddu, price: 600, priceStr: '₹600 / kg', description: 'Healthy oats and flax seeds for a guilt-free sweet experience.', category: 'Sugar-Free' },
-    ];
-
-    const categories = ['All', 'Classic', 'Dry Fruit', 'Exotic', 'Sugar-Free', 'Seasonal'];
-
-
-    const filteredLaddus = allLaddus.filter(laddu => {
-        const matchesCategory = activeCategory === 'All' || laddu.category === activeCategory;
-        const price = laddu.price;
-        const min = minPrice === '' ? 0 : parseInt(minPrice);
-        const max = maxPrice === '' ? 10000 : parseInt(maxPrice);
-        const matchesPrice = price >= min && price <= max;
-        return matchesCategory && matchesPrice;
-    });
 
     return (
         <div className="bg-[var(--color-primary)] text-[var(--color-text)] font-[var(--font-body)] min-h-screen overflow-x-hidden">
@@ -137,7 +134,7 @@ const Laddus = () => {
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                         className={`w-full bg-[var(--color-muted)] flex items-center justify-between px-6 py-4 rounded-[22px] shadow-lg border border-[var(--color-secondary)]/20 transition-all active:scale-[0.98] ${isDropdownOpen ? 'ring-2 ring-[var(--color-secondary)]/30' : ''}`}
                     >
-                        <span className="font-bold text-white text-base">{activeCategory}</span>
+                        <span className="font-bold text-white text-base">{activeCategory.name}</span>
                         <ChevronDown className={`text-[var(--color-secondary)] transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} size={20} />
                     </button>
 
@@ -146,14 +143,14 @@ const Laddus = () => {
                         <div className="p-2 py-3 flex flex-col">
                             {categories.map((cat, idx) => (
                                 <button
-                                    key={cat}
+                                    key={cat.id}
                                     onClick={() => {
                                         setActiveCategory(cat);
                                         setIsDropdownOpen(false);
                                     }}
-                                    className={`w-full text-left px-5 py-3.5 rounded-2xl text-sm font-bold transition-all ${activeCategory === cat ? 'bg-[var(--color-secondary)] text-[var(--color-primary)]' : 'text-gray-300 hover:bg-[var(--color-primary)] hover:text-[var(--color-secondary)]'}`}
+                                    className={`w-full text-left px-5 py-3.5 rounded-2xl text-sm font-bold transition-all ${activeCategory.id === cat.id ? 'bg-[var(--color-secondary)] text-[var(--color-primary)]' : 'text-gray-300 hover:bg-[var(--color-primary)] hover:text-[var(--color-secondary)]'}`}
                                 >
-                                    {cat}
+                                    {cat.name}
                                 </button>
                             ))}
                         </div>
@@ -164,14 +161,14 @@ const Laddus = () => {
                 <div className="hidden md:flex flex-wrap justify-center gap-3">
                     {categories.map(cat => (
                         <button
-                            key={cat}
+                            key={cat.id}
                             onClick={() => setActiveCategory(cat)}
-                            className={`px-6 py-2 rounded-full font-bold text-sm transition-all duration-300 border-2 ${activeCategory === cat
+                            className={`px-6 py-2 rounded-full font-bold text-sm transition-all duration-300 border-2 ${activeCategory.id === cat.id
                                 ? 'bg-[var(--color-secondary)] text-[var(--color-primary)] border-[var(--color-secondary)] shadow-[0_0_15px_rgba(255,212,0,0.3)] scale-105'
                                 : 'bg-transparent text-[var(--color-secondary)] border-[var(--color-secondary)]/30 hover:border-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/10'
                                 }`}
                         >
-                            {cat}
+                            {cat.name}
                         </button>
                     ))}
                 </div>
@@ -180,17 +177,37 @@ const Laddus = () => {
             </section>
 
             {/* Laddu Grid */}
-            <section ref={addToRefs} className="scroll-section px-6 md:px-24 relative z-0 mb-20">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-                    {filteredLaddus.map((laddu) => (
-                        <LadduCard
-                            key={laddu.id}
-                            product={laddu}
-                        />
-                    ))}
+            <section ref={addToRefs} className="px-6 md:px-24 relative z-0 mb-20">
+                <div className="text-center mb-6 text-gray-400 text-sm">
+                    Showing {filteredLaddus.length} delicious laddus
                 </div>
 
-                {filteredLaddus.length === 0 && (
+                {loading ? (
+                    <div className="text-center py-20 text-[var(--color-secondary)] animate-pulse text-xl">
+                        Fetching delicious laddus...
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+                        {filteredLaddus.map((laddu) => (
+                            <LadduCard
+                                key={laddu._id}
+                                product={{
+                                    id: laddu._id,
+                                    name: laddu.name,
+                                    img: laddu.mainImage?.url || besanLaddu,
+                                    price: laddu.price,
+                                    finalPrice: laddu.finalPrice,
+                                    discountPercent: laddu.discountPercent,
+                                    priceStr: `₹${laddu.finalPrice} / kg`,
+                                    description: laddu.description,
+                                    category: laddu.category?.name || 'Special'
+                                }}
+                            />
+                        ))}
+                    </div>
+                )}
+
+                {!loading && filteredLaddus.length === 0 && (
                     <div className="text-center py-20">
                         <p className="text-xl md:text-2xl text-gray-500 italic">No laddus found in this selection. Try adjusting your filters!</p>
                     </div>
@@ -198,7 +215,7 @@ const Laddus = () => {
             </section>
 
             {/* Quality Promise */}
-            <section ref={addToRefs} className="scroll-section mt-16 md:mt-24 mx-6 md:mx-24 p-8 md:p-12 bg-[var(--color-muted)] rounded-[40px] md:rounded-[50px] shadow-lg text-center relative overflow-hidden border border-[var(--color-secondary)]/10 ">
+            <section ref={addToRefs} className="mt-16 md:mt-24 mx-6 md:mx-24 p-8 md:p-12 bg-[var(--color-muted)] rounded-[40px] md:rounded-[50px] shadow-lg text-center relative overflow-hidden border border-[var(--color-secondary)]/10 ">
                 <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-[var(--color-secondary)] rounded-full -mr-12 -mt-12 md:-mr-16 md:-mt-16 opacity-10"></div>
                 <h2 className="text-2xl md:text-3xl font-bold text-[var(--color-secondary)] mb-8 md:mb-12 relative z-10 font-[var(--font-heading)]">The SKS Quality Promise</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 relative z-10">

@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'react-toastify';
 
+import { loginUserApi } from '../../api/user';
+
 const Login = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -10,6 +12,7 @@ const Login = () => {
         password: ''
     });
     const [showPassword, setShowPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (e) => {
         setFormData({
@@ -18,16 +21,30 @@ const Login = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (!formData.email || !formData.password) {
             toast.error('Please fill in all fields');
             return;
         }
-        
-        toast.success('Login successful!');
-        navigate('/');
+
+        setIsLoading(true);
+        try {
+            const response = await loginUserApi(formData);
+            if (response.token) {
+                localStorage.setItem('userToken', response.token);
+                toast.success('Login successful!');
+                navigate('/');
+            }
+        } catch (error) {
+            console.error("Login Error:", error);
+            // Prioritize server-side error message
+            const errorMessage = error.response?.data?.message || 'Something went wrong. Please try again.';
+            toast.error(errorMessage);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -80,16 +97,17 @@ const Login = () => {
 
                     <button
                         type="submit"
-                        className="w-full bg-[var(--color-secondary)] text-[var(--color-primary)] py-3 rounded-xl font-bold hover:opacity-90 transition-all shadow-lg"
+                        disabled={isLoading}
+                        className="w-full bg-[var(--color-secondary)] text-[var(--color-primary)] py-3 rounded-xl font-bold hover:opacity-90 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        Login
+                        {isLoading ? 'Logging in...' : 'Login'}
                     </button>
                 </form>
 
                 <div className="mt-6 text-center">
                     <p className="text-gray-400">
                         Don't have an account?{' '}
-                        <Link to="/registration" className="text-[var(--color-secondary)] font-bold hover:underline">
+                        <Link to="/register" className="text-[var(--color-secondary)] font-bold hover:underline">
                             Create Account
                         </Link>
                     </p>

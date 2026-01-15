@@ -59,7 +59,17 @@ const LadduCard = ({ product }) => {
                 {name}
             </h3>
             <p className="text-xs md:text-sm text-gray-400 italic mb-4 line-clamp-2">{description}</p>
-            <div className="text-lg md:text-xl font-bold text-[var(--color-secondary)] mb-6">{priceStr}</div>
+            <div className="flex flex-col items-center mb-6">
+                <div className="text-lg md:text-xl font-bold text-[var(--color-secondary)]">
+                    ₹{product.finalPrice || product.price} / kg
+                </div>
+                {product.discountPercent > 0 && (
+                    <div className="flex items-center gap-2 mt-1">
+                        <span className="text-sm text-gray-500 line-through">₹{product.price}</span>
+                        <span className="text-xs text-green-500 font-bold">{product.discountPercent}% OFF</span>
+                    </div>
+                )}
+            </div>
 
             <button
                 onClick={handleAddToCart}

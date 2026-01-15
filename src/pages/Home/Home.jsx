@@ -9,10 +9,25 @@ import besanLaddu from '../../assets/images/besan-laddu.png';
 import kesarLaddu from '../../assets/images/kesar-laddu.png';
 import nariyalLaddu from '../../assets/images/nariyal-laddu.png';
 
+import { listProductsApi } from '../../api/product';
+
 const Home = () => {
   const sectionRefs = useRef([]);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const scrollRef = useRef(null);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const data = await listProductsApi();
+        setProducts(data.products || []);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   const videoReviews = [
     { id: 1, name: 'Anjali S.', thumbnail: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
@@ -165,22 +180,58 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Special Laddus Section (Moved Up) */}
-      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 text-center bg-[var(--color-primary)] relative z-10 shadow-[0_10px_32px_-10px_rgba(255,255,255,0.24),0_-4px_16px_-6px_rgba(0,0,0,0.1)] mb-2" id="laddus">
-        <h2 className="text-4xl text-[var(--color-secondary)] mb-2 font-bold">Our Special Laddus</h2>
+      {/* Our Laddus Section - Auto Scrolling Carousel */}
+      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 text-center bg-[var(--color-primary)] relative z-10 shadow-[0_10px_32px_-10px_rgba(255,255,255,0.24),0_-4px_16px_-6px_rgba(0,0,0,0.1)] mb-2 overflow-hidden" id="laddus">
+        <h2 className="text-4xl text-[var(--color-secondary)] mb-2 font-bold">Our Laddus</h2>
         <p className="italic text-gray-500 mb-16">Pure and Delicious</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {[
-            { id: 101, name: 'Classic Besan Laddu', img: besanLaddu, price: 480, priceStr: '₹480 / kg', description: 'Hand-roasted gram flour blended with pure desi ghee.', category: 'Classic' },
-            { id: 102, name: 'Kesar Dry Fruit Laddu', img: kesarLaddu, price: 750, priceStr: '₹750 / kg', description: 'Rich saffron infusion with premium dry fruits.', category: 'Dry Fruit' },
-            { id: 103, name: 'Nariyal Laddu', img: nariyalLaddu, price: 380, priceStr: '₹380 / kg', description: 'Soft coconut crumbles with a hint of cardamom.', category: 'Exotic' }
-          ].map((item, i) => (
-            <LadduCard
-              key={item.name}
-              product={item}
-            />
-          ))}
+
+        <div className="relative w-full overflow-hidden">
+          <div
+            className="flex gap-8 animate-scroll hover:pause-animation"
+            style={{
+              width: 'max-content',
+              animation: `scroll ${products.length * 5}s linear infinite`
+            }}
+          >
+            {/* Duplicate products to create seamless infinite scroll effect */}
+            {[...products, ...products, ...products].map((item, index) => (
+              <div key={`${item._id}-${index}`} className="w-[300px] md:w-[350px] flex-shrink-0">
+                <LadduCard
+                  product={{
+                    id: item._id,
+                    name: item.name,
+                    img: item.mainImage?.url || besanLaddu,
+                    price: item.price,
+                    finalPrice: item.finalPrice,
+                    discountPercent: item.discountPercent,
+                    priceStr: `₹${item.finalPrice} / kg`,
+                    description: item.description,
+                    category: item.category?.name || 'Special'
+                  }}
+                />
+              </div>
+            ))}
+          </div>
         </div>
+
+        <style dangerouslySetInnerHTML={{
+          __html: `
+                @keyframes scroll {
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(-33.33%); } /* Move by 1/3 since we tripled the list */
+                }
+                .animate-scroll {
+                    display: flex;
+                }
+                .hover\\:pause-animation:hover {
+                    animation-play-state: paused;
+                }
+             `
+        }} />
+
+        {products.length === 0 && (
+          <p className="text-gray-400">Loading delicious laddus...</p>
+        )}
       </section>
 
       {/* Our Priorities Section (Moved Down) */}
