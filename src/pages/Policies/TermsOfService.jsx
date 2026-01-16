@@ -24,7 +24,7 @@ const TermsOfService = () => {
 
                     <h2 className="text-2xl font-bold text-[var(--color-secondary)] mb-6 font-serif">3. Pricing and Payment</h2>
                     <p className="mb-8 leading-relaxed text-gray-300">
-                        All prices are in INR. We reserve the right to change prices without prior notice. Payments must be made in full before an order is processed for shipping.
+                        All prices are in INR. We reserve the right to change prices without prior notice. Payments must be made in full before an order is processed for shipping. <span className="text-red-400 font-bold">Online payment orders cannot be cancelled once placed.</span>
                     </p>
 
                     <h2 className="text-2xl font-bold text-[var(--color-secondary)] mb-6 font-serif">4. Intellectual Property</h2>

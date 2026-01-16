@@ -11,10 +11,19 @@ import nariyalLaddu from '../../assets/images/nariyal-laddu.png';
 
 import { listProductsApi } from '../../api/product';
 
+const videoReviews = [
+  { id: 1, name: 'Anjali S.', thumbnail: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
+  { id: 2, name: 'Rajesh K.', thumbnail: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4' },
+  { id: 3, name: 'Meera T.', thumbnail: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4' },
+  { id: 4, name: 'Suresh P.', thumbnail: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4' },
+  { id: 5, name: 'Priya M.', thumbnail: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4' }
+];
+
 const Home = () => {
   const sectionRefs = useRef([]);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const scrollRef = useRef(null);
+  const ladduScrollRef = useRef(null);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -28,14 +37,6 @@ const Home = () => {
     };
     fetchProducts();
   }, []);
-
-  const videoReviews = [
-    { id: 1, name: 'Anjali S.', thumbnail: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
-    { id: 2, name: 'Rajesh K.', thumbnail: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4' },
-    { id: 3, name: 'Meera T.', thumbnail: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4' },
-    { id: 4, name: 'Suresh P.', thumbnail: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4' },
-    { id: 5, name: 'Priya M.', thumbnail: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4' }
-  ];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -57,20 +58,69 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const scrollContainer = scrollRef.current;
-    if (!scrollContainer) return;
+    const videoContainer = scrollRef.current;
+    const ladduContainer = ladduScrollRef.current;
 
-    const scroll = () => {
-      if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth - scrollContainer.clientWidth) {
-        scrollContainer.scrollLeft = 0;
-      } else {
-        scrollContainer.scrollLeft += 1;
-      }
+    let videoInterval;
+    let ladduInterval;
+
+    const startVideoScroll = () => {
+      if (videoInterval) clearInterval(videoInterval);
+      videoInterval = setInterval(() => {
+        if (!videoContainer) return;
+        if (videoContainer.scrollLeft >= videoContainer.scrollWidth / 3) {
+          videoContainer.scrollLeft = 0;
+        } else {
+          videoContainer.scrollLeft += 1.5; // Adjusted speed for smoothness
+        }
+      }, 20);
     };
 
-    const interval = setInterval(scroll, 50);
-    return () => clearInterval(interval);
-  }, []);
+    const startLadduScroll = () => {
+      if (ladduInterval) clearInterval(ladduInterval);
+      ladduInterval = setInterval(() => {
+        if (!ladduContainer) return;
+        if (ladduContainer.scrollLeft >= ladduContainer.scrollWidth / 3) {
+          ladduContainer.scrollLeft = 0;
+        } else {
+          ladduContainer.scrollLeft += 1.5; // Consistent speed
+        }
+      }, 20);
+    };
+
+    const stopVideoScroll = () => {
+      if (videoInterval) clearInterval(videoInterval);
+    };
+
+    const stopLadduScroll = () => {
+      if (ladduInterval) clearInterval(ladduInterval);
+    };
+
+    if (videoContainer) {
+      setTimeout(startVideoScroll, 100); // Small delay for layout
+      videoContainer.addEventListener('mouseenter', stopVideoScroll);
+      videoContainer.addEventListener('mouseleave', startVideoScroll);
+    }
+
+    if (ladduContainer) {
+      setTimeout(startLadduScroll, 100);
+      ladduContainer.addEventListener('mouseenter', stopLadduScroll);
+      ladduContainer.addEventListener('mouseleave', startLadduScroll);
+    }
+
+    return () => {
+      stopVideoScroll();
+      stopLadduScroll();
+      if (videoContainer) {
+        videoContainer.removeEventListener('mouseenter', stopVideoScroll);
+        videoContainer.removeEventListener('mouseleave', startVideoScroll);
+      }
+      if (ladduContainer) {
+        ladduContainer.removeEventListener('mouseenter', stopLadduScroll);
+        ladduContainer.removeEventListener('mouseleave', startLadduScroll);
+      }
+    };
+  }, [products]);
 
   const addToRefs = (el) => {
     if (el && !sectionRefs.current.includes(el)) {
@@ -181,21 +231,18 @@ const Home = () => {
       </section>
 
       {/* Our Laddus Section - Auto Scrolling Carousel */}
-      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 text-center bg-[var(--color-primary)] relative z-10 shadow-[0_10px_32px_-10px_rgba(255,255,255,0.24),0_-4px_16px_-6px_rgba(0,0,0,0.1)] mb-2 overflow-hidden" id="laddus">
+      <section ref={addToRefs} className="scroll-section py-16 px-8 md:px-24 text-center bg-[var(--color-primary)] relative z-10 shadow-[0_10px_32px_-10px_rgba(255,255,255,0.24),0_-4px_16px_-6px_rgba(0,0,0,0.1)] mb-2 overflow-hidden" id="laddus">
         <h2 className="text-4xl text-[var(--color-secondary)] mb-2 font-bold">Our Laddus</h2>
         <p className="italic text-gray-500 mb-16">Pure and Delicious</p>
 
         <div className="relative w-full overflow-hidden">
           <div
-            className="flex gap-8 animate-scroll hover:pause-animation"
-            style={{
-              width: 'max-content',
-              animation: `scroll ${products.length * 5}s linear infinite`
-            }}
+            ref={ladduScrollRef}
+            className="flex gap-4 md:gap-8 overflow-hidden py-4"
           >
-            {/* Duplicate products to create seamless infinite scroll effect */}
+            {/* Triple products for seamless scrolling */}
             {[...products, ...products, ...products].map((item, index) => (
-              <div key={`${item._id}-${index}`} className="w-[300px] md:w-[350px] flex-shrink-0">
+              <div key={`${item._id}-${index}`} className="w-[90vw] md:w-[350px] flex-shrink-0">
                 <LadduCard
                   product={{
                     id: item._id,
@@ -214,23 +261,8 @@ const Home = () => {
           </div>
         </div>
 
-        <style dangerouslySetInnerHTML={{
-          __html: `
-                @keyframes scroll {
-                    0% { transform: translateX(0); }
-                    100% { transform: translateX(-33.33%); } /* Move by 1/3 since we tripled the list */
-                }
-                .animate-scroll {
-                    display: flex;
-                }
-                .hover\\:pause-animation:hover {
-                    animation-play-state: paused;
-                }
-             `
-        }} />
-
         {products.length === 0 && (
-          <p className="text-gray-400">Loading delicious laddus...</p>
+          <p className="text-gray-400 mt-8">Loading delicious laddus...</p>
         )}
       </section>
 
@@ -275,13 +307,13 @@ const Home = () => {
         <div className="relative overflow-hidden">
           <div
             ref={scrollRef}
-            className="flex gap-8 overflow-x-hidden"
-            style={{ width: 'calc(100% + 320px)' }}
+            className="flex gap-4 md:gap-8 overflow-x-hidden pb-4"
           >
-            {[...videoReviews, ...videoReviews].map((video, index) => (
+            {/* Triple video reviews for seamless scrolling */}
+            {[...videoReviews, ...videoReviews, ...videoReviews].map((video, index) => (
               <div
                 key={`${video.id}-${index}`}
-                className="flex-shrink-0 w-80 bg-[var(--color-muted)] rounded-xl shadow-lg overflow-hidden cursor-pointer hover:scale-105 transition-transform"
+                className="flex-shrink-0 w-72 md:w-80 bg-[var(--color-muted)] rounded-xl shadow-lg overflow-hidden cursor-pointer hover:scale-105 transition-transform"
                 onClick={() => setSelectedVideo(video)}
               >
                 <div className="relative">
@@ -304,38 +336,39 @@ const Home = () => {
       </section>
 
       {/* Video Modal */}
-      {selectedVideo && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-40 p-4 pt-32">
-          <div className="bg-white rounded-lg max-w-3xl w-full max-h-[70vh] overflow-hidden relative">
-            <button
-              onClick={() => setSelectedVideo(null)}
-              className="absolute bottom-4 right-4 p-1 md:p-2 bg-black text-white rounded-full transition-colors z-10 hover:bg-gray-800"
-            >
-              <X className="w-4 h-4 md:w-6 md:h-6" />
-            </button>
-            <div className="p-6">
-              <video
-                src={selectedVideo.videoUrl}
-                className="w-full aspect-video rounded-lg"
-                controls
-                autoPlay
-                onLoadedData={(e) => {
-                  setTimeout(() => {
-                    e.target.pause();
-                  }, 5000);
-                }}
-              />
-              <div className="mt-4 text-center">
-                <p className="text-gray-600">Customer Review</p>
+      {
+        selectedVideo && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-40 p-4 pt-32">
+            <div className="bg-white rounded-lg max-w-3xl w-full max-h-[70vh] overflow-hidden relative">
+              <button
+                onClick={() => setSelectedVideo(null)}
+                className="absolute bottom-4 right-4 p-1 md:p-2 bg-black text-white rounded-full transition-colors z-10 hover:bg-gray-800"
+              >
+                <X className="w-4 h-4 md:w-6 md:h-6" />
+              </button>
+              <div className="p-6">
+                <video
+                  src={selectedVideo.videoUrl}
+                  className="w-full aspect-video rounded-lg"
+                  controls
+                  autoPlay
+                  onLoadedData={(e) => {
+                    setTimeout(() => {
+                      e.target.pause();
+                    }, 5000);
+                  }}
+                />
+                <div className="mt-4 text-center">
+                  <p className="text-gray-600">Customer Review</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* Founder Section (Moved to Bottom) */}
-      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-[var(--color-primary)] relative z-10 shadow-[0_10px_32px_-10px_rgba(255,255,255,0.24),0_-4px_16px_-6px_rgba(0,0,0,0.1)]
-" id="founders">
+      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-[var(--color-primary)] relative z-10 shadow-[0_10px_32px_-10px_rgba(255,255,255,0.24),0_-4px_16px_-6px_rgba(0,0,0,0.1)]" id="founders">
         <h2 className="text-4xl text-[var(--color-secondary)] mb-16 font-bold text-center">Meet Our Founders</h2>
         <div className="flex flex-col gap-16 max-w-6xl mx-auto">
           {/* Founder 1: Satish Kumar */}
@@ -373,7 +406,7 @@ const Home = () => {
       </section>
 
       <Footer />
-    </div>
+    </div >
   );
 };
 

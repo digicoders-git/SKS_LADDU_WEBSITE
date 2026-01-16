@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { User, Mail, Phone, MapPin, Home, Lock, Eye, EyeOff, LogOut, Edit2, Save, X, Calendar } from 'lucide-react';
 import { toast } from 'react-toastify';
 import Footer from '../../components/layout/Footer';
+import Swal from 'sweetalert2';
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -95,10 +96,24 @@ const Profile = () => {
         setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
     };
 
-    const handleLogout = () => {
-        localStorage.removeItem('userToken'); // Clear token
-        toast.success('Logged out successfully!');
-        navigate('/login');
+    const handleLogout = async () => {
+        const result = await Swal.fire({
+            title: 'Logout Confirmation',
+            text: 'Are you sure you want to logout?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: 'var(--color-secondary)',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Logout',
+            background: 'var(--color-muted)',
+            color: '#fff'
+        });
+
+        if (result.isConfirmed) {
+            localStorage.removeItem('userToken'); // Clear token
+            toast.success('Logged out successfully!');
+            navigate('/login');
+        }
     };
 
     return (

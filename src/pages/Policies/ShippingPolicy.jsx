@@ -37,6 +37,11 @@ const ShippingPolicy = () => {
                         Once your order is shipped, you will receive a tracking ID via email/SMS to monitor your sweet parcel's journey.
                     </p>
 
+                    <h2 className="text-2xl font-bold text-[var(--color-secondary)] mb-6 font-serif underline decoration-[var(--color-secondary)]">Cancellation Policy</h2>
+                    <p className="mb-6 leading-relaxed text-gray-300 text-red-400 font-bold">
+                        Please note: Online payment orders cannot be cancelled once placed.
+                    </p>
+
                     <div className="mt-12 p-6 bg-[var(--color-accent)]/10 rounded-2xl italic text-gray-400 border-l-4 border-[var(--color-secondary)]">
                         <strong>Note:</strong> During festivals or extreme weather conditions, deliveries might experience slight delays. We appreciate your patience!
                     </div>

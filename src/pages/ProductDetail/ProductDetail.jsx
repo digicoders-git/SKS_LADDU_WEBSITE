@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ShoppingCart, ArrowLeft, Star, Package, Truck, Shield } from 'lucide-react';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 import besanLaddu from '../../assets/images/besan-laddu.png';
 import kesarLaddu from '../../assets/images/kesar-laddu.png';
 import nariyalLaddu from '../../assets/images/nariyal-laddu.png';
@@ -72,12 +73,37 @@ const ProductDetail = () => {
         );
     }
 
+    const checkAuth = async () => {
+        const token = localStorage.getItem('userToken');
+        if (!token) {
+            const result = await Swal.fire({
+                title: 'Not Logged In',
+                text: 'Please login first to proceed!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: 'var(--color-secondary)',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Login Now',
+                background: 'var(--color-muted)',
+                color: '#fff'
+            });
+
+            if (result.isConfirmed) {
+                navigate('/login');
+            }
+            return false;
+        }
+        return true;
+    };
+
     const handleAddToCart = async () => {
+        const isAuth = await checkAuth();
+        if (!isAuth) return;
+
         try {
             await addToCartApi({ productId: product.id, quantity: 1 });
             window.dispatchEvent(new Event('cart-updated')); // Notify Navbar
             toast.success(`${product.name} added to cart!`, {
-                position: "bottom-right",
                 autoClose: 2000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -170,12 +196,23 @@ const ProductDetail = () => {
                                 <ShoppingCart size={18} className="md:w-[22px] md:h-[22px]" />
                                 <span className="text-xs md:text-base">Add to Cart</span>
                             </button>
-                            <Link
-                                to="/shop"
-                                className="px-4 md:px-8 py-2 md:py-4 border-2 border-[var(--color-secondary)] text-[var(--color-secondary)] rounded-xl font-bold hover:bg-[var(--color-secondary)] hover:text-[var(--color-primary)] transition-all flex items-center justify-center no-underline text-xs md:text-base"
+                            <button
+                                onClick={async () => {
+                                    const isAuth = await checkAuth();
+                                    if (!isAuth) return;
+
+                                    try {
+                                        await addToCartApi({ productId: product.id, quantity: 1 });
+                                        window.dispatchEvent(new Event('cart-updated'));
+                                        navigate('/shop');
+                                    } catch (error) {
+                                        console.error("Buy now failed:", error);
+                                    }
+                                }}
+                                className="px-4 md:px-8 py-2 md:py-4 border-2 border-[var(--color-secondary)] text-[var(--color-secondary)] rounded-xl font-bold hover:bg-[var(--color-secondary)] hover:text-[var(--color-primary)] transition-all flex items-center justify-center no-underline text-xs md:text-base cursor-pointer"
                             >
-                                View Cart
-                            </Link>
+                                Buy Now
+                            </button>
                         </div>
 
                         {/* Features */}

@@ -28,7 +28,7 @@ const ReturnPolicy = () => {
 
                     <h2 className="text-2xl font-bold text-[var(--color-secondary)] mb-6 font-serif underline decoration-[var(--color-secondary)]">Cancellation Policy</h2>
                     <p className="mb-6 leading-relaxed text-gray-300">
-                        Orders can only be cancelled within 1 hour of placement. Since we prepare our laddus fresh to order, we cannot cancel or refund orders that have already entered the production or shipping phase.
+                        Orders can only be cancelled within 1 hour of placement. Since we prepare our laddus fresh to order, we cannot cancel or refund orders that have already entered the production or shipping phase. <span className="text-red-400 font-bold block mt-2">Note: Online payment orders cannot be cancelled once placed.</span>
                     </p>
 
                     <div className="mt-12 p-6 bg-[var(--color-accent)]/10 rounded-2xl italic text-[var(--color-secondary)] border-l-4 border-[var(--color-secondary)]">

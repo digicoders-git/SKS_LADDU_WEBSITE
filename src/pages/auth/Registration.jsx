@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { User, Mail, Lock, Phone, Calendar, Eye, EyeOff, ChevronDown } from 'lucide-react';
 import { createUserApi } from '../../api/user';
+import { toast } from 'react-toastify';
 
 const Registration = () => {
     const [formData, setFormData] = useState({
@@ -99,13 +100,13 @@ const Registration = () => {
 
                 if (response.token) {
                     localStorage.setItem('userToken', response.token);
-                    alert('Registration successful!');
+                    toast.success('Registration successful!');
                     navigate('/');
                 }
             } catch (error) {
                 console.error('Registration failed:', error);
                 const errorMessage = error.response?.data?.message || 'Registration failed. Please try again.';
-                alert(errorMessage);
+                toast.error(errorMessage);
             }
         } else {
             setErrors(newErrors);

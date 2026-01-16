@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, Heart, Shield, FileText, Link as LinkIcon, Facebook, Instagram, MessageCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Heart, Shield, FileText, Link as LinkIcon, Youtube, Instagram, MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -81,20 +81,20 @@ const Footer = () => {
             {/* Social Media Icons */}
             <div className="flex gap-4">
               <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 bg-white/10 hover:bg-[var(--color-secondary)] rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110"
-              >
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/sks_laddu?igsh=MWp2Nm9xa3VsYndmOQ=="
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 bg-white/10 hover:bg-[var(--color-secondary)] rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110"
               >
                 <Instagram className="w-5 h-5" />
+              </a>
+              <a
+                href="https://m.youtube.com/%40sks_laddu?fbclid=PAb21jcAPXGGJleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA81NjcwNjczNDMzNTI0MjcAAafj2w64xbpG4wS4xy-6qnB46HAugnXjTrzzK7plc5WsusWZCI2h5POQF81YNA_aem_CGusJXXzp0WZZ9_PSx_-AQ"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-white/10 hover:bg-[var(--color-secondary)] rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110"
+              >
+                <Youtube className="w-5 h-5" />
               </a>
               <a
                 href="https://wa.me/916307736698"

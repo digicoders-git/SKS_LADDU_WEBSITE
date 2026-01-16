@@ -136,22 +136,11 @@ const Testimonials = () => {
                         {videoReviews.map((item, i) => (
                             <VideoReviewCard key={i} {...item} />
                         ))}
-                        <div className="bg-[var(--color-muted)] border-2 border-dashed border-[var(--color-secondary)]/30 rounded-[35px] p-8 md:p-10 flex flex-col items-center justify-center text-center opacity-70 group hover:opacity-100 transition-opacity">
-                            <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-[var(--color-primary)] flex items-center justify-center mb-4 text-xl md:text-2xl group-hover:scale-110 transition-transform shadow-sm">⭐</div>
-                            <h4 className="font-bold text-[var(--color-secondary)] mb-2 text-base">Be the next star?</h4>
-                            <p className="text-xs text-gray-400 italic">Share your experience on camera and get a flat 20% discount on your next order!</p>
-                        </div>
                     </div>
                 )}
             </section>
 
-            {/* Action Section */}
-            <div className="text-center mt-20 md:mt-24 px-6">
-                <p className="text-gray-400 italic mb-6 text-base md:text-lg">Your feedback helps us stay authentic.</p>
-                <button className="px-10 md:px-12 py-4 md:py-5 rounded-2xl bg-[var(--color-primary)] border-2 border-[var(--color-secondary)] text-[var(--color-secondary)] font-bold text-lg md:text-xl hover:bg-[var(--color-secondary)] hover:text-[var(--color-primary)] transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 w-full md:w-auto">
-                    Write Your Review
-                </button>
-            </div>
+
 
             <div className="mt-16">
                 <Footer />

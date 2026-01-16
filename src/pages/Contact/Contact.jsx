@@ -1,9 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, MapPin, Loader2 } from 'lucide-react';
 import Footer from '../../components/layout/Footer';
+import { createEnquiryApi } from '../../api/enquiry';
+import { toast } from 'react-toastify';
 
 const Contact = () => {
     const sectionRefs = useRef([]);
+    const [loading, setLoading] = useState(false);
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: ''
+    });
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -27,6 +37,38 @@ const Contact = () => {
     const addToRefs = (el) => {
         if (el && !sectionRefs.current.includes(el)) {
             sectionRefs.current.push(el);
+        }
+    };
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Basic validation
+        if (!formData.name || !formData.phone || !formData.message) {
+            toast.error("Please fill in required fields (Name, Phone, Message)");
+            return;
+        }
+
+        setLoading(true);
+        try {
+            await createEnquiryApi(formData);
+            toast.success("Thank you! Your message has been sent.");
+            setFormData({
+                name: '',
+                email: '',
+                phone: '',
+                subject: '',
+                message: ''
+            });
+        } catch (error) {
+            console.error("Enquiry submission failed:", error);
+            toast.error(error.response?.data?.message || "Something went wrong. Please try again.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -152,29 +194,82 @@ const Contact = () => {
                     </div>
 
                     {/* Contact Form */}
-                    <div ref={addToRefs} className="scroll-section flex-[1.5] bg-[var(--color-muted)] p-12 rounded-[40px] shadow-2xl border border-[var(--color-secondary)]/10">
+                    <div ref={addToRefs} className="scroll-section flex-[1.5] bg-[var(--color-muted)] p-6 md:p-12 rounded-[40px] shadow-2xl border border-[var(--color-secondary)]/10">
                         <h2 className="text-3xl font-bold text-[var(--color-secondary)] mb-10">Send a Message</h2>
-                        <form className="space-y-6">
+                        <form className="space-y-6" onSubmit={handleSubmit}>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <label className="text-sm font-bold text-gray-400 uppercase tracking-wider">Full Name</label>
-                                    <input type="text" placeholder="Your Name" className="w-full px-6 py-4 bg-[var(--color-primary)] text-white rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all placeholder-gray-600" />
+                                    <label className="text-sm font-bold text-gray-400 uppercase tracking-wider">Full Name *</label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                        placeholder="Your Name"
+                                        className="w-full px-6 py-4 bg-[var(--color-primary)] text-white rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all placeholder-gray-600"
+                                        required
+                                    />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-bold text-gray-400 uppercase tracking-wider">Email Address</label>
-                                    <input type="email" placeholder="Your Email" className="w-full px-6 py-4 bg-[var(--color-primary)] text-white rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all placeholder-gray-600" />
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        placeholder="Your Email"
+                                        className="w-full px-6 py-4 bg-[var(--color-primary)] text-white rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all placeholder-gray-600"
+                                    />
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-400 uppercase tracking-wider">Phone Number *</label>
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        value={formData.phone}
+                                        onChange={handleChange}
+                                        placeholder="Your Phone Number"
+                                        className="w-full px-6 py-4 bg-[var(--color-primary)] text-white rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all placeholder-gray-600"
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-400 uppercase tracking-wider">Subject</label>
+                                    <input
+                                        type="text"
+                                        name="subject"
+                                        value={formData.subject}
+                                        onChange={handleChange}
+                                        placeholder="Bulk Inquiry / Ordering"
+                                        className="w-full px-6 py-4 bg-[var(--color-primary)] text-white rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all placeholder-gray-600"
+                                    />
                                 </div>
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-gray-400 uppercase tracking-wider">Subject</label>
-                                <input type="text" placeholder="Bulk Inquiry / Ordering" className="w-full px-6 py-4 bg-[var(--color-primary)] text-white rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all placeholder-gray-600" />
+                                <label className="text-sm font-bold text-gray-400 uppercase tracking-wider">Your Message *</label>
+                                <textarea
+                                    name="message"
+                                    value={formData.message}
+                                    onChange={handleChange}
+                                    placeholder="Tell us what you're looking for..."
+                                    rows="5"
+                                    className="w-full px-6 py-4 bg-[var(--color-primary)] text-white rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all resize-none placeholder-gray-600"
+                                    required
+                                ></textarea>
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-bold text-gray-400 uppercase tracking-wider">Your Message</label>
-                                <textarea placeholder="Tell us what you're looking for..." rows="5" className="w-full px-6 py-4 bg-[var(--color-primary)] text-white rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all resize-none placeholder-gray-600"></textarea>
-                            </div>
-                            <button className="w-full py-5 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-xl font-bold text-lg shadow-[0_4px_15px_rgba(255,212,0,0.3)] hover:bg-[#e6c200] transition-all transform hover:-translate-y-1 hover:shadow-[0_6px_20px_rgba(255,212,0,0.4)]">
-                                Send Message
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full py-5 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-xl font-bold text-lg shadow-[0_4px_15px_rgba(255,212,0,0.3)] hover:bg-[#e6c200] transition-all transform hover:-translate-y-1 hover:shadow-[0_6px_20px_rgba(255,212,0,0.4)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            >
+                                {loading ? (
+                                    <>
+                                        <Loader2 className="animate-spin" size={20} />
+                                        Sending...
+                                    </>
+                                ) : "Send Message"}
                             </button>
                         </form>
                     </div>

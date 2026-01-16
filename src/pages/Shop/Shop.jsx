@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingBag, Trash2, MapPin, CreditCard, CheckCircle2, Plus, Minus, Banknote, Smartphone, X, Home, Briefcase, User, Pencil, Tag } from 'lucide-react';
+import { ShoppingBag, Trash2, MapPin, CreditCard, CheckCircle2, Plus, Minus, Banknote, Smartphone, X, Home, Briefcase, User, Pencil, Tag, ChevronRight, Check } from 'lucide-react';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 import Footer from '../../components/layout/Footer';
 import { getAddressesApi, addAddressApi, updateAddressApi } from '../../api/address';
 import { getCartApi, updateCartItemApi, removeFromCartApi, clearCartApi } from '../../api/cart';
@@ -124,13 +125,28 @@ const Shop = () => {
     };
 
     const handleClearCart = async () => {
-        if (!window.confirm("Are you sure you want to clear your cart?")) return;
+        const result = await Swal.fire({
+            title: 'Clear Cart?',
+            text: "Are you sure you want to remove all items from your tray?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, clear it!',
+            background: 'var(--color-muted)',
+            color: '#fff'
+        });
+
+        if (!result.isConfirmed) return;
+
         try {
             await clearCartApi();
             fetchCart();
             window.dispatchEvent(new Event('cart-updated')); // Notify Navbar
+            toast.success("Cart cleared!");
         } catch (error) {
             console.error("Failed to clear cart:", error);
+            toast.error("Failed to clear cart. Please try again.");
         }
     };
 
@@ -264,10 +280,31 @@ const Shop = () => {
     };
 
     const handleConfirmOrder = async () => {
-        if (!selectedAddressId) {
-            toast.error("Please select a delivery address.");
+        if (cartItems.length === 0) {
+            toast.error("Your cart is empty!");
             return;
         }
+        if (!selectedAddressId) {
+            toast.error("Please select a delivery address!");
+            // Scroll to address section
+            const addressSection = document.getElementById('delivery-address-section');
+            if (addressSection) addressSection.scrollIntoView({ behavior: 'smooth' });
+            return;
+        }
+
+        const result = await Swal.fire({
+            title: 'Confirm Order?',
+            text: `Place order for ₹${cartTotal + 70}?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: 'var(--color-secondary)',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, place it!',
+            background: 'var(--color-muted)',
+            color: '#fff'
+        });
+
+        if (!result.isConfirmed) return;
 
         // Get selected address object
         const selectedAddress = savedAddresses.find(addr => addr._id === selectedAddressId);
@@ -552,11 +589,35 @@ const Shop = () => {
                             </div>
 
                             {/* Delivery Location Section */}
-                            <div ref={addToRefs} className="scroll-section space-y-6">
-                                <h2 className="text-lg md:text-xl font-bold text-[var(--color-secondary)] mb-4 flex items-center gap-2 font-[var(--font-heading)]">
-                                    <MapPin size={20} className="text-[var(--color-secondary)]" />
-                                    Delivery Address
-                                </h2>
+                            <div ref={addToRefs} id="delivery-address-section" className="scroll-section space-y-6">
+                                <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4 px-1 gap-3">
+                                    <h2 className="text-sm md:text-xl font-bold text-[var(--color-secondary)] flex items-center gap-2 font-[var(--font-heading)] whitespace-nowrap">
+                                        <MapPin size={18} className="text-[var(--color-secondary)] md:w-5 md:h-5 flex-shrink-0" />
+                                        Delivery Address
+                                    </h2>
+                                    {savedAddresses.length > 0 && !showAddressForm && (
+                                        <button
+                                            onClick={() => {
+                                                setEditingAddressId(null);
+                                                setAddressForm({
+                                                    name: '',
+                                                    phone: '',
+                                                    addressLine1: '',
+                                                    addressLine2: '',
+                                                    city: '',
+                                                    state: '',
+                                                    pincode: '',
+                                                    addressType: 'home'
+                                                });
+                                                setShowAddressForm(true);
+                                            }}
+                                            className="flex items-center justify-center gap-2 px-4 py-2 bg-[var(--color-secondary)]/10 text-[var(--color-secondary)] border border-[var(--color-secondary)]/20 rounded-xl text-xs md:text-xs font-bold hover:bg-[var(--color-secondary)]/20 transition-all shadow-sm w-full md:w-auto"
+                                        >
+                                            <Plus size={16} className="md:w-3.5 md:h-3.5" />
+                                            Add New Address
+                                        </button>
+                                    )}
+                                </div>
 
                                 <div className="space-y-4">
                                     {/* Saved Addresses List */}
@@ -604,30 +665,6 @@ const Shop = () => {
                                                     <p className="text-sm font-medium text-[var(--color-secondary)]">{addr.phone}</p>
                                                 </div>
                                             ))}
-
-                                            {/* Add Another Address Button */}
-                                            <div
-                                                onClick={() => {
-                                                    setEditingAddressId(null);
-                                                    setAddressForm({
-                                                        name: '',
-                                                        phone: '',
-                                                        addressLine1: '',
-                                                        addressLine2: '',
-                                                        city: '',
-                                                        state: '',
-                                                        pincode: '',
-                                                        addressType: 'home'
-                                                    });
-                                                    setShowAddressForm(true);
-                                                }}
-                                                className="p-5 rounded-[25px] border-2 border-dashed border-[var(--color-secondary)]/20 bg-transparent hover:bg-[var(--color-secondary)]/5 hover:border-[var(--color-secondary)]/40 cursor-pointer transition-all flex flex-col items-center justify-center gap-3 group h-full min-h-[160px]"
-                                            >
-                                                <div className="w-12 h-12 rounded-full bg-[var(--color-secondary)]/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                                    <Plus size={24} className="text-[var(--color-secondary)]" />
-                                                </div>
-                                                <span className="text-sm font-bold text-[var(--color-secondary)]">Add Another Address</span>
-                                            </div>
                                         </div>
                                     )}
 
@@ -765,37 +802,31 @@ const Shop = () => {
                                     <CreditCard size={20} className="text-[var(--color-secondary)]" />
                                     Payment Method
                                 </h2>
-                                <div className="grid grid-cols-1 gap-4">
+                                <div className="grid grid-cols-2 md:grid-cols-2 gap-3">
                                     <div
                                         onClick={() => setPaymentMethod('cod')}
-                                        className={`p-6 rounded-[30px] border-2 cursor-pointer transition-all flex items-center justify-between ${paymentMethod === 'cod' ? 'border-[var(--color-secondary)] bg-[var(--color-secondary)]/10' : 'border-[var(--color-secondary)]/10 bg-[var(--color-muted)] hover:border-[var(--color-secondary)]/30'}`}
+                                        className={`p-3 md:p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-center gap-3 ${paymentMethod === 'cod' ? 'border-[var(--color-secondary)] bg-[var(--color-secondary)]/10 shadow-[0_0_15px_rgba(255,212,0,0.1)]' : 'border-[var(--color-secondary)]/5 bg-[var(--color-muted)] hover:border-[var(--color-secondary)]/20'}`}
                                     >
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 bg-green-900/30 rounded-2xl flex items-center justify-center border border-green-500/20">
-                                                <Banknote className="w-6 h-6 text-green-400" />
-                                            </div>
-                                            <div>
-                                                <h4 className="font-bold text-[var(--color-text)]">Cash on Delivery</h4>
-                                                <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Pay when you receive</p>
-                                            </div>
+                                        <div className={`w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${paymentMethod === 'cod' ? 'bg-[var(--color-secondary)] text-[var(--color-primary)]' : 'bg-[var(--color-primary)] text-gray-400'}`}>
+                                            <Banknote size={18} />
                                         </div>
-                                        {paymentMethod === 'cod' && <CheckCircle2 className="text-[var(--color-secondary)]" size={24} />}
+                                        <div className="min-w-0">
+                                            <h4 className={`font-bold text-[11px] md:text-sm whitespace-nowrap ${paymentMethod === 'cod' ? 'text-[var(--color-secondary)]' : 'text-gray-400'}`}>Cash (COD)</h4>
+                                        </div>
+                                        {paymentMethod === 'cod' && <Check size={14} className="text-[var(--color-secondary)] ml-auto" />}
                                     </div>
 
                                     <div
                                         onClick={() => setPaymentMethod('upi')}
-                                        className={`p-6 rounded-[30px] border-2 cursor-pointer transition-all flex items-center justify-between ${paymentMethod === 'upi' ? 'border-[var(--color-secondary)] bg-[var(--color-secondary)]/10' : 'border-[var(--color-secondary)]/10 bg-[var(--color-muted)] hover:border-[var(--color-secondary)]/30'}`}
+                                        className={`p-3 md:p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-center gap-3 ${paymentMethod === 'upi' ? 'border-[var(--color-secondary)] bg-[var(--color-secondary)]/10 shadow-[0_0_15px_rgba(255,212,0,0.1)]' : 'border-[var(--color-secondary)]/5 bg-[var(--color-muted)] hover:border-[var(--color-secondary)]/20'}`}
                                     >
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 bg-blue-900/30 rounded-2xl flex items-center justify-center border border-blue-500/20">
-                                                <Smartphone className="w-6 h-6 text-blue-400" />
-                                            </div>
-                                            <div>
-                                                <h4 className="font-bold text-[var(--color-text)]">UPI Payment</h4>
-                                                <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">PhonePe, GPay, Paytm</p>
-                                            </div>
+                                        <div className={`w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${paymentMethod === 'upi' ? 'bg-[var(--color-secondary)] text-[var(--color-primary)]' : 'bg-[var(--color-primary)] text-gray-400'}`}>
+                                            <Smartphone size={18} />
                                         </div>
-                                        {paymentMethod === 'upi' && <CheckCircle2 className="text-[var(--color-secondary)]" size={24} />}
+                                        <div className="min-w-0">
+                                            <h4 className={`font-bold text-[11px] md:text-sm whitespace-nowrap ${paymentMethod === 'upi' ? 'text-[var(--color-secondary)]' : 'text-gray-400'}`}>Online (UPI)</h4>
+                                        </div>
+                                        {paymentMethod === 'upi' && <Check size={14} className="text-[var(--color-secondary)] ml-auto" />}
                                     </div>
                                 </div>
                             </div>

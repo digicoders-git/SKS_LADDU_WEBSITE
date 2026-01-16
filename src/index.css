@@ -56,18 +56,18 @@ h6 {
 
   /* Smaller text for mobile */
   h1 {
-    font-size: 2.25rem !important;
+    font-size: 2.25rem;
   }
 
   /* text-4xl */
   h2 {
-    font-size: 1.875rem !important;
+    font-size: 1.875rem;
   }
 
   /* text-3xl */
   p,
   li {
-    font-size: 0.875rem !important;
+    font-size: 0.875rem;
   }
 
   /* text-sm */
@@ -75,12 +75,12 @@ h6 {
   /* Smaller buttons for mobile */
   button,
   .btn {
-    padding: 0.75rem 1.5rem !important;
-    font-size: 0.875rem !important;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
   }
 
   .hero-btn {
-    padding: 0.75rem 1.5rem !important;
-    font-size: 1rem !important;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
   }
 }

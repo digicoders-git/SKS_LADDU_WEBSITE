@@ -3,6 +3,7 @@ import { getUserOrdersApi, cancelOrderApi } from '../../api/order';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { XCircle, Package, Calendar, MapPin, CreditCard, ShoppingBag, CheckCircle2, ChevronRight, Clock } from 'lucide-react';
+import Swal from 'sweetalert2';
 
 const Orders = () => {
     const [orders, setOrders] = useState([]);
@@ -28,7 +29,19 @@ const Orders = () => {
     }, []);
 
     const handleCancelOrder = async (orderId) => {
-        if (!window.confirm("Are you sure you want to cancel this order?")) return;
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you really want to cancel this order?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, cancel it!',
+            background: 'var(--color-muted)',
+            color: '#fff'
+        });
+
+        if (!result.isConfirmed) return;
 
         try {
             const res = await cancelOrderApi(orderId);
@@ -109,29 +122,30 @@ const Orders = () => {
                                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 pb-6 border-b border-white/5">
                                     <div className="space-y-1">
                                         <div className="flex items-center gap-3">
-                                            <span className="text-lg font-bold text-white">Order #{order._id.slice(-6).toUpperCase()}</span>
-                                            <span className={`px-3 py-1 rounded-full text-xs font-bold border ${getStatusColor(order.status)} uppercase tracking-wider flex items-center gap-1`}>
-                                                {order.status === 'confirmed' && <CheckCircle2 size={12} />}
+                                            <span className="text-base md:text-lg font-bold text-white whitespace-nowrap">Order #{order._id.slice(-6).toUpperCase()}</span>
+                                            <span className={`px-3 py-1 rounded-full text-[10px] md:text-xs font-bold border ${getStatusColor(order.status)} uppercase tracking-wider flex items-center gap-1`}>
+                                                {order.status === 'confirmed' && <CheckCircle2 size={10} className="md:w-3 md:h-3" />}
                                                 {order.status}
                                             </span>
                                         </div>
-                                        <div className="flex items-center gap-2 text-sm text-gray-400">
-                                            <Calendar size={14} />
+                                        <div className="flex items-center gap-2 text-xs md:text-sm text-gray-400">
+                                            <Calendar size={12} className="md:w-3.5 md:h-3.5" />
                                             <span>{formatDate(order.createdAt)}</span>
                                         </div>
                                     </div>
-                                    <div className="flex flex-row md:flex-col items-end gap-3">
-                                        <div className="text-right">
-                                            <p className="text-sm text-gray-400 mb-1">Total Amount</p>
-                                            <p className="text-2xl font-bold text-[var(--color-secondary)]">₹{order.total}</p>
+                                    <div className="flex flex-row md:flex-col items-center md:items-end justify-between w-full md:w-auto gap-4">
+                                        <div className="text-left md:text-right">
+                                            <p className="text-[10px] md:text-sm text-gray-400 md:mb-1">Total Amount</p>
+                                            <p className="text-xl md:text-2xl font-bold text-[var(--color-secondary)]">₹{order.total}</p>
                                         </div>
                                         {['confirmed', 'processing', 'pending', 'placed'].includes(order.status.toLowerCase()) && (
                                             <button
                                                 onClick={() => handleCancelOrder(order._id)}
-                                                className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/20 rounded-lg text-xs font-bold transition-all"
+                                                className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/20 rounded-lg text-xs font-bold transition-all whitespace-nowrap"
                                             >
                                                 <XCircle size={14} />
-                                                Cancel Order
+                                                <span className="md:inline hidden">Cancel Order</span>
+                                                <span className="md:hidden inline">Cancel</span>
                                             </button>
                                         )}
                                     </div>

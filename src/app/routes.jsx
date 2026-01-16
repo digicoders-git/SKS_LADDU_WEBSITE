@@ -16,6 +16,7 @@ import Orders from "../pages/Orders/Orders";
 import ReturnPolicy from "../pages/Policies/ReturnPolicy";
 import ShippingPolicy from "../pages/Policies/ShippingPolicy";
 import TermsOfService from "../pages/Policies/TermsOfService";
+import ErrorPage from "../components/common/ErrorPage";
 
 export const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Home /> },
       { path: "shop", element: <Shop /> },
