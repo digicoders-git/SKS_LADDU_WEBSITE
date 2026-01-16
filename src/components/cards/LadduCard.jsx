@@ -1,34 +1,44 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCart } from '../../context/CartContext';
+import { addToCartApi } from '../../api/cart';
 import { ShoppingCart, CheckCircle } from 'lucide-react';
 import { toast } from 'react-toastify';
 
 const LadduCard = ({ product }) => {
-    const { addToCart } = useCart();
     const navigate = useNavigate();
     const [added, setAdded] = useState(false);
 
     const name = product?.name;
     const img = product?.img;
-    const priceStr = product?.priceStr || product?.price;
+    // Fallback price string logic if needed, but we rely on numeric prices mostly
     const description = product?.description;
     const category = product?.category;
-    const id = product?.id;
+    const id = product?.id || product?._id;
 
-    const handleAddToCart = (e) => {
+    // Price display logic
+    const displayPrice = product?.finalPrice || product?.price;
+    const originalPrice = product?.price;
+    const discount = product?.discountPercent;
+
+    const handleAddToCart = async (e) => {
         e.stopPropagation();
-        addToCart(product);
-        setAdded(true);
-        toast.success(`${name} added to cart!`, {
-            position: "bottom-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-        });
-        setTimeout(() => setAdded(false), 2000);
+        try {
+            await addToCartApi({ productId: id, quantity: 1 });
+            window.dispatchEvent(new Event('cart-updated')); // Notify Navbar
+            setAdded(true);
+            toast.success(`${name} added to cart!`, {
+                position: "bottom-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            setTimeout(() => setAdded(false), 2000);
+        } catch (error) {
+            console.error("Failed to add to cart:", error);
+            // Optional: toast.error("Log in to add items!"); 
+        }
     };
 
     const handleViewDetails = () => {
@@ -61,12 +71,12 @@ const LadduCard = ({ product }) => {
             <p className="text-xs md:text-sm text-gray-400 italic mb-4 line-clamp-2">{description}</p>
             <div className="flex flex-col items-center mb-6">
                 <div className="text-lg md:text-xl font-bold text-[var(--color-secondary)]">
-                    ₹{product.finalPrice || product.price} / kg
+                    ₹{displayPrice} / kg
                 </div>
-                {product.discountPercent > 0 && (
+                {discount > 0 && (
                     <div className="flex items-center gap-2 mt-1">
-                        <span className="text-sm text-gray-500 line-through">₹{product.price}</span>
-                        <span className="text-xs text-green-500 font-bold">{product.discountPercent}% OFF</span>
+                        <span className="text-sm text-gray-500 line-through">₹{originalPrice}</span>
+                        <span className="text-xs text-green-500 font-bold">{discount}% OFF</span>
                     </div>
                 )}
             </div>

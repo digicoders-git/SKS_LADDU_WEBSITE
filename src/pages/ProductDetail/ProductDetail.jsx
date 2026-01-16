@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ShoppingCart, ArrowLeft, Star, Package, Truck, Shield } from 'lucide-react';
-import { useCart } from '../../context/CartContext';
 import { toast } from 'react-toastify';
 import besanLaddu from '../../assets/images/besan-laddu.png';
 import kesarLaddu from '../../assets/images/kesar-laddu.png';
@@ -9,12 +8,12 @@ import nariyalLaddu from '../../assets/images/nariyal-laddu.png';
 import heroLaddus from '../../assets/images/hero-laddus.png';
 
 import { getProductApi } from '../../api/product';
+import { addToCartApi } from '../../api/cart';
 
 
 const ProductDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { addToCart } = useCart();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
@@ -73,16 +72,21 @@ const ProductDetail = () => {
         );
     }
 
-    const handleAddToCart = () => {
-        addToCart(product);
-        toast.success(`${product.name} added to cart!`, {
-            position: "bottom-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-        });
+    const handleAddToCart = async () => {
+        try {
+            await addToCartApi({ productId: product.id, quantity: 1 });
+            window.dispatchEvent(new Event('cart-updated')); // Notify Navbar
+            toast.success(`${product.name} added to cart!`, {
+                position: "bottom-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+        } catch (error) {
+            console.error("Failed to add to cart:", error);
+        }
     };
 
     return (

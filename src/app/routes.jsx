@@ -12,6 +12,7 @@ import Registration from "../pages/auth/Registration";
 import Profile from "../pages/auth/Profile";
 
 import Shop from "../pages/Shop/Shop";
+import Orders from "../pages/Orders/Orders";
 import ReturnPolicy from "../pages/Policies/ReturnPolicy";
 import ShippingPolicy from "../pages/Policies/ShippingPolicy";
 import TermsOfService from "../pages/Policies/TermsOfService";
@@ -25,6 +26,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "shop", element: <Shop /> },
+      { path: "orders", element: <Orders /> },
       { path: "about", element: <About /> },
       { path: "laddus", element: <Laddus /> },
       { path: "product/:id", element: <ProductDetail /> },

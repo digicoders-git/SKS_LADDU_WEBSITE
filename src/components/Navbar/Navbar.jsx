@@ -1,13 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { useCart } from '../../context/CartContext';
+import { getCartApi } from '../../api/cart';
 import { ShoppingCart, User, Menu, X } from 'lucide-react';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const { cart } = useCart();
+    const [cartCount, setCartCount] = useState(0);
     const navigate = useNavigate();
     const location = useLocation();
+
+    // Fetch cart count
+    useEffect(() => {
+        const fetchCartCount = async () => {
+            try {
+                const data = await getCartApi();
+                if (data && data.items) {
+                    setCartCount(data.items.length);
+                } else {
+                    setCartCount(0);
+                }
+            } catch (error) {
+                console.error("Failed to fetch cart count", error);
+                setCartCount(0);
+            }
+        };
+
+        fetchCartCount();
+
+        // Listen for global cart update events
+        window.addEventListener('cart-updated', fetchCartCount);
+
+        return () => {
+            window.removeEventListener('cart-updated', fetchCartCount);
+        };
+    }, [location.pathname]);
 
     // Close menu when route changes
     useEffect(() => {
@@ -20,7 +46,7 @@ const Navbar = () => {
     const navLinks = [
         { to: "/", label: "Home" },
         { to: "/laddus", label: "Our Laddus" },
-        { to: "/shop", label: "Our Orders" },
+        { to: "/orders", label: "Our Orders" },
         { to: "/about", label: "About Us" },
         { to: "/testimonials", label: "Testimonials" },
         { to: "/contact", label: "Contact" },
@@ -53,16 +79,16 @@ const Navbar = () => {
                     title="View Order"
                 >
                     <ShoppingCart size={24} className="md:w-7 md:h-7" />
-                    {cart.length > 0 && (
+                    {cartCount > 0 && (
                         <span className="absolute -top-2 -right-2 bg-[var(--color-secondary)] text-[var(--color-primary)] text-[10px] font-extrabold w-4 h-4 md:w-5 md:h-5 flex items-center justify-center rounded-full shadow-md animate-bounce">
-                            {cart.length}
+                            {cartCount}
                         </span>
                     )}
                 </div>
 
-                <div 
+                <div
                     onClick={() => navigate('/profile')}
-                    className="hidden sm:flex items-center text-[var(--color-secondary)] cursor-pointer transition-transform duration-200 hover:scale-110" 
+                    className="hidden sm:flex items-center text-[var(--color-secondary)] cursor-pointer transition-transform duration-200 hover:scale-110"
                     title="Customer Profile"
                 >
                     <User size={24} className="md:w-7 md:h-7" />
@@ -100,7 +126,7 @@ const Navbar = () => {
                     ))}
 
                     <div className="mt-auto pt-6 border-t border-gray-100/10 flex items-center justify-between">
-                        <div 
+                        <div
                             onClick={() => navigate('/profile')}
                             className="flex items-center gap-3 text-[var(--color-secondary)] font-bold cursor-pointer hover:bg-[var(--color-accent)]/20 p-2 rounded-xl transition-all duration-300"
                         >
