@@ -1,4 +1,4 @@
-import { getProfileApi } from '../../api/user';
+import { getProfileApi, updateProfileApi } from '../../api/user';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Mail, Phone, MapPin, Home, Lock, Eye, EyeOff, LogOut, Edit2, Save, X, Calendar } from 'lucide-react';
@@ -19,11 +19,7 @@ const Profile = () => {
         email: '',
         phone: '',
         dateOfBirth: '',
-        gender: '',
-        city: '',
-        landmark: '',
-        houseNo: '',
-        address: ''
+        gender: ''
     });
 
     useEffect(() => {
@@ -32,21 +28,17 @@ const Profile = () => {
                 const data = await getProfileApi();
                 const user = data.user;
                 if (user) {
-                    setProfileData(prev => ({
-                        ...prev,
+                    setProfileData({
                         firstName: user.firstName || '',
                         lastName: user.lastName || '',
                         email: user.email || '',
                         phone: user.phone || '',
                         dateOfBirth: user.dateOfBirth ? new Date(user.dateOfBirth).toISOString().split('T')[0] : '',
                         gender: user.gender || ''
-                        // Address fields left as is since they are not in the top-level user object shown
-                    }));
+                    });
                 }
             } catch (error) {
                 console.error("Failed to fetch profile:", error);
-
-                // If unauthorized, maybe redirect to login?
                 if (error.response && error.response.status === 401) {
                     toast.error("Session expired. Please login again.");
                     navigate('/login');
@@ -77,12 +69,27 @@ const Profile = () => {
         });
     };
 
-    const handleSaveProfile = () => {
-        toast.success('Profile updated successfully!');
-        setIsEditing(false);
+    const handleSaveProfile = async () => {
+        try {
+            const profilePayload = {
+                firstName: profileData.firstName,
+                lastName: profileData.lastName,
+                phone: profileData.phone,
+                dateOfBirth: profileData.dateOfBirth,
+                gender: profileData.gender
+            };
+            await updateProfileApi(profilePayload);
+
+            toast.success('Profile updated successfully!');
+            setIsEditing(false);
+        } catch (error) {
+            console.error("Update failed:", error);
+            const message = error.response?.data?.message || 'Failed to update profile. Please try again.';
+            toast.error(message);
+        }
     };
 
-    const handleChangePassword = (e) => {
+    const handleChangePassword = async (e) => {
         e.preventDefault();
         if (!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword) {
             toast.error('Please fill all password fields');
@@ -92,8 +99,22 @@ const Profile = () => {
             toast.error('New passwords do not match');
             return;
         }
-        toast.success('Password changed successfully!');
-        setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+
+        try {
+            const passwordPayload = {
+                currentPassword: passwordData.currentPassword,
+                newPassword: passwordData.newPassword,
+                confirmPassword: passwordData.confirmPassword
+            };
+            await updateProfileApi(passwordPayload);
+
+            toast.success('Password changed successfully!');
+            setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+        } catch (error) {
+            console.error("Password update failed:", error);
+            const message = error.response?.data?.message || 'Failed to update password. Please try again.';
+            toast.error(message);
+        }
     };
 
     const handleLogout = async () => {
@@ -158,10 +179,10 @@ const Profile = () => {
                             )}
                         </div>
 
-                        <div className="space-y-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-10">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                                 <div>
-                                    <label className="block text-sm font-bold text-gray-300 mb-2">First Name</label>
+                                    <label className="block text-base font-bold text-gray-700 mb-3">First Name</label>
                                     <div className="relative">
                                         <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
                                         <input
@@ -170,13 +191,13 @@ const Profile = () => {
                                             value={profileData.firstName}
                                             onChange={handleProfileChange}
                                             disabled={!isEditing}
-                                            className="w-full pl-10 pr-4 py-2.5 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-lg outline-none transition-all text-sm disabled:opacity-60"
+                                            className="w-full pl-10 pr-4 py-3.5 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-lg outline-none transition-all text-base disabled:opacity-60"
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-bold text-gray-300 mb-2">Last Name</label>
+                                    <label className="block text-base font-bold text-gray-700 mb-3">Last Name</label>
                                     <div className="relative">
                                         <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
                                         <input
@@ -185,36 +206,37 @@ const Profile = () => {
                                             value={profileData.lastName}
                                             onChange={handleProfileChange}
                                             disabled={!isEditing}
-                                            className="w-full pl-10 pr-4 py-2.5 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-lg outline-none transition-all text-sm disabled:opacity-60"
+                                            className="w-full pl-10 pr-4 py-3.5 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-lg outline-none transition-all text-base disabled:opacity-60"
                                         />
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                                 <div>
-                                    <label className="block text-sm font-bold text-gray-300 mb-2">Email</label>
+                                    <label className="block text-base font-bold text-gray-700 mb-3">Email</label>
                                     <div className="relative">
                                         <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
                                         <input
                                             type="email"
                                             name="email"
                                             value={profileData.email}
-                                            disabled
-                                            className="w-full pl-10 pr-4 py-2.5 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-lg outline-none transition-all text-sm opacity-60 cursor-not-allowed"
+                                            onChange={handleProfileChange}
+                                            disabled={!isEditing}
+                                            className="w-full pl-10 pr-4 py-3.5 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-lg outline-none transition-all text-base disabled:opacity-60"
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-bold text-gray-300 mb-2">Gender</label>
+                                    <label className="block text-base font-bold text-gray-700 mb-3">Gender</label>
                                     <div className="relative">
                                         <select
                                             name="gender"
                                             value={profileData.gender}
                                             onChange={handleProfileChange}
                                             disabled={!isEditing}
-                                            className="w-full px-4 py-2.5 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-lg outline-none transition-all text-sm disabled:opacity-60"
+                                            className="w-full px-4 py-3.5 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-lg outline-none transition-all text-base disabled:opacity-60"
                                         >
                                             <option value="">Select Gender</option>
                                             <option value="male">Male</option>
@@ -225,9 +247,9 @@ const Profile = () => {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                                 <div>
-                                    <label className="block text-sm font-bold text-gray-300 mb-2">Phone Number</label>
+                                    <label className="block text-base font-bold text-gray-700 mb-3">Phone Number</label>
                                     <div className="relative">
                                         <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
                                         <input
@@ -236,14 +258,14 @@ const Profile = () => {
                                             value={profileData.phone}
                                             onChange={handleProfileChange}
                                             disabled={!isEditing}
-                                            className="w-full pl-10 pr-4 py-2.5 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-lg outline-none transition-all text-sm disabled:opacity-60"
+                                            className="w-full pl-10 pr-4 py-3.5 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-lg outline-none transition-all text-base disabled:opacity-60"
                                             maxLength="10"
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-bold text-gray-300 mb-2">Date of Birth</label>
+                                    <label className="block text-base font-bold text-gray-700 mb-3">Date of Birth</label>
                                     <div className="relative">
                                         <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
                                         <input
@@ -252,67 +274,12 @@ const Profile = () => {
                                             value={profileData.dateOfBirth}
                                             onChange={handleProfileChange}
                                             disabled={!isEditing}
-                                            className="w-full pl-10 pr-4 py-2.5 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-lg outline-none transition-all text-sm disabled:opacity-60"
+                                            className="w-full pl-10 pr-4 py-3.5 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-lg outline-none transition-all text-base disabled:opacity-60"
                                         />
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div>
-                                    <label className="block text-sm font-bold text-gray-300 mb-2">City</label>
-                                    <div className="relative">
-                                        <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
-                                        <input
-                                            type="text"
-                                            name="city"
-                                            value={profileData.city}
-                                            onChange={handleProfileChange}
-                                            disabled={!isEditing}
-                                            className="w-full pl-10 pr-4 py-2.5 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-lg outline-none transition-all text-sm disabled:opacity-60"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-bold text-gray-300 mb-2">Landmark</label>
-                                    <input
-                                        type="text"
-                                        name="landmark"
-                                        value={profileData.landmark}
-                                        onChange={handleProfileChange}
-                                        disabled={!isEditing}
-                                        className="w-full px-4 py-2.5 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-lg outline-none transition-all text-sm disabled:opacity-60"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-bold text-gray-300 mb-2">House No.</label>
-                                    <div className="relative">
-                                        <Home className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
-                                        <input
-                                            type="text"
-                                            name="houseNo"
-                                            value={profileData.houseNo}
-                                            onChange={handleProfileChange}
-                                            disabled={!isEditing}
-                                            className="w-full pl-10 pr-4 py-2.5 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-lg outline-none transition-all text-sm disabled:opacity-60"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-bold text-gray-300 mb-2">Additional Address</label>
-                                <textarea
-                                    name="address"
-                                    value={profileData.address}
-                                    onChange={handleProfileChange}
-                                    disabled={!isEditing}
-                                    rows="3"
-                                    className="w-full px-4 py-2.5 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-lg outline-none transition-all resize-none text-sm disabled:opacity-60"
-                                ></textarea>
-                            </div>
                         </div>
                     </div>
 
@@ -331,7 +298,7 @@ const Profile = () => {
                                             name="currentPassword"
                                             value={passwordData.currentPassword}
                                             onChange={handlePasswordChange}
-                                            className="w-full pl-10 pr-10 py-2.5 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-lg outline-none transition-all text-sm"
+                                            className="w-full pl-10 pr-10 py-2.5 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-lg outline-none transition-all text-sm"
                                             placeholder="Enter current password"
                                         />
                                         <button
@@ -353,7 +320,7 @@ const Profile = () => {
                                             name="newPassword"
                                             value={passwordData.newPassword}
                                             onChange={handlePasswordChange}
-                                            className="w-full pl-10 pr-10 py-2.5 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-lg outline-none transition-all text-sm"
+                                            className="w-full pl-10 pr-10 py-2.5 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-lg outline-none transition-all text-sm"
                                             placeholder="Enter new password"
                                         />
                                         <button
@@ -375,7 +342,7 @@ const Profile = () => {
                                             name="confirmPassword"
                                             value={passwordData.confirmPassword}
                                             onChange={handlePasswordChange}
-                                            className="w-full pl-10 pr-10 py-2.5 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-lg outline-none transition-all text-sm"
+                                            className="w-full pl-10 pr-10 py-2.5 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-lg outline-none transition-all text-sm"
                                             placeholder="Confirm new password"
                                         />
                                         <button

@@ -1,4 +1,3 @@
-import { LogIn } from "lucide-react";
 import api from "./axios";
 
 
@@ -27,4 +26,12 @@ export const getProfileApi = async () => {
     const res = await api.get("/api/users/profile");
     return res.data;
 };
+
+
+// update user profile
+export const updateProfileApi = async (payload) => {
+    const res = await api.put("/api/users/profile", payload);
+    return res.data;
+};
+
 

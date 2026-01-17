@@ -124,7 +124,7 @@ const Registration = () => {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label className="block text-sm font-bold text-gray-300 mb-2">First Name</label>
+                            <label className="block text-sm font-bold text-gray-700 mb-2">First Name</label>
                             <div className="relative">
                                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
                                 <input
@@ -132,7 +132,7 @@ const Registration = () => {
                                     name="firstName"
                                     value={formData.firstName}
                                     onChange={handleChange}
-                                    className={`w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.firstName ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
+                                    className={`w-full pl-12 pr-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.firstName ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
                                     placeholder="Enter first name"
                                 />
                             </div>
@@ -140,7 +140,7 @@ const Registration = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-bold text-gray-300 mb-2">Last Name</label>
+                            <label className="block text-sm font-bold text-gray-700 mb-2">Last Name</label>
                             <div className="relative">
                                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
                                 <input
@@ -148,7 +148,7 @@ const Registration = () => {
                                     name="lastName"
                                     value={formData.lastName}
                                     onChange={handleChange}
-                                    className={`w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.lastName ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
+                                    className={`w-full pl-12 pr-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.lastName ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
                                     placeholder="Enter last name"
                                 />
                             </div>
@@ -158,7 +158,7 @@ const Registration = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label className="block text-sm font-bold text-gray-300 mb-2">Password</label>
+                            <label className="block text-sm font-bold text-gray-700 mb-2">Password</label>
                             <div className="relative">
                                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
                                 <input
@@ -166,7 +166,7 @@ const Registration = () => {
                                     name="password"
                                     value={formData.password}
                                     onChange={handleChange}
-                                    className={`w-full pl-12 pr-12 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.password ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
+                                    className={`w-full pl-12 pr-12 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.password ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
                                     placeholder="Enter password"
                                 />
                                 <button
@@ -181,7 +181,7 @@ const Registration = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-bold text-gray-300 mb-2">Confirm Password</label>
+                            <label className="block text-sm font-bold text-gray-700 mb-2">Confirm Password</label>
                             <div className="relative">
                                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
                                 <input
@@ -189,7 +189,7 @@ const Registration = () => {
                                     name="confirmPassword"
                                     value={formData.confirmPassword}
                                     onChange={handleChange}
-                                    className={`w-full pl-12 pr-12 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.confirmPassword ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
+                                    className={`w-full pl-12 pr-12 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.confirmPassword ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
                                     placeholder="Confirm password"
                                 />
                                 <button
@@ -206,7 +206,7 @@ const Registration = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label className="block text-sm font-bold text-gray-300 mb-2">Phone Number</label>
+                            <label className="block text-sm font-bold text-gray-700 mb-2">Phone Number</label>
                             <div className="relative">
                                 <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
                                 <input
@@ -214,7 +214,7 @@ const Registration = () => {
                                     name="phone"
                                     value={formData.phone}
                                     onChange={handleChange}
-                                    className={`w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.phone ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
+                                    className={`w-full pl-12 pr-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.phone ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
                                     placeholder="Enter 10-digit phone number"
                                     maxLength="10"
                                 />
@@ -223,7 +223,7 @@ const Registration = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-bold text-gray-300 mb-2">Date of Birth</label>
+                            <label className="block text-sm font-bold text-gray-700 mb-2">Date of Birth</label>
                             <div className="relative">
                                 <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
                                 <input
@@ -231,7 +231,7 @@ const Registration = () => {
                                     name="dob"
                                     value={formData.dob}
                                     onChange={handleChange}
-                                    className={`w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.dob ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
+                                    className={`w-full pl-12 pr-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.dob ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
                                 />
                             </div>
                             {errors.dob && <p className="text-red-400 text-sm mt-1">{errors.dob}</p>}
@@ -244,10 +244,10 @@ const Registration = () => {
                             <button
                                 type="button"
                                 onClick={() => setShowGenderDropdown(!showGenderDropdown)}
-                                className={`w-full px-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all text-left flex items-center justify-between ${errors.gender ? 'border-red-500' : 'border-[var(--color-secondary)]/20'
+                                className={`w-full px-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all text-left flex items-center justify-between ${errors.gender ? 'border-red-500' : 'border-[var(--color-secondary)]/20'
                                     }`}
                             >
-                                <span className={formData.gender ? 'text-white' : 'text-gray-500'}>
+                                <span className={formData.gender ? 'text-[var(--color-text)]' : 'text-gray-500'}>
                                     {formData.gender || 'Select gender'}
                                 </span>
                                 <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform ${showGenderDropdown ? 'rotate-180' : ''}`} />
@@ -265,7 +265,7 @@ const Registration = () => {
                                                     setErrors({ ...errors, gender: '' });
                                                 }
                                             }}
-                                            className="w-full px-4 py-3 text-left text-white hover:bg-[var(--color-secondary)] hover:text-[var(--color-primary)] transition-all"
+                                            className="w-full px-4 py-3 text-left text-[var(--color-text)] hover:bg-[var(--color-secondary)] hover:text-white transition-all"
                                         >
                                             {option}
                                         </button>
@@ -285,7 +285,7 @@ const Registration = () => {
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                className={`w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.email ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
+                                className={`w-full pl-12 pr-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.email ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
                                 placeholder="Enter your email"
                             />
                         </div>

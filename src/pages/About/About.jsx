@@ -96,7 +96,7 @@ const About = () => {
         }} />
 
         <h1 className="text-4xl md:text-6xl font-bold mb-6 relative z-10 text-[var(--color-secondary)]">Our Legacy of Sweetness</h1>
-        <p className="text-xl md:text-2xl opacity-90 max-w-2xl mx-auto italic relative z-10 text-gray-300">
+        <p className="text-xl md:text-2xl opacity-90 max-w-2xl mx-auto italic relative z-10 text-[var(--color-text-muted)]">
           Crafting perfection for over a century, SKS Sandila Laddu brings the authentic taste of tradition to your modern lifestyle.
         </p>
       </section>
@@ -106,10 +106,10 @@ const About = () => {
         <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-start md:items-center">
           <div className="flex-1">
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-secondary)] mb-4 md:mb-6">A Journey Through Time</h2>
-            <p className="text-base md:text-lg text-gray-300 leading-relaxed mb-4 md:mb-6">
+            <p className="text-base md:text-lg text-[var(--color-text-muted)] leading-relaxed mb-4 md:mb-6">
               Sandila, a hidden gem in Uttar Pradesh, has always been synonymous with its world-famous Laddus. At SKS, we carry a legacy that dates back over 100 years. What started as a passion for preserving traditional flavors has now blossomed into a brand that stands for quality, authenticity, and love.
             </p>
-            <p className="text-base md:text-lg text-gray-300 leading-relaxed">
+            <p className="text-base md:text-lg text-[var(--color-text-muted)] leading-relaxed">
               Every single Laddu is handcrafted with precision, using recipes handed down through generations. From the selection of premium ingredients to the slow-roasting process, we ensure that every bite transports you back to the golden era of Nawabs and their grand feasts.
             </p>
           </div>
@@ -138,21 +138,21 @@ const About = () => {
               <Heart className="w-8 h-8 text-[var(--color-primary)]" />
             </div>
             <h3 className="text-xl font-bold mb-4 text-[var(--color-secondary)]">Pure Desi Ghee</h3>
-            <p className="text-gray-400 italic">We use only the finest clarified butter, ensuring a rich aroma and melt-in-the-mouth texture.</p>
+            <p className="text-[var(--color-text-muted)] italic">We use only the finest clarified butter, ensuring a rich aroma and melt-in-the-mouth texture.</p>
           </div>
           <div className="text-center p-8 rounded-3xl bg-[var(--color-muted)] border border-[var(--color-secondary)]/20 shadow-lg hover:-translate-y-2 transition-transform duration-300">
             <div className="w-16 h-16 bg-[var(--color-secondary)] rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_15px_rgba(255,212,0,0.4)]">
               <Users className="w-8 h-8 text-[var(--color-primary)]" />
             </div>
             <h3 className="text-xl font-bold mb-4 text-[var(--color-secondary)]">Artisanal Craft</h3>
-            <p className="text-gray-400 italic">No machines here. Every Laddu is hand-rolled by experienced artisans to maintain the perfect density.</p>
+            <p className="text-[var(--color-text-muted)] italic">No machines here. Every Laddu is hand-rolled by experienced artisans to maintain the perfect density.</p>
           </div>
           <div className="text-center p-8 rounded-3xl bg-[var(--color-muted)] border border-[var(--color-secondary)]/20 shadow-lg hover:-translate-y-2 transition-transform duration-300">
             <div className="w-16 h-16 bg-[var(--color-secondary)] rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_15px_rgba(255,212,0,0.4)]">
               <Leaf className="w-8 h-8 text-[var(--color-primary)]" />
             </div>
             <h3 className="text-xl font-bold mb-4 text-[var(--color-secondary)]">No Preservatives</h3>
-            <p className="text-gray-400 italic">Freshly made, packed with care, and delivered to you without any artificial additives or chemicals.</p>
+            <p className="text-[var(--color-text-muted)] italic">Freshly made, packed with care, and delivered to you without any artificial additives or chemicals.</p>
           </div>
         </div>
       </section>

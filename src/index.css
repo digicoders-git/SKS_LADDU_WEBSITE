@@ -1,16 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --color-primary: #0B0B0B;
-  --color-secondary: #FFD400;
-  --color-accent: #FFF2B2;
-  --color-text: #FFFFFF;
-  --color-muted: #2A2A2A;
+  --color-primary: #FAFAF7;
+  --color-secondary: #F2B705;
+  --color-accent: #FFF0C2;
+  --color-text: #2E2E2E;
+  --color-text-muted: #6B7280;
+  --color-muted: #EAE6D8;
+  --color-surface: #FFFFFF;
+  --color-dark: #1A1A1A;
+  --color-border: rgba(242, 183, 5, 0.15);
+  --color-shadow: rgba(0, 0, 0, 0.08);
 
   /* Fonts */
-  --font-heading: 'Playfair Display', serif;
-  --font-body: 'Poppins', sans-serif;
-  --font-accent: 'Montserrat', sans-serif;
+  --font-heading: 'Cormorant Garamond', serif;
+  --font-body: 'Outfit', sans-serif;
+  --font-accent: 'Cinzel', serif;
 }
 
 html,
@@ -24,6 +29,25 @@ body {
   background-color: var(--color-primary);
   color: var(--color-text);
   overflow-x: hidden;
+  transition: background-color 0.3s ease;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-muted);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-secondary);
 }
 
 h1,
@@ -33,6 +57,7 @@ h4,
 h5,
 h6 {
   font-family: var(--font-heading);
+  color: var(--color-text);
 }
 
 .font-accent {

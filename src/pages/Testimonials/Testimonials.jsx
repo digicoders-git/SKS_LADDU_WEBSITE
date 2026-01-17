@@ -101,17 +101,17 @@ const Testimonials = () => {
             <section ref={addToRefs} className="scroll-section flex justify-center -mt-8 md:-mt-10 mb-12 md:mb-16 relative z-10 px-6">
                 <div className="bg-[var(--color-muted)] px-6 md:px-16 py-6 md:py-8 rounded-[30px] md:rounded-[35px] shadow-2xl flex flex-wrap justify-around md:justify-between gap-6 md:gap-12 border border-[var(--color-secondary)]/10 backdrop-blur-md bg-[var(--color-muted)]/95 w-full max-w-4xl">
                     <div className="text-center">
-                        <h4 className="text-2xl md:text-4xl font-bold text-[var(--color-secondary)]">4.9/5</h4>
+                        <h4 className="text-2xl md:text-4xl font-bold" style={{ color: 'var(--color-secondary)' }}>4.9/5</h4>
                         <p className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Avg Rating</p>
                     </div>
                     <div className="w-[1px] bg-[var(--color-accent)] opacity-20 hidden md:block"></div>
                     <div className="text-center">
-                        <h4 className="text-2xl md:text-4xl font-bold text-[var(--color-secondary)]">15k+</h4>
+                        <h4 className="text-2xl md:text-4xl font-bold" style={{ color: 'var(--color-secondary)' }}>15k+</h4>
                         <p className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Orders Served</p>
                     </div>
                     <div className="w-[1px] bg-[var(--color-accent)] opacity-20 hidden md:block"></div>
                     <div className="text-center">
-                        <h4 className="text-2xl md:text-4xl font-bold text-[var(--color-secondary)]">98%</h4>
+                        <h4 className="text-2xl md:text-4xl font-bold" style={{ color: 'var(--color-secondary)' }}>98%</h4>
                         <p className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Loyal Users</p>
                     </div>
                 </div>
@@ -184,7 +184,7 @@ const Testimonials = () => {
                     <div className="bg-white rounded-lg max-w-4xl w-full max-h-[80vh] overflow-hidden relative">
                         <div className="flex justify-between items-center p-4 border-b">
                             <h3 className="text-xl font-semibold text-gray-800">Customer Video Review</h3>
-                            <button 
+                            <button
                                 onClick={() => setSelectedVideo(null)}
                                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                             >
@@ -192,7 +192,7 @@ const Testimonials = () => {
                             </button>
                         </div>
                         <div className="p-6">
-                            <video 
+                            <video
                                 src={selectedVideo.url}
                                 className="w-full aspect-video rounded-lg"
                                 controls

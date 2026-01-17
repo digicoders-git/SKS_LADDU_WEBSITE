@@ -3,16 +3,22 @@ import { Link } from 'react-router-dom';
 import { User, Heart, Castle, Film, Truck, Play, X, Shield, Droplets, Leaf, Heart as HeartIcon } from 'lucide-react';
 import LadduCard from '../../components/cards/LadduCard';
 import Footer from '../../components/layout/Footer';
-import heroLaddus from '../../assets/images/hero-laddus.png';
+import big from '../../assets/images/big.png';
+import kulhad from '../../assets/images/kulhad.png';
+import moti from '../../assets/images/moti.png';
 import storyMaker from '../../assets/images/story-maker.png';
+import rusticLaddu from '../../assets/images/images.jpg';
 import besanLaddu from '../../assets/images/besan-laddu.png';
-import kesarLaddu from '../../assets/images/kesar-laddu.png';
-import nariyalLaddu from '../../assets/images/nariyal-laddu.png';
 
 import { listProductsApi } from '../../api/product';
 import { getAllVideosApi, getSingleVideoApi } from '../../api/video';
+import HeroSlider from '../../components/Slider/HeroSlider';
 
-
+const SKSBrand = () => (
+  <span className="font-[var(--font-accent)] text-[var(--color-secondary)] font-black tracking-tighter inline-flex items-center">
+    SKS<span className="text-[10px] align-top ml-0.5 opacity-70">®</span>
+  </span>
+);
 
 const Home = () => {
   const sectionRefs = useRef([]);
@@ -31,7 +37,7 @@ const Home = () => {
         console.error("Failed to fetch products:", error);
       }
     };
-    
+
     const fetchVideos = async () => {
       try {
         const data = await getAllVideosApi();
@@ -40,7 +46,7 @@ const Home = () => {
         console.error("Failed to fetch videos:", error);
       }
     };
-    
+
     fetchProducts();
     fetchVideos();
   }, []);
@@ -54,7 +60,7 @@ const Home = () => {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0, rootMargin: '0px 0px -50px 0px' }
     );
 
     sectionRefs.current.forEach((ref) => {
@@ -137,7 +143,6 @@ const Home = () => {
 
     return () => {
       stopVideoScroll();
-      stopLadduScroll();
     };
   }, [products, videos]);
 
@@ -148,120 +153,49 @@ const Home = () => {
   };
 
   return (
-    <div className="bg-[var(--color-primary)] -mt-10 text-[var(--color-text)] font-[var(--font-body)] overflow-x-hidden">
+    <div className="bg-[var(--color-primary)] text-[var(--color-text)] font-[var(--font-body)] overflow-x-hidden">
 
-      {/* Hero Section */}
-      <section className="flex flex-col md:flex-row items-center justify-between pt-24 pb-12 px-8 md:px-24 min-h-[70vh] bg-[linear-gradient(0deg,rgba(255,212,0,0.2)_0%,transparent_70%)] mt-0 relative z-10 shadow-2xl mb-1" id="home">
-        <div className="flex-1 max-w-xl text-center md:text-left z-10">
-          <h1 className="text-4xl md:text-6xl text-[var(--color-secondary)] font-bold leading-tight mb-6">
-            The Original Taste of Sandila, <br />Now at Your Home!
-          </h1>
-          <p className="text-lg md:text-xl text-gray-300 mb-10 italic">
-            Traditional Sandila Laddus Delivered to Your Doorstep
-          </p>
-          <Link
-            to="/shop"
-            className="hero-btn px-10 py-4 bg-[var(--color-secondary)] text-[var(--color-primary)] no-underline rounded-md text-lg font-semibold inline-block transition-all duration-300 shadow-[0_4px_15px_rgba(255,212,0,0.3)] hover:opacity-90 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(255,212,0,0.4)]"
-            style={{ backgroundColor: 'var(--color-secondary)' }}
-          >
-            Order Now ›
-          </Link>
-        </div>
-        <div className="flex-1 flex justify-center mt-8 md:mt-0 relative">
-          <img
-            src={heroLaddus}
-            alt="Traditional Laddus"
-            className="max-w-[80%] md:max-w-[70%] rounded-3xl drop-shadow-[0_20px_30px_rgba(0,0,0,0.15)] animate-[float_6s_ease-in-out_infinite]"
-            style={{ animation: 'float 6s ease-in-out infinite' }}
-          />
-          <style dangerouslySetInnerHTML={{
-            __html: `
-            @keyframes float {
-              0%, 100% { transform: translateY(0); }
-              50% { transform: translateY(-20px); }
-            }
-          ` }} />
-        </div>
-      </section>
+      {/* Hero Slider Section */}
+      <HeroSlider />
 
-      {/* Our Story Section */}
-      <section ref={addToRefs} className="scroll-section bg-[var(--color-primary)] text-[var(--color-secondary)] py-24 px-8 md:px-24 relative z-20 overflow-hidden mb-2 border-t border-[var(--color-secondary)]/5 shadow-[0_10px_32px_-10px_rgba(255,255,255,0.24),0_-4px_16px_-6px_rgba(0,0,0,0.1)]" id="about">
-        {/* Animated Background Bubbles */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Our Special Laddus Section - Grid Layout First */}
+      <section ref={addToRefs} className="scroll-section py-20 px-8 md:px-24 text-center bg-[var(--color-primary)] relative z-10 shadow-sm border-y border-[var(--color-secondary)]/10 overflow-hidden" id="laddus">
+        {/* Decorative Bubbles for This Section */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
           <div className="home-bubble home-bubble-1"></div>
           <div className="home-bubble home-bubble-2"></div>
           <div className="home-bubble home-bubble-3"></div>
         </div>
+
         <style dangerouslySetInnerHTML={{
           __html: `
             .home-bubble {
               position: absolute;
-              background: rgba(255, 212, 0, 0.2);
+              background: var(--color-secondary);
               border-radius: 50%;
-              animation: float-home-bubble 20s infinite ease-in-out;
+              opacity: 0.1;
+              animation: float-bubble 25s infinite ease-in-out;
             }
-            .home-bubble-1 {
-              width: 150px;
-              height: 150px;
-              left: 5%;
-              top: 10%;
-              animation-delay: 0s;
-            }
-            .home-bubble-2 {
-              width: 100px;
-              height: 100px;
-              right: 10%;
-              bottom: 20%;
-              animation-delay: 5s;
-            }
-            .home-bubble-3 {
-              width: 80px;
-              height: 80px;
-              left: 40%;
-              bottom: 10%;
-              animation-delay: 10s;
-            }
-            @keyframes float-home-bubble {
-              0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
-              50% { transform: translateY(-30px) scale(1.1); opacity: 0.6; }
+            .home-bubble-1 { width: 150px; height: 150px; left: 5%; top: 10%; animation-delay: 0s; }
+            .home-bubble-2 { width: 250px; height: 250px; right: -5%; top: 40%; animation-delay: 4s; }
+            .home-bubble-3 { width: 100px; height: 100px; left: 40%; bottom: 5%; animation-delay: 2s; }
+            @keyframes float-bubble {
+              0%, 100% { transform: translate(0, 0) scale(1); }
+              50% { transform: translate(40px, -60px) scale(1.1); }
             }
           `
         }} />
-        <div className="flex flex-col md:flex-row gap-16 items-center">
-          <div className="flex-1">
-            <h2 className="text-4xl text-[var(--color-secondary)] mb-8 flex items-center">
-              <span className="mr-3 opacity-50">::</span>
-              Our Story
-            </h2>
-            <ul className="list-none p-0">
-              <li className="mb-6 text-lg flex items-start leading-relaxed"><User className="mr-4 mt-1 text-[var(--color-secondary)] w-6 h-6 flex-shrink-0" /> I am Satish Kumar, a resident of Sandila. I have been enjoying Sandila's Laddus since childhood.</li>
-              <li className="mb-6 text-lg flex items-start leading-relaxed"><Heart className="mr-4 mt-1 text-[var(--color-secondary)] w-6 h-6 flex-shrink-0" /> Our Laddu tradition is more than 100 years old!</li>
-              <li className="mb-6 text-lg flex items-start leading-relaxed"><Castle className="mr-4 mt-1 text-[var(--color-secondary)] w-6 h-6 flex-shrink-0" /> "The feast of the Nawabs of Lucknow is incomplete without Sandila's authentic Laddus!"</li>
-              <li className="mb-6 text-lg flex items-start leading-relaxed"><Film className="mr-4 mt-1 text-[var(--color-secondary)] w-6 h-6 flex-shrink-0" /> They have even been celebrated in several Bollywood movies.</li>
-              <li className="mb-6 text-lg flex items-start leading-relaxed"><Truck className="mr-4 mt-1 text-[var(--color-secondary)] w-6 h-6 flex-shrink-0" /> Today, carrying this legacy forward, we bring you the original Laddus of Sandila, now available online!</li>
-            </ul>
-          </div>
-          <div className="flex-1 w-full max-w-md">
-            <div className="border-[8px] border-white/10 rounded-2xl overflow-hidden shadow-2xl">
-              <img src={storyMaker} alt="Making Laddus" className="w-full h-auto" />
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Our Laddus Section - Auto Scrolling Carousel */}
-      <section ref={addToRefs} className="scroll-section py-16 px-8 md:px-24 text-center bg-[var(--color-primary)] relative z-10 shadow-[0_10px_32px_-10px_rgba(255,255,255,0.24),0_-4px_16px_-6px_rgba(0,0,0,0.1)] mb-2 overflow-hidden" id="laddus">
-        <h2 className="text-4xl text-[var(--color-secondary)] mb-2 font-bold">Our Laddus</h2>
-        <p className="italic text-gray-500 mb-16">Pure and Delicious</p>
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="inline-block px-4 py-1.5 bg-[var(--color-secondary)]/10 text-[var(--color-secondary)] rounded-full text-[10px] font-bold uppercase tracking-[0.3em] mb-6 border border-[var(--color-secondary)]/20">
+            Artisanal Collection
+          </div>
+          <h2 className="text-4xl md:text-7xl text-[var(--color-secondary)] mb-6 font-bold font-[var(--font-heading)] drop-shadow-sm">Our Special Laddus</h2>
+          <p className="italic text-[var(--color-text-muted)] mb-16 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">Handcrafted with over 100 years of love and ancestral tradition, bringing the soul of Sandila to your home.</p>
 
-        <div className="relative w-full overflow-hidden">
-          <div
-            ref={ladduScrollRef}
-            className="flex gap-4 md:gap-8 overflow-hidden py-4"
-          >
-            {/* Triple products for seamless scrolling */}
-            {[...products, ...products, ...products].map((item, index) => (
-              <div key={`${item._id}-${index}`} className="w-[90vw] md:w-[350px] flex-shrink-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-14 px-4">
+            {products.map((item) => (
+              <div key={item._id} className="h-full transform hover:-translate-y-2 transition-transform duration-300">
                 <LadduCard
                   product={{
                     id: item._id,
@@ -272,21 +206,126 @@ const Home = () => {
                     discountPercent: item.discountPercent,
                     priceStr: `₹${item.finalPrice} / kg`,
                     description: item.description,
-                    category: item.category?.name || 'Special'
+                    category: item.category?.name || 'Traditional'
                   }}
                 />
               </div>
             ))}
           </div>
-        </div>
 
-        {products.length === 0 && (
-          <p className="text-gray-400 mt-8">Loading delicious laddus...</p>
-        )}
+          {products.length === 0 && (
+            <div className="py-20 flex flex-col items-center">
+              <div className="w-16 h-16 border-4 border-[var(--color-secondary)] border-t-transparent rounded-full animate-spin mb-4"></div>
+              <p className="text-[var(--color-text-muted)] font-medium">Preparing fresh laddus for you...</p>
+            </div>
+          )}
+        </div>
       </section>
 
-      {/* Our Priorities Section (Moved Down) */}
-      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-[var(--color-accent)]/5 relative z-10 shadow-[0_10px_32px_-10px_rgba(255,255,255,0.24),0_-4px_16px_-6px_rgba(0,0,0,0.1)] mb-2" id="priorities">
+      {/* Our Story Section - Massive Heritage Revamp placed AFTER Laddus */}
+      <section ref={addToRefs} className="scroll-section bg-[var(--color-surface)] py-20 px-8 md:px-24 relative z-20 overflow-hidden mb-2" id="about">
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-center mb-24 space-y-6">
+            <div className="flex items-center justify-center gap-4 opacity-50">
+              <div className="h-[1px] w-12 bg-[var(--color-secondary)]"></div>
+              <h4 className="text-[var(--color-secondary)] font-bold uppercase tracking-[0.6em] text-xs lg:text-sm">The Soul of Sandila</h4>
+              <div className="h-[1px] w-12 bg-[var(--color-secondary)]"></div>
+            </div>
+            <h2 className="text-5xl md:text-9xl font-black text-[var(--color-text)] font-[var(--font-heading)] leading-none tracking-tighter">
+              Legacy of the <span className="text-[var(--color-secondary)] drop-shadow-[0_4px_10px_rgba(242,183,5,0.2)]">SKS</span>
+            </h2>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-20 items-stretch">
+            {/* Left Column: Multi-Image Grid with HD Quality Focus */}
+            <div className="grid grid-cols-2 gap-6 h-full min-h-[600px]">
+              <div className="col-span-2 relative group overflow-hidden rounded-[40px] shadow-2xl">
+                <img src={big} alt="Sandila Railway Station Heritage" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 brightness-90 group-hover:brightness-100" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div className="absolute bottom-6 left-8">
+                  <p className="text-white font-bold text-xl drop-shadow-lg">A Nostalgic Railway Icon</p>
+                </div>
+              </div>
+              <div className="relative group overflow-hidden rounded-[30px] shadow-xl border-2 border-white/10">
+                <img src={kulhad} alt="Traditional Preparation" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
+              </div>
+              <div className="relative group overflow-hidden rounded-[30px] shadow-xl border-4 border-[var(--color-secondary)]/20">
+                <img src={moti} alt="Sandila Laddoo Kulhad" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">
+                  <span className="text-[var(--color-secondary)] font-bold tracking-widest uppercase">Pure Sandila</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Detailed Story Blocks */}
+            <div className="flex flex-col justify-center gap-12">
+              <div className="space-y-6">
+                <p className="text-2xl text-[var(--color-text)] leading-relaxed italic font-medium border-l-8 border-[var(--color-secondary)] pl-8 bg-[var(--color-secondary)]/5 py-4 rounded-r-2xl">
+                  "Sandila ke Laddoo are famous sweets from Sandila, UP, known for their unique 'sondha' (earthy) flavor traditionally sold in small earthen pots (SKS)."
+                </p>
+                <div className="space-y-4">
+                  <p className="text-lg text-[var(--color-text-muted)] leading-relaxed opacity-90">
+                    Sandila ke Laddoo are famous sweets from Sandila, UP, known for their simple ingredients (sugar, gram flour, water) and unique, moist, 'sondha' (earthy) flavor, traditionally sold in small earthen pots (SKS) at the railway station.
+                  </p>
+                  <p className="text-lg text-[var(--color-text-muted)] leading-relaxed opacity-90">
+                    A nostalgic symbol of this transit town, enjoyed for generations by travelers, with legacy shops run by families for decades. Images show these laddus in rustic SKS or small pots, often with a sugar coating, a hallmark of this unique regional delicacy.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-8">
+                <div className="p-6 bg-white rounded-xl shadow-sm border border-[var(--color-secondary)]/10 hover:border-[var(--color-secondary)]/40 transition-colors group">
+                  <h4 className="text-[var(--color-secondary)] font-black text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
+                    <span className="w-2 h-2 bg-[var(--color-secondary)] rounded-full animate-ping"></span>
+                    Origin
+                  </h4>
+                  <p className="text-[var(--color-text)] font-semibold leading-relaxed">
+                    Sandila, a small town in the <span className="text-[var(--color-secondary)]">Hardoi district of UP</span>, gained fame for these laddoos, linked to royal kitchens and railway stops.
+                  </p>
+                </div>
+
+                <div className="p-6 bg-white rounded-xl shadow-sm border border-[var(--color-secondary)]/10 hover:border-[var(--color-secondary)]/40 transition-colors">
+                  <h4 className="text-[var(--color-secondary)] font-black text-xs uppercase tracking-widest mb-3">Pure Ingredients</h4>
+                  <p className="text-[var(--color-text)] font-semibold leading-relaxed">
+                    Made from basic gram flour (besan), sugar, and water, but the magic lies in their preparation and <span className="italic">earthy aroma</span>.
+                  </p>
+                </div>
+
+                <div className="p-6 bg-white rounded-xl shadow-sm border border-[var(--color-secondary)]/10 hover:border-[var(--color-secondary)]/40 transition-colors">
+                  <h4 className="text-[var(--color-secondary)] font-black text-xs uppercase tracking-widest mb-3">Kulhad Packaging</h4>
+                  <p className="text-[var(--color-text)] font-semibold leading-relaxed">
+                    Traditionally packed in clay pots and sold through train windows, making them an iconic transit snack.
+                  </p>
+                </div>
+
+                <div className="p-6 bg-white rounded-xl shadow-sm border border-[var(--color-secondary)]/10 hover:border-[var(--color-secondary)]/40 transition-colors">
+                  <h4 className="text-[var(--color-secondary)] font-black text-xs uppercase tracking-widest mb-3">Family Legacy</h4>
+                  <p className="text-[var(--color-text)] font-semibold leading-relaxed">
+                    Families have run the same shops for decades at <SKSBrand /> passing down recipes that remain a strong sentimental memory.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white p-8 rounded-[40px] shadow-xl border border-[var(--color-secondary)]/10 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--color-secondary)]/5 blur-3xl rotate-45 transform translate-x-10 -translate-y-10"></div>
+                <div className="flex gap-6 items-center">
+                  <div className="w-16 h-16 bg-[var(--color-secondary)] rounded-full flex items-center justify-center shrink-0 shadow-lg group-hover:rotate-12 transition-transform">
+                    <Heart className="text-[var(--color-primary)] " fill="currentColor" size={32} />
+                  </div>
+                  <p className="text-[var(--color-text)] text-xl font-medium italic">
+                    "Contrasting with Motichur, the moist texture and 'Sondha' taste of <SKSBrand /> is a hallmark regional delicacy enjoyed by millions."
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Priorities Section */}
+      <section ref={addToRefs} className="scroll-section py-10 px-8 md:px-24 bg-[var(--color-accent)]/10 relative z-10 shadow-sm mb-2" id="priorities">
         <h2 className="text-4xl text-[var(--color-secondary)] mb-16 font-bold text-center">Our Priorities</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
           <div className="text-center p-6 bg-[var(--color-muted)] rounded-xl shadow-md hover:shadow-lg transition-shadow">
@@ -315,121 +354,220 @@ const Home = () => {
               <HeartIcon className="w-8 h-8 text-white" />
             </div>
             <h3 className="text-lg font-bold text-[var(--color-secondary)] mb-2">Made with Love</h3>
-            <p className="text-sm text-[var(--color-text)]">Every laddu is handcrafted with care, carrying forward our family's century-old tradition.</p>
+            <p className="text-sm text-[var(--color-text-muted)]">Every laddu is handcrafted with care, carrying forward our family's century-old tradition.</p>
           </div>
         </div>
       </section>
 
       {/* Video Reviews Section */}
-      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-muted)] text-center relative z-10 shadow-[0_10px_32px_-10px_rgba(255,255,255,0.24),0_-4px_16px_-6px_rgba(0,0,0,0.1)] mb-2" id="testimonials">
-        <h2 className="text-4xl text-[var(--color-secondary)] mb-16 font-bold">Customer Video Reviews</h2>
-        {videos.length > 0 ? (
-          <div className="relative overflow-hidden">
-            <div
-              ref={scrollRef}
-              className="flex gap-4 md:gap-8 overflow-x-hidden pb-4"
-            >
-              {/* Triple videos for seamless scrolling */}
-              {[...videos, ...videos, ...videos].map((video, index) => (
-                <div
-                  key={`${video._id}-${index}`}
-                  className="flex-shrink-0 w-72 md:w-80 bg-[var(--color-muted)] rounded-xl shadow-lg overflow-hidden cursor-pointer hover:scale-105 transition-transform"
-                  onClick={() => setSelectedVideo(video)}
-                >
-                  <div className="relative">
+      <section ref={addToRefs} className="scroll-section py-20 px-8 md:px-24 bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-surface)] text-center relative z-10 shadow-sm overflow-hidden" id="testimonials">
+        <div className="relative z-10">
+          <div className="inline-block px-4 py-1.5 bg-[var(--color-secondary)]/10 text-[var(--color-secondary)] rounded-full text-[10px] font-bold uppercase tracking-[0.3em] mb-6 border border-[var(--color-secondary)]/20">
+            Real Stories
+          </div>
+          <h2 className="text-4xl md:text-7xl text-[var(--color-secondary)] mb-12 font-bold font-[var(--font-heading)] drop-shadow-sm">Loved by Customers</h2>
+
+          {videos.length > 0 ? (
+            <div className="relative group">
+              <div
+                ref={scrollRef}
+                className="flex gap-6 md:gap-10 overflow-x-auto pb-12 scroll-smooth no-scrollbar px-4"
+              >
+                {[...videos, ...videos, ...videos].map((video, index) => (
+                  <div
+                    key={`${video._id}-${index}`}
+                    className="flex-shrink-0 w-64 md:w-80 h-96 bg-[var(--color-muted)] rounded-[30px] shadow-2xl overflow-hidden cursor-pointer hover:scale-[1.03] transition-all duration-500 border border-[var(--color-secondary)]/10 group relative"
+                    onClick={() => setSelectedVideo(video)}
+                  >
                     <video
                       src={video.url}
-                      className="w-full h-56 object-cover"
+                      className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
                       muted
                       loop
                       autoPlay
                       playsInline
                     />
-                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                      <Play className="w-16 h-16 text-white" />
-                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        ) : (
-          <p className="text-gray-400">Loading customer reviews...</p>
-        )}
+          ) : (
+            <div className="py-20 flex flex-col items-center">
+              <div className="w-12 h-12 border-4 border-[var(--color-secondary)] border-t-transparent rounded-full animate-spin mb-4"></div>
+              <p className="text-[var(--color-text-muted)] font-medium">Loading customer stories...</p>
+            </div>
+          )}
+        </div>
       </section>
 
       {/* Video Modal */}
-      {
-        selectedVideo && (
-          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-40 p-4 pt-32">
-            <div className="bg-white rounded-lg max-w-3xl w-full max-h-[70vh] overflow-hidden relative">
-              <button
-                onClick={() => setSelectedVideo(null)}
-                className="absolute bottom-4 right-4 p-1 md:p-2 bg-black text-white rounded-full transition-colors z-10 hover:bg-gray-800"
-              >
-                <X className="w-4 h-4 md:w-6 md:h-6" />
-              </button>
-              <div className="p-6">
-                <video
-                  src={selectedVideo.url}
-                  className="w-full aspect-video rounded-lg"
-                  controls
-                  autoPlay
-                  onLoadedData={(e) => {
-                    setTimeout(() => {
-                      e.target.pause();
-                    }, 5000);
-                  }}
-                />
-                <div className="mt-4 text-center">
-                  <p className="text-gray-600">Customer Review</p>
-                </div>
+      {selectedVideo && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-40 p-4 pt-32">
+          <div className="bg-white rounded-lg max-w-3xl w-full max-h-[70vh] overflow-hidden relative">
+            <button
+              onClick={() => setSelectedVideo(null)}
+              className="absolute bottom-4 right-4 p-1 md:p-2 bg-black text-white rounded-full transition-colors z-10 hover:bg-gray-800"
+            >
+              <X className="w-4 h-4 md:w-6 md:h-6" />
+            </button>
+            <div className="p-6">
+              <video
+                src={selectedVideo.url}
+                className="w-full aspect-video rounded-lg"
+                controls
+                autoPlay
+                onLoadedData={(e) => {
+                  setTimeout(() => {
+                    e.target.pause();
+                  }, 5000);
+                }}
+              />
+              <div className="mt-4 text-center">
+                <p className="text-gray-600">Customer Review</p>
               </div>
             </div>
           </div>
-        )
-      }
+        </div>
+      )}
 
-      {/* Founder Section (Moved to Bottom) */}
-      <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-[var(--color-primary)] relative z-10 shadow-[0_10px_32px_-10px_rgba(255,255,255,0.24),0_-4px_16px_-6px_rgba(0,0,0,0.1)]" id="founders">
-        <h2 className="text-4xl text-[var(--color-secondary)] mb-16 font-bold text-center">Meet Our Founders</h2>
-        <div className="flex flex-col gap-16 max-w-6xl mx-auto">
-          {/* Founder 1: Satish Kumar */}
-          <div className="flex flex-col md:flex-row gap-12 items-center bg-[var(--color-muted)] p-8 rounded-3xl shadow-lg border border-[var(--color-secondary)]/10 text-left">
-            <div className="w-48 h-64 flex-shrink-0 rounded-2xl overflow-hidden border-4 border-[var(--color-secondary)] shadow-lg">
-              <img src={storyMaker} alt="Satish Kumar - Founder" className="w-full h-full object-cover" />
+      {/* Founder Section */}
+      <section ref={addToRefs} className="scroll-section py-12 px-8 md:px-24 bg-[var(--color-primary)] relative z-10 shadow-sm overflow-hidden" id="founders">
+
+        {/* Decorative Floating Elements */}
+        <div className="absolute -top-10 -left-10 w-48 h-48 bg-[var(--color-secondary)] rounded-full opacity-10 blur-[100px] animate-pulse"></div>
+        <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-[var(--color-secondary)] rounded-full opacity-10 blur-[120px]"></div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-center mb-24">
+            <div className="inline-block px-4 py-1.5 bg-[var(--color-secondary)]/10 text-[var(--color-secondary)] rounded-full text-[10px] font-bold uppercase tracking-[0.3em] mb-4 border border-[var(--color-secondary)]/20">
+              The Guiding Light
             </div>
-            <div className="flex-1">
-              <h3 className="text-3xl font-bold text-[var(--color-secondary)] mb-2">Satish Kumar</h3>
-              <p className="text-[var(--color-accent)] font-semibold mb-4 text-xl">Founder & Master Craftsman</p>
-              <p className="text-[var(--color-text)] leading-relaxed text-lg">
-                Born and raised in Sandila, Satish has been perfecting the art of laddu making for over 25 years.
-                His passion for preserving traditional recipes and bringing authentic flavors to modern homes drives our mission.
-                He personally selects every ingredient to ensure the authentic taste of Sandila remains strictly preserved.
-              </p>
-            </div>
+            <h2 className="text-4xl md:text-8xl font-bold text-[var(--color-secondary)] font-[var(--font-heading)] tracking-tighter drop-shadow-md">The Faces Behind <SKSBrand /></h2>
+            <p className="italic text-[var(--color-text-muted)] mt-6 text-lg md:text-2xl max-w-2xl mx-auto opacity-80 leading-relaxed">Preserving the legacy of Sandila for future generations with every handcrafted batch.</p>
           </div>
 
-          {/* Founder 2: Priya Kumar */}
-          <div className="flex flex-col md:flex-row gap-12 items-center bg-[var(--color-muted)] p-8 rounded-3xl shadow-lg border border-[var(--color-secondary)]/10 text-left">
-            <div className="w-48 h-64 flex-shrink-0 rounded-2xl overflow-hidden border-4 border-[var(--color-secondary)] shadow-lg">
-              <img src={storyMaker} alt="Co-Founder" className="w-full h-full object-cover" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
+            <div className="flex flex-col gap-8 bg-[var(--color-primary)] p-8 md:p-10 rounded-[40px] shadow-xl border border-[var(--color-secondary)]/10 text-left hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
+              <div className="w-full h-80 rounded-[30px] overflow-hidden border-4 border-white shadow-lg group-hover:border-[var(--color-secondary)]/30 transition-all">
+                <img src={storyMaker} alt="Satish Kumar - Founder" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              </div>
+              <div>
+                <h3 className="text-4xl font-bold text-[var(--color-secondary)] mb-2 font-[var(--font-heading)] drop-shadow-sm">Satish Kumar</h3>
+                <p className="text-[var(--color-primary)] bg-[var(--color-secondary)] inline-block px-5 py-1.5 rounded-full font-bold mb-8 text-xs uppercase tracking-widest shadow-md">Founder & Master Craftsman</p>
+                <p className="text-[var(--color-text-muted)] leading-relaxed text-lg italic border-l-4 border-[var(--color-secondary)]/30 pl-4">
+                  Born and raised in Sandila, Satish has been perfecting the art of laddu making for over 25 years.
+                  His passion for preserving traditional recipes and bringing authentic flavors to modern homes drives our mission.
+                </p>
+              </div>
             </div>
-            <div className="flex-1">
-              <h3 className="text-3xl font-bold text-[var(--color-secondary)] mb-2">Priya Kumar</h3>
-              <p className="text-[var(--color-accent)] font-semibold mb-4 text-xl">Co-Founder & Quality Head</p>
-              <p className="text-[var(--color-text)] leading-relaxed text-lg">
-                With a background in food technology, Priya ensures every batch meets our highest quality standards.
-                She oversees packaging, hygiene protocols, and customer satisfaction to maintain our legacy of excellence.
-                Her vision brings our traditional heritage to the digital world.
-              </p>
+
+            <div className="flex flex-col gap-8 bg-[var(--color-primary)] p-8 md:p-10 rounded-[40px] shadow-xl border border-[var(--color-secondary)]/10 text-left hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
+              <div className="w-full h-80 rounded-[30px] overflow-hidden border-4 border-white shadow-lg group-hover:border-[var(--color-secondary)]/30 transition-all">
+                <img src={storyMaker} alt="Co-Founder" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              </div>
+              <div>
+                <h3 className="text-4xl font-bold text-[var(--color-secondary)] mb-2 font-[var(--font-heading)] drop-shadow-sm">Priya Kumar</h3>
+                <p className="text-[var(--color-primary)] bg-[var(--color-secondary)] inline-block px-5 py-1.5 rounded-full font-bold mb-8 text-xs uppercase tracking-widest shadow-md">Co-Founder & Quality Head</p>
+                <p className="text-[var(--color-text-muted)] leading-relaxed text-lg italic border-l-4 border-[var(--color-secondary)]/30 pl-4">
+                  With a background in food technology, Priya ensures every batch meets our highest quality standards.
+                  She oversees packaging, hygiene protocols, and customer satisfaction to maintain our legacy of excellence.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
+      {/* As Seen On - Media Coverage Section */}
+      <section ref={addToRefs} className="scroll-section py-20 px-8 md:px-24 bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-surface)] relative overflow-hidden" id="media-coverage">
+        {/* Background Decorations */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+          <div className="absolute top-10 left-10 w-32 h-32 bg-[var(--color-secondary)] rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-20 w-40 h-40 bg-[var(--color-secondary)] rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Section Header */}
+          <div className="text-center mb-16">
+            <div className="inline-block px-4 py-1.5 bg-[var(--color-secondary)]/10 text-[var(--color-secondary)] rounded-full text-[10px] font-bold uppercase tracking-[0.3em] mb-6 border border-[var(--color-secondary)]/20">
+              Media Coverage
+            </div>
+            <h2 className="text-4xl md:text-7xl font-bold text-[var(--color-secondary)] mb-6 font-[var(--font-heading)] drop-shadow-sm">
+              As Seen On
+            </h2>
+            <p className="text-lg md:text-2xl text-gray-300 italic max-w-3xl mx-auto leading-relaxed">
+              Discover why food lovers and media personalities across India are raving about our authentic <SKSBrand /> Laddus
+            </p>
+          </div>
+
+          {/* Video Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+            {/* Video 1 */}
+            <div className="group bg-[var(--color-muted)] rounded-[30px] overflow-hidden shadow-2xl border border-[var(--color-secondary)]/10 hover:border-[var(--color-secondary)]/40 transition-all duration-500 hover:-translate-y-2">
+              <div className="aspect-video relative overflow-hidden bg-black">
+                <iframe
+                  className="w-full h-full"
+                  src="https://www.youtube.com/embed/03sUU0xzCnM?autoplay=1&mute=1&loop=1&playlist=03sUU0xzCnM&enablejsapi=1"
+                  title="SKS Laddu Featured Video 1"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  id="youtube-video-1"
+                ></iframe>
+              </div>
+            </div>
+
+            {/* Video 2 */}
+            <div className="group bg-[var(--color-muted)] rounded-[30px] overflow-hidden shadow-2xl border border-[var(--color-secondary)]/10 hover:border-[var(--color-secondary)]/40 transition-all duration-500 hover:-translate-y-2">
+              <div className="aspect-video relative overflow-hidden bg-black">
+                <iframe
+                  className="w-full h-full"
+                  src="https://www.youtube.com/embed/ea5YwPwTlLE?autoplay=1&mute=1&loop=1&playlist=ea5YwPwTlLE&enablejsapi=1"
+                  title="SKS Laddu Featured Video 2"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  id="youtube-video-2"
+                ></iframe>
+              </div>
+            </div>
+
+            {/* Video 3 */}
+            <div className="group bg-[var(--color-muted)] rounded-[30px] overflow-hidden shadow-2xl border border-[var(--color-secondary)]/10 hover:border-[var(--color-secondary)]/40 transition-all duration-500 hover:-translate-y-2">
+              <div className="aspect-video relative overflow-hidden bg-black">
+                <iframe
+                  className="w-full h-full"
+                  src="https://www.youtube.com/embed/QavZkjDbm7w?autoplay=1&mute=1&loop=1&playlist=QavZkjDbm7w"
+                  title="SKS Laddu Featured Short"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  id="youtube-video-3"
+                ></iframe>
+              </div>
+            </div>
+          </div>
+
+          {/* Call to Action */}
+          <div className="text-center mt-16">
+            <p className="text-xl md:text-2xl text-zinc-400 mb-8 font-medium">
+              Join thousands of satisfied customers who trust <SKSBrand /> for authentic sweetness
+            </p>
+            <Link
+              to="/laddus"
+              className="inline-block px-10 py-4 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-full font-bold text-lg shadow-2xl hover:scale-105 transition-transform"
+            >
+              Order Your Laddus Now
+            </Link>
+          </div>
+        </div>
+      </section>
+
+
+
       <Footer />
-    </div >
+    </div>
   );
 };
 

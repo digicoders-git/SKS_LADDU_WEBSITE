@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addToCartApi } from '../../api/cart';
-import { ShoppingCart, CheckCircle } from 'lucide-react';
+import { ShoppingCart, CheckCircle, Heart } from 'lucide-react';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 
@@ -25,15 +25,17 @@ const LadduCard = ({ product }) => {
         const token = localStorage.getItem('userToken');
         if (!token) {
             const result = await Swal.fire({
-                title: 'Not Logged In',
-                text: 'Please login first to add items to cart!',
-                icon: 'warning',
+                title: 'Authentic Taste Awaits!',
+                text: 'Please login to add these delicious laddus to your cart.',
+                icon: 'info',
                 showCancelButton: true,
-                confirmButtonColor: 'var(--color-secondary)',
-                cancelButtonColor: '#d33',
+                confirmButtonColor: '#F2B705',
+                cancelButtonColor: '#2E2E2E',
                 confirmButtonText: 'Login Now',
-                background: 'var(--color-muted)',
-                color: '#fff'
+                cancelButtonText: 'Later',
+                background: '#FFFFFF',
+                color: '#2E2E2E',
+                iconColor: '#F2B705'
             });
 
             if (result.isConfirmed) {
@@ -75,36 +77,45 @@ const LadduCard = ({ product }) => {
     return (
         <div
             onClick={handleViewDetails}
-            className="bg-[var(--color-muted)] p-5 md:p-5 rounded-[30px] md:rounded-[35px] shadow-xl border border-white/5 flex flex-col items-center text-center transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl group relative overflow-hidden h-full cursor-pointer"
+            className="bg-[var(--color-surface)] p-4 md:p-5 rounded-[30px] shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-[var(--color-secondary)]/5 flex flex-col items-center text-center transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_20px_50px_rgba(242,183,5,0.12)] hover:border-[var(--color-secondary)]/30 group relative overflow-hidden h-full cursor-pointer"
         >
             {category && (
-                <div className="absolute top-3 right-3 md:top-4 md:right-4 bg-[var(--color-secondary)] text-[var(--color-primary)] text-[10px] md:text-[10px] font-bold px-2.5 md:px-3 py-1 md:py-1 rounded-full uppercase tracking-tighter z-10">
+                <div className="absolute top-3 left-3 bg-[var(--color-secondary)] text-[var(--color-primary)] text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-widest z-10 shadow-lg">
                     {category}
                 </div>
             )}
+
+
+
             <div
-                className="w-full h-48 md:h-52 overflow-hidden rounded-[22px] md:rounded-[25px] mb-4 md:mb-4"
+                className="w-full aspect-square overflow-hidden rounded-[20px] mb-3 bg-[var(--color-primary)]/20 relative shadow-inner"
             >
                 <img
                     src={img}
                     alt={name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </div>
+
             <h3
-                className="text-xl md:text-2xl font-bold text-[var(--color-text)] mb-1.5 md:mb-2 hover:text-[var(--color-secondary)] transition-colors line-clamp-1"
+                className="text-lg md:text-xl font-bold text-[var(--color-text)] mb-0.5 font-[var(--font-heading)] group-hover:text-[var(--color-secondary)] transition-colors line-clamp-1 px-1"
             >
                 {name}
             </h3>
-            <p className="text-xs md:text-sm text-gray-400 italic mb-4 md:mb-3 line-clamp-2 px-1">{description}</p>
-            <div className="flex flex-col items-center mb-5 md:mb-4">
-                <div className="text-lg md:text-xl font-bold text-[var(--color-secondary)]">
-                    ₹{displayPrice} / kg
+
+            <p className="text-[10px] md:text-xs text-[var(--color-text-muted)] mb-3 line-clamp-2 px-1 leading-tight opacity-80">
+                {description}
+            </p>
+
+            <div className="flex flex-col items-center mb-4">
+                <div className="text-xl font-bold text-[var(--color-secondary)] font-[var(--font-body)]">
+                    ₹{displayPrice} <span className="text-[10px] text-[var(--color-text-muted)] font-normal opacity-60">/ kg</span>
                 </div>
                 {discount > 0 && (
-                    <div className="flex items-center gap-2 md:gap-2 mt-1 md:mt-1">
-                        <span className="text-xs md:text-sm text-gray-500 line-through">₹{originalPrice}</span>
-                        <span className="text-[10px] md:text-xs text-green-500 font-bold">{discount}% OFF</span>
+                    <div className="flex items-center gap-1.5 mt-0.5 bg-green-50 px-2.5 py-0.5 rounded-full border border-green-100">
+                        <span className="text-[10px] text-[var(--color-text-muted)] line-through">₹{originalPrice}</span>
+                        <span className="text-[9px] text-green-600 font-bold">{discount}% OFF</span>
                     </div>
                 )}
             </div>
@@ -113,19 +124,19 @@ const LadduCard = ({ product }) => {
                 <button
                     onClick={handleAddToCart}
                     disabled={added}
-                    className={`flex-1 py-3 md:py-3 rounded-xl md:rounded-2xl font-bold transition-all duration-300 flex items-center justify-center gap-2 text-xs md:text-sm ${added
-                        ? 'bg-green-600 text-white shadow-inner'
-                        : 'bg-[var(--color-primary)] text-[var(--color-secondary)] border border-[var(--color-secondary)]/30 hover:bg-[var(--color-secondary)]/10'
+                    className={`flex-1 py-2.5 rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-2 text-[10px] md:text-xs ${added
+                        ? 'bg-green-600 text-white shadow-inner scale-95'
+                        : 'bg-white text-[var(--color-secondary)] border-2 border-[var(--color-secondary)]/20 hover:border-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/5 active:scale-95'
                         }`}
                 >
                     {added ? (
                         <>
-                            <CheckCircle size={15} className="md:w-4 md:h-4" />
-                            <span>Added!</span>
+                            <CheckCircle size={14} />
+                            <span>Added</span>
                         </>
                     ) : (
                         <>
-                            <ShoppingCart size={15} className="md:w-4 md:h-4" />
+                            <ShoppingCart size={14} />
                             <span>Cart</span>
                         </>
                     )}
@@ -133,10 +144,8 @@ const LadduCard = ({ product }) => {
                 <button
                     onClick={async (e) => {
                         e.stopPropagation();
-
                         const isAuth = await checkAuth();
                         if (!isAuth) return;
-
                         try {
                             await addToCartApi({ productId: id, quantity: 1 });
                             window.dispatchEvent(new Event('cart-updated'));
@@ -145,7 +154,7 @@ const LadduCard = ({ product }) => {
                             console.error("Buy now failed:", error);
                         }
                     }}
-                    className="flex-1 py-3 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-xl md:rounded-2xl font-bold hover:opacity-90 transition-all shadow-md text-xs md:text-sm"
+                    className="flex-1 py-2.5 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-xl font-bold hover:opacity-90 hover:shadow-xl transition-all active:scale-95 text-[10px] md:text-xs shadow-[0_8px_20px_rgba(242,183,5,0.25)]"
                 >
                     Buy Now
                 </button>

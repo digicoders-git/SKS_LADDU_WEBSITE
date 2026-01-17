@@ -98,7 +98,7 @@ const Orders = () => {
                     </div>
                     <div className="bg-[var(--color-muted)] px-4 py-2 rounded-xl border border-[var(--color-secondary)]/10 flex items-center gap-2">
                         <Package size={18} className="text-[var(--color-secondary)]" />
-                        <span className="text-sm font-bold text-gray-300">Total Orders: <span className="text-white">{orders.length}</span></span>
+                        <span className="text-sm font-bold text-zinc-500">Total Orders: <span className="text-zinc-700">{orders.length}</span></span>
                     </div>
                 </div>
 
@@ -165,7 +165,7 @@ const Orders = () => {
                                                 <p className="text-sm text-gray-400">Qty: {item.quantity} × ₹{item.productPrice}</p>
                                             </div>
                                             <div className="text-right">
-                                                <p className="font-bold text-white">₹{item.productPrice * item.quantity}</p>
+                                                <p className="font-bold text-black">₹{item.productPrice * item.quantity}</p>
                                             </div>
                                         </div>
                                     ))}
@@ -191,7 +191,7 @@ const Orders = () => {
                                                 <h4 className="font-bold text-white text-sm">Payment Info</h4>
                                             </div>
                                             <p className="text-xs text-gray-400">
-                                                Method: <span className="text-white font-medium">{order.paymentMethod}</span>
+                                                Method: <span className="text-black font-medium">{order.paymentMethod}</span>
                                             </p>
                                             <p className="text-xs text-gray-400">
                                                 Status: <span className={`font-medium ${order.paymentStatus === 'paid' ? 'text-green-400' : 'text-yellow-400'}`}>{order.paymentStatus?.toUpperCase()}</span>

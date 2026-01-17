@@ -57,7 +57,7 @@ const Login = () => {
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label className="block text-sm font-bold text-gray-300 mb-2">Email Address</label>
+                        <label className="block text-sm font-bold text-gray-700 mb-2">Email Address</label>
                         <div className="relative">
                             <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
                             <input
@@ -65,7 +65,7 @@ const Login = () => {
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                className="w-full pl-12 pr-4 py-3 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all"
+                                className="w-full pl-12 pr-4 py-3 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all"
                                 placeholder="Enter your email"
                             />
                         </div>
@@ -73,7 +73,7 @@ const Login = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-bold text-gray-300 mb-2">Password</label>
+                        <label className="block text-sm font-bold text-gray-700 mb-2">Password</label>
                         <div className="relative">
                             <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
                             <input
@@ -81,7 +81,7 @@ const Login = () => {
                                 name="password"
                                 value={formData.password}
                                 onChange={handleChange}
-                                className="w-full pl-12 pr-12 py-3 bg-[var(--color-primary)] border border-[var(--color-secondary)]/20 text-white rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all"
+                                className="w-full pl-12 pr-12 py-3 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all"
                                 placeholder="Enter your password"
                             />
                             <button

@@ -134,7 +134,7 @@ const Contact = () => {
                 }} />
 
                 <h1 className="text-4xl md:text-6xl font-bold mb-6 relative z-10 text-[var(--color-secondary)]">Let's Talk Sweets</h1>
-                <p className="text-xl md:text-2xl opacity-90 max-w-2xl mx-auto italic relative z-10 text-gray-300">
+                <p className="text-xl md:text-2xl opacity-90 max-w-2xl mx-auto italic relative z-10 text-[var(--color-text-muted)]">
                     Have questions about our laddus or want to place a bulk order? We're here to help!
                 </p>
             </section>
@@ -152,7 +152,7 @@ const Contact = () => {
                                 </div>
                                 <div className="min-w-0 flex-1">
                                     <h4 className="font-bold text-[var(--color-secondary)] text-sm md:text-base">Email Us</h4>
-                                    <a href="mailto:sksladdu8313@gmail.com" className="text-gray-400 hover:text-[var(--color-secondary)] transition-colors text-xs md:text-sm break-all">sksladdu8313@gmail.com</a>
+                                    <a href="mailto:sksladdu8313@gmail.com" className="text-[var(--color-text-muted)] hover:text-[var(--color-secondary)] transition-colors text-xs md:text-sm break-all">sksladdu8313@gmail.com</a>
                                 </div>
                             </div>
 
@@ -163,9 +163,9 @@ const Contact = () => {
                                 <div className="min-w-0 flex-1">
                                     <h4 className="font-bold text-[var(--color-secondary)] text-sm md:text-base">Call Us</h4>
                                     <div className="text-xs md:text-sm">
-                                        <a href="tel:+916307736698" className="text-gray-400 hover:text-[var(--color-secondary)] transition-colors inline-block">+91 6307736698</a>
-                                        <span className="text-gray-500">, </span>
-                                        <a href="tel:+918467831372" className="text-gray-400 hover:text-[var(--color-secondary)] transition-colors inline-block">8467831372</a>
+                                        <a href="tel:+916307736698" className="text-[var(--color-text-muted)] hover:text-[var(--color-secondary)] transition-colors inline-block">+91 6307736698</a>
+                                        <span className="text-[var(--color-text-muted)] opacity-50">, </span>
+                                        <a href="tel:+918467831372" className="text-[var(--color-text-muted)] hover:text-[var(--color-secondary)] transition-colors inline-block">8467831372</a>
                                     </div>
                                 </div>
                             </div>
@@ -180,7 +180,7 @@ const Contact = () => {
                                         href="https://www.google.com/maps/search/?api=1&query=Ahirawan,+Sandila,+Hardoi,+Uttar+Pradesh"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-gray-400 hover:text-[var(--color-secondary)] transition-colors underline decoration-dotted underline-offset-4 text-xs md:text-sm break-words"
+                                        className="text-[var(--color-text-muted)] hover:text-[var(--color-secondary)] transition-colors underline decoration-dotted underline-offset-4 text-xs md:text-sm break-words"
                                     >
                                         Ahirawan, Sandila, Hardoi, Uttar Pradesh
                                     </a>
@@ -188,7 +188,7 @@ const Contact = () => {
                             </div>
                         </div>
 
-                        <div className="mt-8 md:mt-12 pt-8 md:pt-12 border-t border-[var(--color-secondary)]/10 italic text-gray-500 text-xs md:text-sm">
+                        <div className="mt-8 md:mt-12 pt-8 md:pt-12 border-t border-[var(--color-secondary)]/10 italic text-[var(--color-text-muted)] text-xs md:text-sm">
                             "Bringing the warmth of Sandila to your home since the 1920s."
                         </div>
                     </div>
@@ -199,63 +199,63 @@ const Contact = () => {
                         <form className="space-y-6" onSubmit={handleSubmit}>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <label className="text-sm font-bold text-gray-400 uppercase tracking-wider">Full Name *</label>
+                                    <label className="text-sm font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Full Name *</label>
                                     <input
                                         type="text"
                                         name="name"
                                         value={formData.name}
                                         onChange={handleChange}
                                         placeholder="Your Name"
-                                        className="w-full px-6 py-4 bg-[var(--color-primary)] text-white rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all placeholder-gray-600"
+                                        className="w-full px-6 py-4 bg-[var(--color-surface)] text-[var(--color-text)] rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all placeholder-gray-400"
                                         required
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-sm font-bold text-gray-400 uppercase tracking-wider">Email Address</label>
+                                    <label className="text-sm font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Email Address</label>
                                     <input
                                         type="email"
                                         name="email"
                                         value={formData.email}
                                         onChange={handleChange}
                                         placeholder="Your Email"
-                                        className="w-full px-6 py-4 bg-[var(--color-primary)] text-white rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all placeholder-gray-600"
+                                        className="w-full px-6 py-4 bg-[var(--color-surface)] text-[var(--color-text)] rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all placeholder-gray-400"
                                     />
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <label className="text-sm font-bold text-gray-400 uppercase tracking-wider">Phone Number *</label>
+                                    <label className="text-sm font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Phone Number *</label>
                                     <input
                                         type="tel"
                                         name="phone"
                                         value={formData.phone}
                                         onChange={handleChange}
                                         placeholder="Your Phone Number"
-                                        className="w-full px-6 py-4 bg-[var(--color-primary)] text-white rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all placeholder-gray-600"
+                                        className="w-full px-6 py-4 bg-[var(--color-surface)] text-[var(--color-text)] rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all placeholder-gray-400"
                                         required
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-sm font-bold text-gray-400 uppercase tracking-wider">Subject</label>
+                                    <label className="text-sm font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Subject</label>
                                     <input
                                         type="text"
                                         name="subject"
                                         value={formData.subject}
                                         onChange={handleChange}
                                         placeholder="Bulk Inquiry / Ordering"
-                                        className="w-full px-6 py-4 bg-[var(--color-primary)] text-white rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all placeholder-gray-600"
+                                        className="w-full px-6 py-4 bg-[var(--color-surface)] text-[var(--color-text)] rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all placeholder-gray-400"
                                     />
                                 </div>
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-gray-400 uppercase tracking-wider">Your Message *</label>
+                                <label className="text-sm font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Your Message *</label>
                                 <textarea
                                     name="message"
                                     value={formData.message}
                                     onChange={handleChange}
                                     placeholder="Tell us what you're looking for..."
                                     rows="5"
-                                    className="w-full px-6 py-4 bg-[var(--color-primary)] text-white rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all resize-none placeholder-gray-600"
+                                    className="w-full px-6 py-4 bg-[var(--color-surface)] text-[var(--color-text)] rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all resize-none placeholder-gray-400"
                                     required
                                 ></textarea>
                             </div>

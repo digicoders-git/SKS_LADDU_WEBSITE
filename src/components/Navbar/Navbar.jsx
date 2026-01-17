@@ -53,7 +53,7 @@ const Navbar = () => {
     ];
 
     return (
-        <nav className="flex justify-between items-center py-2 px-4 md:px-16 bg-[var(--color-primary)] font-[var(--font-body)] fixed top-0 left-0 right-0 w-full z-[1000] shadow-[0_10px_32px_-10px_rgba(255,255,255,0.24),0_-4px_16px_-6px_rgba(0,0,0,0.1)] transition-all duration-300 border-b border-[var(--color-secondary)]/10">
+        <nav className="flex justify-between items-center py-2 px-4 md:px-16 bg-[var(--color-primary)] font-[var(--font-body)] fixed top-0 left-0 right-0 w-full z-[1000] shadow-sm transition-all duration-300 border-b border-[var(--color-secondary)]/10 backdrop-blur-md">
             {/* Logo Section */}
             <div className="flex items-center gap-3">
                 <img src="/sks-logo.png" alt="SKS Logo" className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-[var(--color-secondary)] shadow-sm object-cover hover:scale-105 transition-transform cursor-pointer" onClick={() => navigate('/')} />
@@ -97,44 +97,41 @@ const Navbar = () => {
                 {/* Hamburger Button */}
                 <button
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
-                    className="lg:hidden flex flex-col justify-center text-[var(--color-secondary)] focus:outline-none z-[1001] bg-[var(--color-primary)] p-2 rounded-xl shadow-sm border border-[var(--color-secondary)]/10 transition-transform active:scale-95"
+                    className="lg:hidden flex flex-col justify-center text-[var(--color-secondary)] focus:outline-none z-[1001] bg-[var(--color-surface)] p-2 rounded-xl shadow-sm border border-[var(--color-secondary)]/10 transition-transform active:scale-95"
                     aria-label="Toggle Menu"
                 >
                     {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
             </div>
 
-            {/* Mobile Sidebar - 70% height, background blur, top right positioning */}
+            {/* Mobile Sidebar */}
             <div
-                className={`lg:hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-[999] transition-opacity duration-500 ease-in-out ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+                className={`lg:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-[999] transition-opacity duration-500 ease-in-out ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
                 onClick={() => setIsMenuOpen(false)}
             ></div>
 
-            <div className={`lg:hidden fixed top-24 right-4 h-[85vh] w-[80%] max-w-[300px] bg-[var(--color-muted)]/95 backdrop-blur-2xl z-[1000] shadow-2xl transition-all duration-500 ease-in-out rounded-[45px] border border-white/10 overflow-hidden ${isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-[120%] opacity-0'}`}>
+            <div className={`lg:hidden fixed top-24 right-4 h-[80vh] w-[80%] max-w-[300px] bg-[var(--color-surface)]/95 backdrop-blur-2xl z-[1000] shadow-2xl transition-all duration-500 ease-in-out rounded-[45px] border border-[var(--color-secondary)]/10 overflow-hidden ${isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-[120%] opacity-0'}`}>
                 <div className="flex flex-col h-full p-8 py-10 gap-3">
-                    <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--color-text)] opacity-50 mb-4 px-2">Navigation Menu</p>
+                    <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--color-text-muted)] opacity-50 mb-4 px-2">Navigation Menu</p>
                     {navLinks.map((link, idx) => (
                         <NavLink
                             key={link.to}
                             to={link.to}
                             onClick={() => setIsMenuOpen(false)}
-                            className={({ isActive }) => `text-base font-bold no-underline py-3 px-6 rounded-2xl transition-all duration-300 ${isActive ? 'bg-[var(--color-secondary)]/20 text-[var(--color-secondary)] shadow-sm' : 'text-[var(--color-text)] hover:bg-[var(--color-accent)]/20'}`}
+                            className={({ isActive }) => `text-base font-bold no-underline py-3 px-6 rounded-2xl transition-all duration-300 ${isActive ? 'bg-[var(--color-secondary)]/10 text-[var(--color-secondary)] shadow-sm' : 'text-[var(--color-text)] hover:bg-[var(--color-secondary)]/5'}`}
                             style={{ transitionDelay: `${idx * 40}ms` }}
                         >
                             {link.label}
                         </NavLink>
                     ))}
 
-                    <div className="mt-auto pt-6 border-t border-gray-100/10 flex items-center justify-between">
+                    <div className="mt-auto pt-6 border-t border-[var(--color-secondary)]/10 flex items-center justify-between">
                         <div
                             onClick={() => navigate('/profile')}
-                            className="flex items-center gap-3 text-[var(--color-secondary)] font-bold cursor-pointer hover:bg-[var(--color-accent)]/20 p-2 rounded-xl transition-all duration-300"
+                            className="flex items-center gap-3 text-[var(--color-secondary)] font-bold cursor-pointer hover:bg-[var(--color-secondary)]/10 p-2 rounded-xl transition-all duration-300"
                         >
                             <User size={18} />
                             <span className="text-sm uppercase tracking-wider">Profile</span>
-                        </div>
-                        <div className="flex gap-4">
-                            {/* Social icons could go here */}
                         </div>
                     </div>
                 </div>

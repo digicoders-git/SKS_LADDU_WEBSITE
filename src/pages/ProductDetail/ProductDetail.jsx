@@ -77,15 +77,17 @@ const ProductDetail = () => {
         const token = localStorage.getItem('userToken');
         if (!token) {
             const result = await Swal.fire({
-                title: 'Not Logged In',
-                text: 'Please login first to proceed!',
-                icon: 'warning',
+                title: 'Ready for a Treat?',
+                text: 'Please login to proceed with your purchase.',
+                icon: 'info',
                 showCancelButton: true,
-                confirmButtonColor: 'var(--color-secondary)',
-                cancelButtonColor: '#d33',
+                confirmButtonColor: '#F2B705',
+                cancelButtonColor: '#2E2E2E',
                 confirmButtonText: 'Login Now',
-                background: 'var(--color-muted)',
-                color: '#fff'
+                cancelButtonText: 'Maybe Later',
+                background: '#FFFFFF',
+                color: '#2E2E2E',
+                iconColor: '#F2B705'
             });
 
             if (result.isConfirmed) {
@@ -116,25 +118,50 @@ const ProductDetail = () => {
     };
 
     return (
-        <div className="bg-[var(--color-primary)] min-h-screen py-12 px-6 md:px-24 font-[var(--font-body)]">
+        <div className="bg-[var(--color-primary)] min-h-screen py-12 px-6 md:px-24 font-[var(--font-body)] relative overflow-hidden">
+            {/* Background Decorative Elements */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
+                <div className="detail-bubble detail-bubble-1"></div>
+                <div className="detail-bubble detail-bubble-2"></div>
+            </div>
+
+            <style dangerouslySetInnerHTML={{
+                __html: `
+                    .detail-bubble {
+                        position: absolute;
+                        background: var(--color-secondary);
+                        border-radius: 50%;
+                        opacity: 0.1;
+                        animation: float-detail 20s infinite ease-in-out;
+                    }
+                    .detail-bubble-1 { width: 200px; height: 200px; left: -50px; top: 10%; }
+                    .detail-bubble-2 { width: 300px; height: 300px; right: -80px; bottom: 10%; animation-delay: 4s; }
+                    @keyframes float-detail {
+                        0%, 100% { transform: translate(0, 0) scale(1); }
+                        50% { transform: translate(30px, -40px) scale(1.05); }
+                    }
+                `
+            }} />
+
             {/* Back Button */}
             <button
                 onClick={() => navigate(-1)}
-                className="flex items-center gap-2 text-[var(--color-secondary)] hover:text-white mb-8 font-semibold transition-colors"
+                className="flex items-center gap-2 text-[var(--color-secondary)] hover:text-white mb-8 font-semibold transition-colors relative z-10"
             >
                 <ArrowLeft size={20} />
                 Back
             </button>
 
-            <div className="max-w-6xl mx-auto bg-[var(--color-muted)] rounded-3xl shadow-2xl overflow-hidden border border-[var(--color-secondary)]/10">
+            <div className="max-w-6xl mx-auto bg-[var(--color-muted)] rounded-[40px] shadow-2xl overflow-hidden border border-[var(--color-secondary)]/10 relative z-10 backdrop-blur-sm">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                     {/* Product Image */}
-                    <div className="p-8 md:p-12 flex items-center justify-center bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-muted)] relative">
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,212,0,0.1)_0%,transparent_70%)] opacity-50"></div>
+                    <div className="p-8 md:p-16 flex items-center justify-center bg-gradient-to-br from-[var(--color-primary)]/50 to-[var(--color-muted)] relative overflow-hidden">
+                        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${heroLaddus})`, backgroundSize: 'cover', filter: 'blur(20px)' }}></div>
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(242,183,5,0.15)_0%,transparent_70%)]"></div>
                         <img
                             src={product.img}
                             alt={product.name}
-                            className="w-full max-w-md rounded-2xl shadow-xl transform hover:scale-105 transition-transform duration-300 relative z-10"
+                            className="w-full max-w-sm rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.3)] transform hover:scale-105 transition-transform duration-500 relative z-10 border border-white/10"
                         />
                     </div>
 
@@ -144,7 +171,7 @@ const ProductDetail = () => {
                             {product.category}
                         </div>
 
-                        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 font-[var(--font-heading)]">
+                        <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-text)] mb-4 font-[var(--font-heading)]">
                             {product.name}
                         </h1>
 
@@ -152,10 +179,10 @@ const ProductDetail = () => {
                             {[...Array(5)].map((_, i) => (
                                 <Star key={i} size={20} className="fill-[var(--color-secondary)] text-[var(--color-secondary)]" />
                             ))}
-                            <span className="text-gray-400 text-sm ml-2">(4.9/5 from 120 reviews)</span>
+                            <span className="text-[var(--color-text-muted)] text-sm ml-2">(4.9/5 from 120 reviews)</span>
                         </div>
 
-                        <p className="text-gray-300 text-lg leading-relaxed mb-6">
+                        <p className="text-[var(--color-text)] text-lg leading-relaxed mb-6 opacity-80">
                             {product.description}
                         </p>
 
@@ -164,10 +191,10 @@ const ProductDetail = () => {
                                 <Package size={20} />
                                 Product Details
                             </h3>
-                            <div className="space-y-2 text-sm text-gray-300">
-                                <p><span className="font-semibold text-white">Ingredients:</span> {product.ingredients}</p>
-                                <p><span className="font-semibold text-white">Shelf Life:</span> {product.shelfLife}</p>
-                                <p><span className="font-semibold text-white">Net Weight:</span> {product.netWeight}</p>
+                            <div className="space-y-2 text-sm text-[var(--color-text-muted)]">
+                                <p><span className="font-semibold text-[var(--color-text)]">Ingredients:</span> {product.ingredients}</p>
+                                <p><span className="font-semibold text-[var(--color-text)]">Shelf Life:</span> {product.shelfLife}</p>
+                                <p><span className="font-semibold text-[var(--color-text)]">Net Weight:</span> {product.netWeight}</p>
                             </div>
                         </div>
 

@@ -18,7 +18,7 @@ const TestimonialCard = ({ quote, name, color, initial, location, rating = 5 }) 
                 ))}
             </div>
 
-            <p className="text-sm md:text-base text-gray-200 italic leading-relaxed mb-4 flex-grow -mt-2">
+            <p className="text-sm md:text-base text-zinc-500 italic leading-relaxed mb-4 flex-grow -mt-2">
                 {quote}
             </p>
 

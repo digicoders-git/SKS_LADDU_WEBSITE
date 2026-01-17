@@ -131,7 +131,7 @@ const Laddus = () => {
                 }} />
 
                 <h1 className="text-3xl md:text-7xl font-bold mb-4 relative z-10 text-[var(--color-secondary)] font-[var(--font-heading)]">Our Sweet Gallery</h1>
-                <p className="text-base md:text-xl italic opacity-90 max-w-2xl mx-auto relative z-10 text-gray-300">
+                <p className="text-base md:text-xl italic opacity-90 max-w-2xl mx-auto relative z-10 text-[var(--color-text-muted)]">
                     Explore our diverse collection of authentic Sandila laddus, handcrafted for every palate and occasion.
                 </p>
             </section>
@@ -151,9 +151,9 @@ const Laddus = () => {
 
                     <button
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className={`w-full bg-[var(--color-muted)] flex items-center justify-between px-6 py-4 rounded-[22px] shadow-lg border border-[var(--color-secondary)]/20 transition-all active:scale-[0.98] ${isDropdownOpen ? 'ring-2 ring-[var(--color-secondary)]/30' : ''}`}
+                        className={`w-full bg-[var(--color-surface)] flex items-center justify-between px-6 py-4 rounded-[22px] shadow-lg border border-[var(--color-secondary)]/20 transition-all active:scale-[0.98] ${isDropdownOpen ? 'ring-2 ring-[var(--color-secondary)]/30' : ''}`}
                     >
-                        <span className="font-bold text-white text-base">{activeCategory.name}</span>
+                        <span className="font-bold text-[var(--color-text)] text-base">{activeCategory.name}</span>
                         <ChevronDown className={`text-[var(--color-secondary)] transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} size={20} />
                     </button>
 
@@ -167,7 +167,7 @@ const Laddus = () => {
                                         setActiveCategory(cat);
                                         setIsDropdownOpen(false);
                                     }}
-                                    className={`w-full text-left px-5 py-3.5 rounded-2xl text-sm font-bold transition-all ${activeCategory.id === cat.id ? 'bg-[var(--color-secondary)] text-[var(--color-primary)]' : 'text-gray-300 hover:bg-[var(--color-primary)] hover:text-[var(--color-secondary)]'}`}
+                                    className={`w-full text-left px-5 py-3.5 rounded-2xl text-sm font-bold transition-all ${activeCategory.id === cat.id ? 'bg-[var(--color-secondary)] text-[var(--color-primary)]' : 'text-[var(--color-text-muted)] hover:bg-[var(--color-primary)] hover:text-[var(--color-secondary)]'}`}
                                 >
                                     {cat.name}
                                 </button>
@@ -197,7 +197,7 @@ const Laddus = () => {
 
             {/* Laddu Grid */}
             <section ref={addToRefs} className="px-6 md:px-24 relative z-0 mb-20">
-                <div className="text-center mb-6 text-gray-400 text-sm">
+                <div className="text-center mb-6 text-[var(--color-text-muted)] text-sm">
                     Showing {filteredLaddus.length} delicious laddus
                 </div>
 
@@ -242,22 +242,22 @@ const Laddus = () => {
                         <div className="w-16 h-16 bg-[var(--color-secondary)] rounded-full flex items-center justify-center mx-auto mb-4 transform group-hover:scale-110 transition-transform shadow-[0_4px_15px_rgba(255,212,0,0.3)]">
                             <Shield className="w-8 h-8 text-[var(--color-primary)]" />
                         </div>
-                        <h4 className="font-bold mb-2 text-base md:text-lg text-white">Hygienically Packed</h4>
-                        <p className="text-xs md:text-sm text-gray-400 leading-relaxed italic">Double-sealed airtight containers to maintain freshness.</p>
+                        <h4 className="font-bold mb-2 text-base md:text-lg text-[var(--color-text)]">Hygienically Packed</h4>
+                        <p className="text-xs md:text-sm text-[var(--color-text-muted)] leading-relaxed italic">Double-sealed airtight containers to maintain freshness.</p>
                     </div>
                     <div className="group text-center">
                         <div className="w-16 h-16 bg-[var(--color-secondary)] rounded-full flex items-center justify-center mx-auto mb-4 transform group-hover:scale-110 transition-transform shadow-[0_4px_15px_rgba(255,212,0,0.3)]">
                             <Truck className="w-8 h-8 text-[var(--color-primary)]" />
                         </div>
-                        <h4 className="font-bold mb-2 text-base md:text-lg text-white">Pan-India Shipping</h4>
-                        <p className="text-xs md:text-sm text-gray-400 leading-relaxed italic">Fast delivery to any corner within 3-5 business days.</p>
+                        <h4 className="font-bold mb-2 text-base md:text-lg text-[var(--color-text)]">Pan-India Shipping</h4>
+                        <p className="text-xs md:text-sm text-[var(--color-text-muted)] leading-relaxed italic">Fast delivery to any corner within 3-5 business days.</p>
                     </div>
                     <div className="group text-center">
                         <div className="w-16 h-16 bg-[var(--color-secondary)] rounded-full flex items-center justify-center mx-auto mb-4 transform group-hover:scale-110 transition-transform shadow-[0_4px_15px_rgba(255,212,0,0.3)]">
                             <Package className="w-8 h-8 text-[var(--color-primary)]" />
                         </div>
-                        <h4 className="font-bold mb-2 text-base md:text-lg text-white">Bulk Orders</h4>
-                        <p className="text-xs md:text-sm text-gray-400 leading-relaxed italic">Special customization for weddings and corporate events.</p>
+                        <h4 className="font-bold mb-2 text-base md:text-lg text-[var(--color-text)]">Bulk Orders</h4>
+                        <p className="text-xs md:text-sm text-[var(--color-text-muted)] leading-relaxed italic">Special customization for weddings and corporate events.</p>
                     </div>
                 </div>
             </section>
