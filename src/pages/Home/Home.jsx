@@ -324,41 +324,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Our Priorities Section */}
-      <section ref={addToRefs} className="scroll-section py-10 px-8 md:px-24 bg-[var(--color-accent)]/10 relative z-10 shadow-sm mb-2" id="priorities">
-        <h2 className="text-4xl text-[var(--color-secondary)] mb-16 font-bold text-center">Our Priorities</h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
-          <div className="text-center p-6 bg-[var(--color-muted)] rounded-xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Shield className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-lg font-bold text-[var(--color-secondary)] mb-2">Health First</h3>
-            <p className="text-sm text-[var(--color-text)]">No artificial preservatives, colors, or flavors. Pure and natural ingredients only.</p>
-          </div>
-          <div className="text-center p-6 bg-[var(--color-muted)] rounded-xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Droplets className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-lg font-bold text-[var(--color-secondary)] mb-2">Hygiene Standards</h3>
-            <p className="text-sm text-[var(--color-text)]">FSSAI certified kitchen with strict hygiene protocols and regular quality checks.</p>
-          </div>
-          <div className="text-center p-6 bg-[var(--color-muted)] rounded-xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Leaf className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-lg font-bold text-[var(--color-secondary)] mb-2">Fresh Daily</h3>
-            <p className="text-sm text-[var(--color-text)]">Made fresh every day and delivered within 24-48 hours to ensure maximum freshness.</p>
-          </div>
-          <div className="text-center p-6 bg-[var(--color-muted)] rounded-xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <HeartIcon className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-lg font-bold text-[var(--color-secondary)] mb-2">Made with Love</h3>
-            <p className="text-sm text-[var(--color-text-muted)]">Every laddu is handcrafted with care, carrying forward our family's century-old tradition.</p>
-          </div>
-        </div>
-      </section>
-
       {/* Video Reviews Section */}
       <section ref={addToRefs} className="scroll-section py-20 px-8 md:px-24 bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-surface)] text-center relative z-10 shadow-sm overflow-hidden" id="testimonials">
         <div className="relative z-10">
@@ -432,7 +397,7 @@ const Home = () => {
       )}
 
       {/* Founder Section */}
-      <section ref={addToRefs} className="scroll-section py-12 px-8 md:px-24 bg-[var(--color-primary)] relative z-10 shadow-sm overflow-hidden" id="founders">
+      <section ref={addToRefs} className="scroll-section py-6 px-8 md:px-24 bg-[var(--color-primary)] relative z-10 shadow-sm overflow-hidden" id="founders">
 
         {/* Decorative Floating Elements */}
         <div className="absolute -top-10 -left-10 w-48 h-48 bg-[var(--color-secondary)] rounded-full opacity-10 blur-[100px] animate-pulse"></div>
@@ -560,6 +525,41 @@ const Home = () => {
             >
               Order Your Laddus Now
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Priorities Section */}
+      <section ref={addToRefs} className="scroll-section py-10 px-8 md:px-24 bg-[var(--color-accent)]/10 relative z-10 shadow-sm mb-2" id="priorities">
+        <h2 className="text-4xl text-[var(--color-secondary)] mb-16 font-bold text-center">Our Priorities</h2>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+          <div className="text-center p-6 bg-[var(--color-muted)] rounded-xl shadow-md hover:shadow-lg transition-shadow">
+            <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Shield className="w-8 h-8 text-white" />
+            </div>
+            <h3 className="text-lg font-bold text-[var(--color-secondary)] mb-2">Health First</h3>
+            <p className="text-sm text-[var(--color-text)]">No artificial preservatives, colors, or flavors. Pure and natural ingredients only.</p>
+          </div>
+          <div className="text-center p-6 bg-[var(--color-muted)] rounded-xl shadow-md hover:shadow-lg transition-shadow">
+            <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Droplets className="w-8 h-8 text-white" />
+            </div>
+            <h3 className="text-lg font-bold text-[var(--color-secondary)] mb-2">Hygiene Standards</h3>
+            <p className="text-sm text-[var(--color-text)]">FSSAI certified kitchen with strict hygiene protocols and regular quality checks.</p>
+          </div>
+          <div className="text-center p-6 bg-[var(--color-muted)] rounded-xl shadow-md hover:shadow-lg transition-shadow">
+            <div className="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Leaf className="w-8 h-8 text-white" />
+            </div>
+            <h3 className="text-lg font-bold text-[var(--color-secondary)] mb-2">Fresh Daily</h3>
+            <p className="text-sm text-[var(--color-text)]">Made fresh every day and delivered within 24-48 hours to ensure maximum freshness.</p>
+          </div>
+          <div className="text-center p-6 bg-[var(--color-muted)] rounded-xl shadow-md hover:shadow-lg transition-shadow">
+            <div className="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <HeartIcon className="w-8 h-8 text-white" />
+            </div>
+            <h3 className="text-lg font-bold text-[var(--color-secondary)] mb-2">Made with Love</h3>
+            <p className="text-sm text-[var(--color-text-muted)]">Every laddu is handcrafted with care, carrying forward our family's century-old tradition.</p>
           </div>
         </div>
       </section>
