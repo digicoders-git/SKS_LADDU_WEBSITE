@@ -10,14 +10,9 @@ import kesarLaddu from '../../assets/images/kesar-laddu.png';
 import nariyalLaddu from '../../assets/images/nariyal-laddu.png';
 
 import { listProductsApi } from '../../api/product';
+import { getAllVideosApi, getSingleVideoApi } from '../../api/video';
 
-const videoReviews = [
-  { id: 1, name: 'Anjali S.', thumbnail: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
-  { id: 2, name: 'Rajesh K.', thumbnail: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4' },
-  { id: 3, name: 'Meera T.', thumbnail: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4' },
-  { id: 4, name: 'Suresh P.', thumbnail: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4' },
-  { id: 5, name: 'Priya M.', thumbnail: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4' }
-];
+
 
 const Home = () => {
   const sectionRefs = useRef([]);
@@ -25,6 +20,7 @@ const Home = () => {
   const scrollRef = useRef(null);
   const ladduScrollRef = useRef(null);
   const [products, setProducts] = useState([]);
+  const [videos, setVideos] = useState([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -35,7 +31,18 @@ const Home = () => {
         console.error("Failed to fetch products:", error);
       }
     };
+    
+    const fetchVideos = async () => {
+      try {
+        const data = await getAllVideosApi();
+        setVideos(data.videos || []);
+      } catch (error) {
+        console.error("Failed to fetch videos:", error);
+      }
+    };
+    
     fetchProducts();
+    fetchVideos();
   }, []);
 
   useEffect(() => {
@@ -63,64 +70,76 @@ const Home = () => {
 
     let videoInterval;
     let ladduInterval;
+    let isVideoHovered = false;
+    let isLadduHovered = false;
 
     const startVideoScroll = () => {
-      if (videoInterval) clearInterval(videoInterval);
+      if (videoInterval || isVideoHovered) return;
       videoInterval = setInterval(() => {
-        if (!videoContainer) return;
+        if (!videoContainer || isVideoHovered) return;
         if (videoContainer.scrollLeft >= videoContainer.scrollWidth / 3) {
           videoContainer.scrollLeft = 0;
         } else {
-          videoContainer.scrollLeft += 1.5; // Adjusted speed for smoothness
+          videoContainer.scrollLeft += 1.5;
         }
       }, 20);
     };
 
     const startLadduScroll = () => {
-      if (ladduInterval) clearInterval(ladduInterval);
+      if (ladduInterval || isLadduHovered) return;
       ladduInterval = setInterval(() => {
-        if (!ladduContainer) return;
+        if (!ladduContainer || isLadduHovered) return;
         if (ladduContainer.scrollLeft >= ladduContainer.scrollWidth / 3) {
           ladduContainer.scrollLeft = 0;
         } else {
-          ladduContainer.scrollLeft += 1.5; // Consistent speed
+          ladduContainer.scrollLeft += 1.5;
         }
       }, 20);
     };
 
     const stopVideoScroll = () => {
-      if (videoInterval) clearInterval(videoInterval);
+      if (videoInterval) {
+        clearInterval(videoInterval);
+        videoInterval = null;
+      }
     };
 
     const stopLadduScroll = () => {
-      if (ladduInterval) clearInterval(ladduInterval);
+      if (ladduInterval) {
+        clearInterval(ladduInterval);
+        ladduInterval = null;
+      }
     };
 
     if (videoContainer) {
-      setTimeout(startVideoScroll, 100); // Small delay for layout
-      videoContainer.addEventListener('mouseenter', stopVideoScroll);
-      videoContainer.addEventListener('mouseleave', startVideoScroll);
+      setTimeout(startVideoScroll, 100);
+      videoContainer.addEventListener('mouseenter', () => {
+        isVideoHovered = true;
+        stopVideoScroll();
+      });
+      videoContainer.addEventListener('mouseleave', () => {
+        isVideoHovered = false;
+        startVideoScroll();
+      });
     }
 
     if (ladduContainer) {
       setTimeout(startLadduScroll, 100);
-      ladduContainer.addEventListener('mouseenter', stopLadduScroll);
-      ladduContainer.addEventListener('mouseleave', startLadduScroll);
+      ladduContainer.addEventListener('mouseenter', () => {
+        isLadduHovered = true;
+        stopLadduScroll();
+      });
+      ladduContainer.addEventListener('mouseleave', () => {
+        isLadduHovered = false;
+        startLadduScroll();
+      });
     }
 
     return () => {
       stopVideoScroll();
       stopLadduScroll();
-      if (videoContainer) {
-        videoContainer.removeEventListener('mouseenter', stopVideoScroll);
-        videoContainer.removeEventListener('mouseleave', startVideoScroll);
-      }
-      if (ladduContainer) {
-        ladduContainer.removeEventListener('mouseenter', stopLadduScroll);
-        ladduContainer.removeEventListener('mouseleave', startLadduScroll);
-      }
     };
-  }, [products]);
+  }, [products, videos]);
 
   const addToRefs = (el) => {
     if (el && !sectionRefs.current.includes(el)) {
@@ -304,35 +323,39 @@ const Home = () => {
       {/* Video Reviews Section */}
       <section ref={addToRefs} className="scroll-section py-24 px-8 md:px-24 bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-muted)] text-center relative z-10 shadow-[0_10px_32px_-10px_rgba(255,255,255,0.24),0_-4px_16px_-6px_rgba(0,0,0,0.1)] mb-2" id="testimonials">
         <h2 className="text-4xl text-[var(--color-secondary)] mb-16 font-bold">Customer Video Reviews</h2>
-        <div className="relative overflow-hidden">
-          <div
-            ref={scrollRef}
-            className="flex gap-4 md:gap-8 overflow-x-hidden pb-4"
-          >
-            {/* Triple video reviews for seamless scrolling */}
-            {[...videoReviews, ...videoReviews, ...videoReviews].map((video, index) => (
-              <div
-                key={`${video.id}-${index}`}
-                className="flex-shrink-0 w-72 md:w-80 bg-[var(--color-muted)] rounded-xl shadow-lg overflow-hidden cursor-pointer hover:scale-105 transition-transform"
-                onClick={() => setSelectedVideo(video)}
-              >
-                <div className="relative">
-                  <video
-                    src={video.videoUrl}
-                    className="w-full h-56 object-cover"
-                    muted
-                    loop
-                    autoPlay
-                    playsInline
-                  />
-                  <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                    <Play className="w-16 h-16 text-white" />
+        {videos.length > 0 ? (
+          <div className="relative overflow-hidden">
+            <div
+              ref={scrollRef}
+              className="flex gap-4 md:gap-8 overflow-x-hidden pb-4"
+            >
+              {/* Triple videos for seamless scrolling */}
+              {[...videos, ...videos, ...videos].map((video, index) => (
+                <div
+                  key={`${video._id}-${index}`}
+                  className="flex-shrink-0 w-72 md:w-80 bg-[var(--color-muted)] rounded-xl shadow-lg overflow-hidden cursor-pointer hover:scale-105 transition-transform"
+                  onClick={() => setSelectedVideo(video)}
+                >
+                  <div className="relative">
+                    <video
+                      src={video.url}
+                      className="w-full h-56 object-cover"
+                      muted
+                      loop
+                      autoPlay
+                      playsInline
+                    />
+                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                      <Play className="w-16 h-16 text-white" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        ) : (
+          <p className="text-gray-400">Loading customer reviews...</p>
+        )}
       </section>
 
       {/* Video Modal */}
@@ -348,7 +371,7 @@ const Home = () => {
               </button>
               <div className="p-6">
                 <video
-                  src={selectedVideo.videoUrl}
+                  src={selectedVideo.url}
                   className="w-full aspect-video rounded-lg"
                   controls
                   autoPlay

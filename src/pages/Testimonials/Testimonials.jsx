@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
+import { Play, X } from 'lucide-react';
 import TestimonialCard from '../../components/cards/TestimonialCard';
 import VideoReviewCard from '../../components/cards/VideoReviewCard';
 import Footer from '../../components/layout/Footer';
+import { getAllVideosApi, getSingleVideoApi } from '../../api/video';
 
 const Testimonials = () => {
     const [activeTab, setActiveTab] = useState('text');
     const sectionRefs = useRef([]);
+    const [videos, setVideos] = useState([]);
+    const [selectedVideo, setSelectedVideo] = useState(null);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -27,6 +31,18 @@ const Testimonials = () => {
         return () => observer.disconnect();
     }, []);
 
+    useEffect(() => {
+        const fetchVideos = async () => {
+            try {
+                const data = await getAllVideosApi();
+                setVideos(data.videos || []);
+            } catch (error) {
+                console.error("Failed to fetch videos:", error);
+            }
+        };
+        fetchVideos();
+    }, []);
+
     const addToRefs = (el) => {
         if (el && !sectionRefs.current.includes(el)) {
             sectionRefs.current.push(el);
@@ -42,11 +58,7 @@ const Testimonials = () => {
         { quote: "The packaging was beautiful and protected the sweets perfectly. Great attention to detail in everything.", name: "Neha G.", color: 'var(--color-maroon)', initial: 'NG', location: 'Pune', rating: 5 },
     ];
 
-    const videoReviews = [
-        { title: "The secret of Sandila revealed!", name: "Vikas Khanna", initial: "VK", color: "var(--color-maroon)", location: "Chef, New York", rating: 5, thumbnailImg: "https://images.unsplash.com/photo-1541913076644-ee7343e86f87?q=80&w=800&auto=format&fit=crop" },
-        { title: "Best Besan Laddu Review", name: "Priya S.", initial: "PS", color: "var(--color-secondary)", location: "Food Vlogger", rating: 5, thumbnailImg: "https://images.unsplash.com/photo-1596791011555-b170e7ec97e6?q=80&w=800&auto=format&fit=crop" },
-        { title: "Unboxing Genuine Sandila Laddus", name: "Amit T.", initial: "AT", color: "var(--color-maroon)", location: "Tech Guru", rating: 4, thumbnailImg: "https://images.unsplash.com/photo-1589113331629-078bc2ecfe1b?q=80&w=800&auto=format&fit=crop" },
-    ];
+
 
     return (
         <div className="bg-[var(--color-primary)] text-[var(--color-text)] font-[var(--font-body)] min-h-screen overflow-x-hidden">
@@ -124,21 +136,72 @@ const Testimonials = () => {
             </section>
 
             {/* Review Content */}
-            <section className="px-6 md:px-24">
+            <section className="px-6 md:px-24 min-h-[400px]">
                 {activeTab === 'text' ? (
-                    <div ref={addToRefs} className="scroll-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 transition-all">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
                         {textReviews.map((item, i) => (
                             <TestimonialCard key={i} {...item} />
                         ))}
                     </div>
                 ) : (
-                    <div ref={addToRefs} className="scroll-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 transition-all">
-                        {videoReviews.map((item, i) => (
-                            <VideoReviewCard key={i} {...item} />
-                        ))}
+                    <div>
+                        {videos.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+                                {videos.map((video) => (
+                                    <div
+                                        key={video._id}
+                                        className="rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group cursor-pointer"
+                                        onClick={() => setSelectedVideo(video)}
+                                    >
+                                        <div className="relative aspect-video bg-black group-hover:scale-105 transition-transform duration-500 overflow-hidden">
+                                            <video
+                                                src={video.url}
+                                                className="w-full h-full object-cover opacity-80"
+                                                muted
+                                                loop
+                                                autoPlay
+                                                playsInline
+                                            />
+                                            <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                                                <Play className="w-16 h-16 text-white" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-center py-12">
+                                <p className="text-gray-400 text-lg">Loading video reviews...</p>
+                            </div>
+                        )}
                     </div>
                 )}
             </section>
+
+            {/* Video Modal */}
+            {selectedVideo && (
+                <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-lg max-w-4xl w-full max-h-[80vh] overflow-hidden relative">
+                        <div className="flex justify-between items-center p-4 border-b">
+                            <h3 className="text-xl font-semibold text-gray-800">Customer Video Review</h3>
+                            <button 
+                                onClick={() => setSelectedVideo(null)}
+                                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                            >
+                                <X className="w-6 h-6 text-gray-600" />
+                            </button>
+                        </div>
+                        <div className="p-6">
+                            <video 
+                                src={selectedVideo.url}
+                                className="w-full aspect-video rounded-lg"
+                                controls
+                                autoPlay
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
 
 
 

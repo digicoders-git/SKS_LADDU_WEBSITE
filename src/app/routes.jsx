@@ -11,6 +11,7 @@ import Login from "../pages/auth/Login";
 import Registration from "../pages/auth/Registration";
 import Profile from "../pages/auth/Profile";
 
+
 import Shop from "../pages/Shop/Shop";
 import Orders from "../pages/Orders/Orders";
 import ReturnPolicy from "../pages/Policies/ReturnPolicy";
