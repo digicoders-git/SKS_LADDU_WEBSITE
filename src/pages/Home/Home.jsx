@@ -32,7 +32,15 @@ const Home = () => {
     const fetchProducts = async () => {
       try {
         const data = await listProductsApi();
-        setProducts(data.products || []);
+        console.log('Home products data:', data);
+        // Check if data has products array or if products are directly in data
+        if (data.products) {
+          setProducts(data.products);
+        } else if (Array.isArray(data)) {
+          setProducts(data);
+        } else {
+          setProducts([]);
+        }
       } catch (error) {
         console.error("Failed to fetch products:", error);
       }
@@ -195,7 +203,7 @@ const Home = () => {
           <p className="italic text-[var(--color-text-muted)] mb-16 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">Handcrafted with over 100 years of love and ancestral tradition, bringing the soul of Sandila to your home.</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-14 px-2 sm:px-4">
-            {products.map((item) => (
+            {products.slice(0, 6).map((item) => (
               <div key={item._id} className="h-full transform hover:-translate-y-2 transition-transform duration-300">
                 <LadduCard
                   product={{

@@ -61,13 +61,27 @@ const Laddus = () => {
             try {
                 let data;
                 if (activeCategory.id === 'all') {
-                    // Response: { products: [...] }
                     data = await listProductsApi();
-                    setProducts(data.products || []);
+                    console.log('All products data:', data);
+                    // Check if data has products array or if products are directly in data
+                    if (data.products) {
+                        setProducts(data.products);
+                    } else if (Array.isArray(data)) {
+                        setProducts(data);
+                    } else {
+                        setProducts([]);
+                    }
                 } else {
-                    // Response: { category: {...}, products: [...] }
                     data = await listProductsByCategoryApi(activeCategory.id);
-                    setProducts(data.products || []);
+                    console.log('Category products data:', data);
+                    // Check if data has products array or if products are directly in data
+                    if (data.products) {
+                        setProducts(data.products);
+                    } else if (Array.isArray(data)) {
+                        setProducts(data);
+                    } else {
+                        setProducts([]);
+                    }
                 }
             } catch (error) {
                 console.error("Failed to fetch products:", error);
