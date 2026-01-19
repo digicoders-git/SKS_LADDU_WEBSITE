@@ -30,20 +30,13 @@ const HeroSlider = () => {
     }, []);
 
     if (loading) {
-        return (
-            <div className="w-full h-screen bg-[var(--color-primary)] flex items-center justify-center">
-                <div className="animate-pulse flex flex-col items-center">
-                    <div className="w-12 h-12 border-4 border-[var(--color-secondary)] border-t-transparent rounded-full animate-spin"></div>
-                    <p className="mt-4 text-[var(--color-secondary)] font-medium tracking-widest uppercase text-xs">Loading...</p>
-                </div>
-            </div>
-        );
+        return null;
     }
 
     if (sliders.length === 0) return null;
 
     return (
-        <section className="relative w-full h-[50vh] md:h-[80vh] overflow-hidden">
+        <section className="relative w-full h-[60vh] sm:h-[70vh] md:h-[75vh] lg:h-[80vh] overflow-hidden">
             <Swiper
                 modules={[Autoplay, Pagination, EffectFade]}
                 effect="fade"
@@ -62,27 +55,25 @@ const HeroSlider = () => {
                 {sliders.map((slider) => (
                     <SwiperSlide key={slider._id}>
                         <div className="relative w-full h-full flex items-end justify-center pb-12 md:pb-24">
-                            {/* Improved Image Fitting */}
                             <div className="absolute inset-0 bg-[var(--color-primary)]">
                                 <img
                                     src={slider.image?.url}
                                     alt={slider.title || 'SKS Laddu'}
-                                    className="w-full h-full object-cover object-center"
+                                    className="w-full h-full object-cover object-center md:object-top lg:object-center"
                                 />
                             </div>
 
-                            {/* Bottom Buttons - Ultra Responsive */}
                             <div className="relative z-10 px-4 flex flex-col items-center">
                                 <div className="flex flex-row justify-center items-center gap-3 md:gap-8 opacity-0 animate-slide-up" style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}>
                                     <Link
                                         to="/laddus"
-                                        className="inline-flex items-center justify-center px-4 py-2.5 md:px-10 md:py-5 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-full text-[10px] md:text-xl font-bold shadow-xl hover:scale-105 transition-transform"
+                                        className="inline-flex items-center justify-center px-6 py-3 md:px-10 md:py-5 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-full text-sm md:text-xl font-bold shadow-xl hover:scale-105 transition-transform"
                                     >
                                         Order Now
                                     </Link>
                                     <Link
                                         to="/about"
-                                        className="inline-flex items-center justify-center px-4 py-2.5 md:px-10 md:py-5 bg-white/40 backdrop-blur-md border border-white/20 text-black rounded-full text-[10px] md:text-xl font-bold shadow-lg hover:scale-105 transition-transform"
+                                        className="inline-flex items-center justify-center px-6 py-3 md:px-10 md:py-5 bg-white/40 backdrop-blur-md border border-white/20 text-black rounded-full text-sm md:text-xl font-bold shadow-lg hover:scale-105 transition-transform"
                                     >
                                         Our Story
                                     </Link>

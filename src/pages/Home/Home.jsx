@@ -168,7 +168,7 @@ const Home = () => {
       <HeroSlider />
 
       {/* Our Special Laddus Section - Grid Layout First */}
-      <section ref={addToRefs} className="scroll-section py-20 px-8 md:px-24 text-center bg-[var(--color-primary)] relative z-10 shadow-sm border-y border-[var(--color-secondary)]/10 overflow-hidden" id="laddus">
+      <section ref={addToRefs} className="scroll-section py-12 px-8 md:px-24 text-center bg-[var(--color-primary)] relative z-10 shadow-sm border-y border-[var(--color-secondary)]/10 overflow-hidden" id="laddus">
         {/* Decorative Bubbles for This Section */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
           <div className="home-bubble home-bubble-1"></div>
@@ -197,7 +197,7 @@ const Home = () => {
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="inline-block px-4 py-1.5 bg-[var(--color-secondary)]/10 text-[var(--color-secondary)] rounded-full text-[10px] font-bold uppercase tracking-[0.3em] mb-6 border border-[var(--color-secondary)]/20">
-            Artisanal Collection
+            SKS Laddu Collection
           </div>
           <h2 className="text-4xl md:text-7xl text-[var(--color-secondary)] mb-6 font-bold font-[var(--font-heading)] drop-shadow-sm">Our Special Laddus</h2>
           <p className="italic text-[var(--color-text-muted)] mb-16 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">Handcrafted with over 100 years of love and ancestral tradition, bringing the soul of Sandila to your home.</p>
