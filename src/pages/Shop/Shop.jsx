@@ -547,7 +547,7 @@ const Shop = () => {
                                             <div className="flex flex-row items-center gap-2.5 md:gap-4 text-left">
                                                 {/* Image - More compact on mobile */}
                                                 <div
-                                                    className="w-14 h-14 md:w-24 md:h-24 rounded-lg md:rounded-2xl overflow-hidden border border-[var(--color-secondary)]/20 flex-shrink-0 cursor-pointer"
+                                                    className="w-12 h-12 sm:w-14 sm:h-14 md:w-24 md:h-24 rounded-lg md:rounded-2xl overflow-hidden border border-[var(--color-secondary)]/20 flex-shrink-0 cursor-pointer"
                                                     onClick={() => handleItemClick(item.productId)}
                                                 >
                                                     <img src={item.img} alt={item.name} className="w-full h-full object-cover" />
@@ -558,7 +558,7 @@ const Shop = () => {
                                                     <div className="flex justify-between items-start gap-2">
                                                         <div className="min-w-0 flex-1">
                                                             <h3
-                                                                className="font-bold text-[13px] md:text-base text-[var(--color-text)] cursor-pointer hover:text-[var(--color-secondary)] transition-colors line-clamp-1"
+                                                                className="font-bold text-[11px] sm:text-[13px] md:text-base text-[var(--color-text)] cursor-pointer hover:text-[var(--color-secondary)] transition-colors line-clamp-1"
                                                                 onClick={() => handleItemClick(item.productId)}
                                                             >{item.name}</h3>
                                                             <p className="text-[10px] md:text-xs text-[var(--color-text-muted)] font-medium line-clamp-1">
@@ -566,14 +566,14 @@ const Shop = () => {
                                                             </p>
                                                         </div>
                                                         <div className="text-right flex-shrink-0">
-                                                            <p className="font-bold text-[13px] md:text-lg text-[var(--color-secondary)]">
+                                                            <p className="font-bold text-[11px] sm:text-[13px] md:text-lg text-[var(--color-secondary)]">
                                                                 ₹{(item.price || 0) * (item.quantity || 1)}
                                                             </p>
                                                         </div>
                                                     </div>
 
                                                     {/* Controls & Mini Info */}
-                                                    <div className="mt-2 md:mt-4 flex items-center justify-between">
+                                                    <div className="mt-2 md:mt-4 flex flex-col xs:flex-row items-start xs:items-center justify-between gap-2">
                                                         <div className="flex items-center gap-1.5 md:gap-3 bg-[var(--color-primary)]/50 rounded-lg p-0.5 md:p-1 border border-[var(--color-secondary)]/5">
                                                             <button
                                                                 onClick={() => handleQuantityChange(item.cartItemId, item.quantity, -1)}
@@ -592,9 +592,9 @@ const Shop = () => {
 
                                                         <button
                                                             onClick={() => removeFromCart(item.cartItemId)}
-                                                            className="flex items-center gap-1 text-red-400/80 hover:text-red-300 font-bold text-[10px] md:text-xs uppercase group"
+                                                            className="flex items-center gap-1 text-red-400/80 hover:text-red-300 font-bold text-[9px] sm:text-[10px] md:text-xs uppercase group"
                                                         >
-                                                            <Trash2 size={12} className="md:w-4 md:h-4 group-hover:scale-110 transition-transform" />
+                                                            <Trash2 size={11} className="sm:w-3 sm:h-3 md:w-4 md:h-4 group-hover:scale-110 transition-transform" />
                                                             <span>Remove</span>
                                                         </button>
                                                     </div>

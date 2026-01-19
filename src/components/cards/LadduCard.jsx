@@ -121,10 +121,29 @@ const LadduCard = ({ product }) => {
             </div>
 
             <div className="flex gap-2 w-full mt-auto" onClick={(e) => e.stopPropagation()}>
+                <style dangerouslySetInnerHTML={{
+                    __html: `
+                        @media (max-width: 374px) {
+                            .laddu-btn-container {
+                                flex-direction: column !important;
+                            }
+                            .laddu-btn {
+                                padding-top: 0.375rem !important;
+                                padding-bottom: 0.375rem !important;
+                                font-size: 8px !important;
+                                gap: 0.25rem !important;
+                            }
+                            .laddu-btn svg {
+                                width: 10px !important;
+                                height: 10px !important;
+                            }
+                        }
+                    `
+                }} />
                 <button
                     onClick={handleAddToCart}
                     disabled={added}
-                    className={`flex-1 py-2.5 rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-2 text-[10px] md:text-xs ${added
+                    className={`laddu-btn flex-1 py-2 md:py-2.5 rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-1.5 text-[10px] md:text-xs ${added
                         ? 'bg-green-600 text-white shadow-inner scale-95'
                         : 'bg-white text-[var(--color-secondary)] border-2 border-[var(--color-secondary)]/20 hover:border-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/5 active:scale-95'
                         }`}
@@ -154,7 +173,7 @@ const LadduCard = ({ product }) => {
                             console.error("Buy now failed:", error);
                         }
                     }}
-                    className="flex-1 py-2.5 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-xl font-bold hover:opacity-90 hover:shadow-xl transition-all active:scale-95 text-[10px] md:text-xs shadow-[0_8px_20px_rgba(242,183,5,0.25)]"
+                    className="laddu-btn flex-1 py-2 md:py-2.5 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-xl font-bold hover:opacity-90 hover:shadow-xl transition-all active:scale-95 text-[10px] md:text-xs shadow-[0_8px_20px_rgba(242,183,5,0.25)]"
                 >
                     Buy Now
                 </button>
