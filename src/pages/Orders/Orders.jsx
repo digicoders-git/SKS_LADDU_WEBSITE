@@ -62,7 +62,7 @@ const Orders = () => {
         switch (status.toLowerCase()) {
             case 'confirmed': return 'text-green-400 bg-green-400/10 border-green-400/20';
             case 'processing': return 'text-blue-400 bg-blue-400/10 border-blue-400/20';
-            case 'shipped': return 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20';
+            case 'shipped': return 'text-orange-400 bg-orange-400/10 border-orange-400/20';
             case 'delivered': return 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20';
             case 'cancelled': return 'text-red-400 bg-red-400/10 border-red-400/20';
             default: return 'text-gray-400 bg-gray-400/10 border-gray-400/20';
@@ -122,7 +122,7 @@ const Orders = () => {
                                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 pb-6 border-b border-white/5">
                                     <div className="space-y-1">
                                         <div className="flex items-center gap-3">
-                                            <span className="text-base md:text-lg font-bold text-white whitespace-nowrap">Order #{order._id.slice(-6).toUpperCase()}</span>
+                                            <span className="text-base md:text-lg font-bold text-white whitespace-nowrap">Order #{order._id.slice(-6)}</span>
                                             <span className={`px-3 py-1 rounded-full text-[10px] md:text-xs font-bold border ${getStatusColor(order.status)} uppercase tracking-wider flex items-center gap-1`}>
                                                 {order.status === 'confirmed' && <CheckCircle2 size={10} className="md:w-3 md:h-3" />}
                                                 {order.status}
@@ -138,14 +138,14 @@ const Orders = () => {
                                             <p className="text-[10px] md:text-sm text-gray-400 md:mb-1">Total Amount</p>
                                             <p className="text-xl md:text-2xl font-bold text-[var(--color-secondary)]">₹{order.total}</p>
                                         </div>
-                                        {['confirmed', 'processing', 'pending', 'placed'].includes(order.status.toLowerCase()) && (
+                                        {(order.status && ['confirmed', 'processing', 'pending', 'placed'].includes(order.status.toLowerCase())) && (
                                             <button
                                                 onClick={() => handleCancelOrder(order._id)}
-                                                className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/20 rounded-lg text-xs font-bold transition-all whitespace-nowrap"
+                                                className="flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 hover:text-red-600 text-red-400 rounded-lg text-xs md:text-sm font-bold transition-all whitespace-nowrap shadow-md"
                                             >
                                                 <XCircle size={14} />
-                                                <span className="md:inline hidden">Cancel Order</span>
-                                                <span className="md:hidden inline">Cancel</span>
+                                                <span className="hidden sm:inline">Cancel Order</span>
+                                                <span className="sm:hidden">Cancel</span>
                                             </button>
                                         )}
                                     </div>

@@ -39,7 +39,6 @@ const Login = () => {
             }
         } catch (error) {
             console.error("Login Error:", error);
-            // Prioritize server-side error message
             const errorMessage = error.response?.data?.message || 'Something went wrong. Please try again.';
             toast.error(errorMessage);
         } finally {

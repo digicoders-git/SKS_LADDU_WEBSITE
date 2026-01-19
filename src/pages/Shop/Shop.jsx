@@ -115,12 +115,34 @@ const Shop = () => {
     };
 
     const removeFromCart = async (itemId) => {
+        const result = await Swal.fire({
+            title: 'Remove Item?',
+            text: "Are you sure you want to remove this item from your cart?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Yes, remove it!',
+            cancelButtonText: 'Cancel',
+            background: '#1f2937',
+            color: '#ffffff',
+            customClass: {
+                popup: 'swal-dark-popup',
+                title: 'swal-dark-title',
+                content: 'swal-dark-content'
+            }
+        });
+
+        if (!result.isConfirmed) return;
+
         try {
-            await removeFromCartApi(itemId); // Use mapped cartItemId
+            await removeFromCartApi(itemId);
             fetchCart();
-            window.dispatchEvent(new Event('cart-updated')); // Notify Navbar
+            window.dispatchEvent(new Event('cart-updated'));
+            toast.success("Item removed from cart!");
         } catch (error) {
             console.error("Failed to remove item:", error);
+            toast.error("Failed to remove item. Please try again.");
         }
     };
 
@@ -131,10 +153,16 @@ const Shop = () => {
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
+            cancelButtonColor: '#6b7280',
             confirmButtonText: 'Yes, clear it!',
-            background: 'var(--color-muted)',
-            color: '#fff'
+            cancelButtonText: 'Cancel',
+            background: '#1f2937',
+            color: '#ffffff',
+            customClass: {
+                popup: 'swal-dark-popup',
+                title: 'swal-dark-title',
+                content: 'swal-dark-content'
+            }
         });
 
         if (!result.isConfirmed) return;
@@ -142,7 +170,7 @@ const Shop = () => {
         try {
             await clearCartApi();
             fetchCart();
-            window.dispatchEvent(new Event('cart-updated')); // Notify Navbar
+            window.dispatchEvent(new Event('cart-updated'));
             toast.success("Cart cleared!");
         } catch (error) {
             console.error("Failed to clear cart:", error);
@@ -569,11 +597,17 @@ const Shop = () => {
                                                             <p className="font-bold text-[11px] sm:text-[13px] md:text-lg text-[var(--color-secondary)]">
                                                                 ₹{(item.price || 0) * (item.quantity || 1)}
                                                             </p>
+                                                            <button
+                                                                onClick={() => removeFromCart(item.cartItemId)}
+                                                                className="mt-3 text-red-400/80 hover:text-red-300 font-bold text-xs uppercase hidden md:block"
+                                                            >
+                                                                Remove
+                                                            </button>
                                                         </div>
                                                     </div>
 
-                                                    {/* Controls & Mini Info */}
-                                                    <div className="mt-2 md:mt-4 flex flex-col xs:flex-row items-start xs:items-center justify-between gap-2">
+                                                    {/* Controls */}
+                                                    <div className="mt-2 md:mt-4 flex items-center justify-between">
                                                         <div className="flex items-center gap-1.5 md:gap-3 bg-[var(--color-primary)]/50 rounded-lg p-0.5 md:p-1 border border-[var(--color-secondary)]/5">
                                                             <button
                                                                 onClick={() => handleQuantityChange(item.cartItemId, item.quantity, -1)}
@@ -589,13 +623,11 @@ const Shop = () => {
                                                                 +
                                                             </button>
                                                         </div>
-
                                                         <button
                                                             onClick={() => removeFromCart(item.cartItemId)}
-                                                            className="flex items-center gap-1 text-red-400/80 hover:text-red-300 font-bold text-[9px] sm:text-[10px] md:text-xs uppercase group"
+                                                            className="text-red-500 hover:text-red-600 font-semibold text-xs uppercase md:hidden ml-8"
                                                         >
-                                                            <Trash2 size={11} className="sm:w-3 sm:h-3 md:w-4 md:h-4 group-hover:scale-110 transition-transform" />
-                                                            <span>Remove</span>
+                                                            Remove
                                                         </button>
                                                     </div>
                                                 </div>
@@ -715,7 +747,10 @@ const Shop = () => {
                                                         placeholder="Full Name"
                                                         className="w-full px-5 py-3.5 bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-secondary)]/10 rounded-2xl focus:border-[var(--color-secondary)] outline-none text-sm font-medium transition-colors placeholder-gray-400"
                                                         value={addressForm.name}
-                                                        onChange={(e) => setAddressForm({ ...addressForm, name: e.target.value })}
+                                                        onChange={(e) => {
+                                                            const value = e.target.value.replace(/[0-9]/g, '');
+                                                            setAddressForm({ ...addressForm, name: value });
+                                                        }}
                                                     />
                                                 </div>
                                                 <div className="space-y-2">
@@ -723,9 +758,12 @@ const Shop = () => {
                                                     <input
                                                         type="tel"
                                                         placeholder="Your Number"
-                                                        className="w-full px-5 py-3.5 bg-[var(--color-primary)] text-white border border-[var(--color-secondary)]/10 rounded-2xl focus:border-[var(--color-secondary)] outline-none text-sm font-medium transition-colors placeholder-gray-600"
+                                                        className="w-full px-5 py-3.5 bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-secondary)]/10 rounded-2xl focus:border-[var(--color-secondary)] outline-none text-sm font-medium transition-colors placeholder-gray-400"
                                                         value={addressForm.phone}
-                                                        onChange={(e) => setAddressForm({ ...addressForm, phone: e.target.value })}
+                                                        onChange={(e) => {
+                                                            const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+                                                            setAddressForm({ ...addressForm, phone: value });
+                                                        }}
                                                     />
                                                 </div>
                                             </div>
@@ -735,7 +773,7 @@ const Shop = () => {
                                                 <input
                                                     type="text"
                                                     placeholder="House No, Building, Street"
-                                                    className="w-full px-5 py-3.5 bg-[var(--color-primary)] text-white border border-[var(--color-secondary)]/10 rounded-2xl focus:border-[var(--color-secondary)] outline-none text-sm font-medium transition-colors placeholder-gray-600"
+                                                    className="w-full px-5 py-3.5 bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-secondary)]/10 rounded-2xl focus:border-[var(--color-secondary)] outline-none text-sm font-medium transition-colors placeholder-gray-400"
                                                     value={addressForm.addressLine1}
                                                     onChange={(e) => setAddressForm({ ...addressForm, addressLine1: e.target.value })}
                                                 />
@@ -746,7 +784,7 @@ const Shop = () => {
                                                 <input
                                                     type="text"
                                                     placeholder="Area, Landmark"
-                                                    className="w-full px-5 py-3.5 bg-[var(--color-primary)] text-white border border-[var(--color-secondary)]/10 rounded-2xl focus:border-[var(--color-secondary)] outline-none text-sm font-medium transition-colors placeholder-gray-600"
+                                                    className="w-full px-5 py-3.5 bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-secondary)]/10 rounded-2xl focus:border-[var(--color-secondary)] outline-none text-sm font-medium transition-colors placeholder-gray-400"
                                                     value={addressForm.addressLine2}
                                                     onChange={(e) => setAddressForm({ ...addressForm, addressLine2: e.target.value })}
                                                 />
@@ -758,7 +796,7 @@ const Shop = () => {
                                                     <input
                                                         type="text"
                                                         placeholder="City"
-                                                        className="w-full px-5 py-3.5 bg-[var(--color-primary)] text-white border border-[var(--color-secondary)]/10 rounded-2xl focus:border-[var(--color-secondary)] outline-none text-sm font-medium transition-colors placeholder-gray-600"
+                                                        className="w-full px-5 py-3.5 bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-secondary)]/10 rounded-2xl focus:border-[var(--color-secondary)] outline-none text-sm font-medium transition-colors placeholder-gray-400"
                                                         value={addressForm.city}
                                                         onChange={(e) => setAddressForm({ ...addressForm, city: e.target.value })}
                                                     />
@@ -768,7 +806,7 @@ const Shop = () => {
                                                     <input
                                                         type="text"
                                                         placeholder="State"
-                                                        className="w-full px-5 py-3.5 bg-[var(--color-primary)] text-white border border-[var(--color-secondary)]/10 rounded-2xl focus:border-[var(--color-secondary)] outline-none text-sm font-medium transition-colors placeholder-gray-600"
+                                                        className="w-full px-5 py-3.5 bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-secondary)]/10 rounded-2xl focus:border-[var(--color-secondary)] outline-none text-sm font-medium transition-colors placeholder-gray-400"
                                                         value={addressForm.state}
                                                         onChange={(e) => setAddressForm({ ...addressForm, state: e.target.value })}
                                                     />
@@ -778,9 +816,12 @@ const Shop = () => {
                                                     <input
                                                         type="text"
                                                         placeholder="Pin Code"
-                                                        className="w-full px-5 py-3.5 bg-[var(--color-primary)] text-white border border-[var(--color-secondary)]/10 rounded-2xl focus:border-[var(--color-secondary)] outline-none text-sm font-medium transition-colors placeholder-gray-600"
+                                                        className="w-full px-5 py-3.5 bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-secondary)]/10 rounded-2xl focus:border-[var(--color-secondary)] outline-none text-sm font-medium transition-colors placeholder-gray-400"
                                                         value={addressForm.pincode}
-                                                        onChange={(e) => setAddressForm({ ...addressForm, pincode: e.target.value })}
+                                                        onChange={(e) => {
+                                                            const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 6);
+                                                            setAddressForm({ ...addressForm, pincode: value });
+                                                        }}
                                                     />
                                                 </div>
                                             </div>

@@ -2,7 +2,7 @@ import api from "./axios";
 
 // list
 export const listProductsApi = async () => {
-    const res = await api.get("/api/products");
+    const res = await api.get("/api/products?status=active");
     return res.data;
 };
 
