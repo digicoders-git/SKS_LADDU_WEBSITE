@@ -3,9 +3,6 @@ import { ChevronDown, Filter, Shield, Truck, Package } from 'lucide-react';
 import LadduCard from '../../components/cards/LadduCard';
 import Footer from '../../components/layout/Footer';
 import besanLaddu from '../../assets/images/besan-laddu.png';
-import kesarLaddu from '../../assets/images/kesar-laddu.png';
-import nariyalLaddu from '../../assets/images/nariyal-laddu.png';
-import heroLaddus from '../../assets/images/hero-laddus.png';
 
 import { listCategoriesApi } from '../../api/categories';
 
