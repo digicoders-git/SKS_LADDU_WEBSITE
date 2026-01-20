@@ -80,21 +80,27 @@ const SingleBrandVideo = memo(({ src, title, isSectionVisible }) => {
           </div>
         )}
 
-        {/* Hover Controls */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        {/* Hover Controls - always visible on mobile, hover on desktop */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10">
           <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
             <button
               onClick={togglePlay}
-              className="w-10 h-10 bg-[var(--color-secondary)] rounded-full flex items-center justify-center hover:bg-[var(--color-secondary)]/80 transition-colors shadow-lg"
+              className="w-10 h-10 bg-[var(--color-secondary)] rounded-full flex items-center justify-center hover:bg-yellow-500 transition-colors shadow-lg active:scale-90"
             >
-              {isPlaying ? <Pause className="w-5 h-5 text-black" /> : <Play className="w-5 h-5 text-black ml-0.5" />}
+              {isPlaying ?
+                <Pause className="w-5 h-5 text-black shrink-0" strokeWidth={2.5} /> :
+                <Play className="w-5 h-5 text-black ml-0.5 shrink-0" strokeWidth={2.5} />
+              }
             </button>
 
             <button
               onClick={toggleMute}
-              className="w-10 h-10 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center hover:bg-black/70 transition-colors border border-white/10"
+              className="w-10 h-10 bg-black/60 backdrop-blur-md rounded-full flex items-center justify-center hover:bg-black/80 transition-colors border border-white/20 active:scale-90"
             >
-              {isMuted ? <VolumeX className="w-4 h-4 text-white" /> : <Volume2 className="w-4 h-4 text-white" />}
+              {isMuted ?
+                <VolumeX className="w-4 h-4 text-white shrink-0" strokeWidth={2.5} /> :
+                <Volume2 className="w-4 h-4 text-white shrink-0" strokeWidth={2.5} />
+              }
             </button>
           </div>
         </div>
