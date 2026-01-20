@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addToCartApi } from '../../api/cart';
 import { ShoppingCart, CheckCircle, Heart } from 'lucide-react';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 
-const LadduCard = ({ product }) => {
+const LadduCard = memo(({ product }) => {
     const navigate = useNavigate();
     const [added, setAdded] = useState(false);
 
@@ -94,6 +94,7 @@ const LadduCard = ({ product }) => {
                     src={img}
                     alt={name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </div>
@@ -180,7 +181,9 @@ const LadduCard = ({ product }) => {
             </div>
         </div>
     );
-};
+});
+
+LadduCard.displayName = 'LadduCard';
 
 export default LadduCard;
 

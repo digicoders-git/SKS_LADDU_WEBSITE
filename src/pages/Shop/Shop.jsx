@@ -328,7 +328,7 @@ const Shop = () => {
             confirmButtonColor: 'var(--color-secondary)',
             cancelButtonColor: '#3085d6',
             confirmButtonText: 'Yes, place it!',
-            background: 'var(--color-muted)',
+            background: '#1f2937',
             color: '#fff'
         });
 
@@ -874,7 +874,7 @@ const Shop = () => {
                                             <Banknote size={18} />
                                         </div>
                                         <div className="min-w-0">
-                                            <h4 className={`font-bold text-[11px] md:text-sm whitespace-nowrap ${paymentMethod === 'cod' ? 'text-[var(--color-text)]' : 'text-gray-500'}`}>Cash (COD)</h4>
+                                            <h4 className={`font-bold text-[11px] md:text-sm whitespace-nowrap ${paymentMethod === 'cod' ? 'text-[var(--color-text)]' : 'text-gray-500'}`}>Cash On Delivery</h4>
                                         </div>
                                         {paymentMethod === 'cod' && <Check size={14} className="text-[var(--color-secondary)] ml-auto" />}
                                     </div>
@@ -887,11 +887,17 @@ const Shop = () => {
                                             <Smartphone size={18} />
                                         </div>
                                         <div className="min-w-0">
-                                            <h4 className={`font-bold text-[11px] md:text-sm whitespace-nowrap ${paymentMethod === 'upi' ? 'text-[var(--color-text)]' : 'text-gray-500'}`}>Online (UPI)</h4>
+                                            <h4 className={`font-bold text-[11px] md:text-sm whitespace-nowrap ${paymentMethod === 'upi' ? 'text-[var(--color-text)]' : 'text-gray-500'}`}>Online Payment</h4>
                                         </div>
                                         {paymentMethod === 'upi' && <Check size={14} className="text-[var(--color-secondary)] ml-auto" />}
                                     </div>
                                 </div>
+                                <button
+                                        onClick={handleConfirmOrder}
+                                        className="w-full py-4 md:py-5 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-2xl font-bold text-base md:text-lg mt-8 md:mt-10 hover:bg-[#ffe033] transition-all shadow-[0_4px_15px_rgba(255,212,0,0.3)] hover:shadow-[0_6px_20px_rgba(255,212,0,0.4)] active:scale-95"
+                                    >
+                                        Place Order
+                                    </button>
                             </div>
                         </div>
 

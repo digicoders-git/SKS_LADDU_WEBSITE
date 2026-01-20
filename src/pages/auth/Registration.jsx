@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { User, Mail, Lock, Phone, Calendar, Eye, EyeOff, ChevronDown } from 'lucide-react';
 import { createUserApi } from '../../api/user';
 import { toast } from 'react-toastify';
+import Navbar from '../../components/Navbar/Navbar';
+import Footer from '../../components/layout/Footer';
 
 const Registration = () => {
     const [formData, setFormData] = useState({
@@ -114,201 +116,205 @@ const Registration = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[var(--color-primary)] flex items-center justify-center py-12 px-4">
-            <div className="max-w-2xl w-full bg-[var(--color-muted)] rounded-3xl shadow-2xl p-8 border border-[var(--color-secondary)]/20">
-                <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-[var(--color-secondary)] mb-2">Create Account</h2>
-                    <p className="text-gray-400">Join us for sweet experiences</p>
-                </div>
-
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2">First Name</label>
-                            <div className="relative">
-                                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
-                                <input
-                                    type="text"
-                                    name="firstName"
-                                    value={formData.firstName}
-                                    onChange={handleChange}
-                                    className={`w-full pl-12 pr-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.firstName ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
-                                    placeholder="Enter first name"
-                                />
-                            </div>
-                            {errors.firstName && <p className="text-red-400 text-sm mt-1">{errors.firstName}</p>}
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2">Last Name</label>
-                            <div className="relative">
-                                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
-                                <input
-                                    type="text"
-                                    name="lastName"
-                                    value={formData.lastName}
-                                    onChange={handleChange}
-                                    className={`w-full pl-12 pr-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.lastName ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
-                                    placeholder="Enter last name"
-                                />
-                            </div>
-                            {errors.lastName && <p className="text-red-400 text-sm mt-1">{errors.lastName}</p>}
-                        </div>
+        <div>
+            <Navbar />
+            <div className="min-h-screen bg-[var(--color-primary)] flex items-center justify-center py-12 px-4 mt-20">
+                <div className="max-w-2xl w-full bg-[var(--color-muted)] rounded-3xl shadow-2xl p-8 border border-[var(--color-secondary)]/20">
+                    <div className="text-center mb-8">
+                        <h2 className="text-3xl font-bold text-[var(--color-secondary)] mb-2">Create Account</h2>
+                        <p className="text-gray-400">Join us for sweet experiences</p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2">Password</label>
-                            <div className="relative">
-                                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
-                                <input
-                                    type={showPassword ? 'text' : 'password'}
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                    className={`w-full pl-12 pr-12 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.password ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
-                                    placeholder="Enter password"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300"
-                                >
-                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                                </button>
-                            </div>
-                            {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password}</p>}
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2">Confirm Password</label>
-                            <div className="relative">
-                                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
-                                <input
-                                    type={showConfirmPassword ? 'text' : 'password'}
-                                    name="confirmPassword"
-                                    value={formData.confirmPassword}
-                                    onChange={handleChange}
-                                    className={`w-full pl-12 pr-12 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.confirmPassword ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
-                                    placeholder="Confirm password"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300"
-                                >
-                                    {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                                </button>
-                            </div>
-                            {errors.confirmPassword && <p className="text-red-400 text-sm mt-1">{errors.confirmPassword}</p>}
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2">Phone Number</label>
-                            <div className="relative">
-                                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
-                                <input
-                                    type="tel"
-                                    name="phone"
-                                    value={formData.phone}
-                                    onChange={handleChange}
-                                    className={`w-full pl-12 pr-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.phone ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
-                                    placeholder="Enter 10-digit phone number"
-                                    maxLength="10"
-                                />
-                            </div>
-                            {errors.phone && <p className="text-red-400 text-sm mt-1">{errors.phone}</p>}
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-bold text-gray-700 mb-2">Date of Birth</label>
-                            <div className="relative">
-                                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
-                                <input
-                                    type="date"
-                                    name="dob"
-                                    value={formData.dob}
-                                    onChange={handleChange}
-                                    className={`w-full pl-12 pr-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.dob ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
-                                />
-                            </div>
-                            {errors.dob && <p className="text-red-400 text-sm mt-1">{errors.dob}</p>}
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-bold text-gray-300 mb-2">Gender</label>
-                        <div className="relative">
-                            <button
-                                type="button"
-                                onClick={() => setShowGenderDropdown(!showGenderDropdown)}
-                                className={`w-full px-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all text-left flex items-center justify-between ${errors.gender ? 'border-red-500' : 'border-[var(--color-secondary)]/20'
-                                    }`}
-                            >
-                                <span className={formData.gender ? 'text-[var(--color-text)]' : 'text-gray-500'}>
-                                    {formData.gender || 'Select gender'}
-                                </span>
-                                <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform ${showGenderDropdown ? 'rotate-180' : ''}`} />
-                            </button>
-                            {showGenderDropdown && (
-                                <div className="absolute z-10 w-full mt-2 bg-[var(--color-muted)] border border-[var(--color-secondary)]/20 rounded-xl shadow-lg overflow-hidden">
-                                    {['Male', 'Female', 'Other'].map((option) => (
-                                        <button
-                                            key={option}
-                                            type="button"
-                                            onClick={() => {
-                                                setFormData({ ...formData, gender: option });
-                                                setShowGenderDropdown(false);
-                                                if (errors.gender) {
-                                                    setErrors({ ...errors, gender: '' });
-                                                }
-                                            }}
-                                            className="w-full px-4 py-3 text-left text-[var(--color-text)] hover:bg-[var(--color-secondary)] hover:text-white transition-all"
-                                        >
-                                            {option}
-                                        </button>
-                                    ))}
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label className="block text-sm font-bold text-gray-700 mb-2">First Name</label>
+                                <div className="relative">
+                                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
+                                    <input
+                                        type="text"
+                                        name="firstName"
+                                        value={formData.firstName}
+                                        onChange={handleChange}
+                                        className={`w-full pl-12 pr-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.firstName ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
+                                        placeholder="Enter first name"
+                                    />
                                 </div>
-                            )}
+                                {errors.firstName && <p className="text-red-400 text-sm mt-1">{errors.firstName}</p>}
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-bold text-gray-700 mb-2">Last Name</label>
+                                <div className="relative">
+                                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
+                                    <input
+                                        type="text"
+                                        name="lastName"
+                                        value={formData.lastName}
+                                        onChange={handleChange}
+                                        className={`w-full pl-12 pr-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.lastName ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
+                                        placeholder="Enter last name"
+                                    />
+                                </div>
+                                {errors.lastName && <p className="text-red-400 text-sm mt-1">{errors.lastName}</p>}
+                            </div>
                         </div>
-                        {errors.gender && <p className="text-red-400 text-sm mt-1">{errors.gender}</p>}
-                    </div>
 
-                    <div>
-                        <label className="block text-sm font-bold text-gray-300 mb-2">Email Address</label>
-                        <div className="relative">
-                            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
-                            <input
-                                type="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                className={`w-full pl-12 pr-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.email ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
-                                placeholder="Enter your email"
-                            />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label className="block text-sm font-bold text-gray-700 mb-2">Password</label>
+                                <div className="relative">
+                                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
+                                    <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        className={`w-full pl-12 pr-12 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.password ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
+                                        placeholder="Enter password"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300"
+                                    >
+                                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                    </button>
+                                </div>
+                                {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password}</p>}
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-bold text-gray-700 mb-2">Confirm Password</label>
+                                <div className="relative">
+                                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
+                                    <input
+                                        type={showConfirmPassword ? 'text' : 'password'}
+                                        name="confirmPassword"
+                                        value={formData.confirmPassword}
+                                        onChange={handleChange}
+                                        className={`w-full pl-12 pr-12 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.confirmPassword ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
+                                        placeholder="Confirm password"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300"
+                                    >
+                                        {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                    </button>
+                                </div>
+                                {errors.confirmPassword && <p className="text-red-400 text-sm mt-1">{errors.confirmPassword}</p>}
+                            </div>
                         </div>
-                        {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label className="block text-sm font-bold text-gray-700 mb-2">Phone Number</label>
+                                <div className="relative">
+                                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        value={formData.phone}
+                                        onChange={handleChange}
+                                        className={`w-full pl-12 pr-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.phone ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
+                                        placeholder="Enter 10-digit phone number"
+                                        maxLength="10"
+                                    />
+                                </div>
+                                {errors.phone && <p className="text-red-400 text-sm mt-1">{errors.phone}</p>}
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-bold text-gray-700 mb-2">Date of Birth</label>
+                                <div className="relative">
+                                    <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
+                                    <input
+                                        type="date"
+                                        name="dob"
+                                        value={formData.dob}
+                                        onChange={handleChange}
+                                        className={`w-full pl-12 pr-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.dob ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
+                                    />
+                                </div>
+                                {errors.dob && <p className="text-red-400 text-sm mt-1">{errors.dob}</p>}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-bold text-gray-700 mb-2">Gender</label>
+                            <div className="relative">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowGenderDropdown(!showGenderDropdown)}
+                                    className={`w-full px-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all text-left flex items-center justify-between ${errors.gender ? 'border-red-500' : 'border-[var(--color-secondary)]/20'
+                                        }`}
+                                >
+                                    <span className={formData.gender ? 'text-[var(--color-text)]' : 'text-gray-500'}>
+                                        {formData.gender || 'Select gender'}
+                                    </span>
+                                    <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform ${showGenderDropdown ? 'rotate-180' : ''}`} />
+                                </button>
+                                {showGenderDropdown && (
+                                    <div className="absolute z-10 w-full mt-2 bg-[var(--color-muted)] border border-[var(--color-secondary)]/20 rounded-xl shadow-lg overflow-hidden">
+                                        {['Male', 'Female', 'Other'].map((option) => (
+                                            <button
+                                                key={option}
+                                                type="button"
+                                                onClick={() => {
+                                                    setFormData({ ...formData, gender: option });
+                                                    setShowGenderDropdown(false);
+                                                    if (errors.gender) {
+                                                        setErrors({ ...errors, gender: '' });
+                                                    }
+                                                }}
+                                                className="w-full px-4 py-3 text-left text-[var(--color-text)] hover:bg-[var(--color-secondary)] hover:text-white transition-all"
+                                            >
+                                                {option}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                            {errors.gender && <p className="text-red-400 text-sm mt-1">{errors.gender}</p>}
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-bold text-gray-700 mb-2">Email Address</label>
+                            <div className="relative">
+                                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    className={`w-full pl-12 pr-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.email ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
+                                    placeholder="Enter your email"
+                                />
+                            </div>
+                            {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="w-full bg-[var(--color-secondary)] text-[var(--color-primary)] py-3 rounded-xl font-bold hover:opacity-90 transition-all shadow-lg"
+                        >
+                            Create Account
+                        </button>
+                    </form>
+
+                    <div className="mt-6 text-center">
+                        <p className="text-gray-400">
+                            Already have an account?{' '}
+                            <Link to="/login" className="text-[var(--color-secondary)] font-bold hover:underline">
+                                Sign In
+                            </Link>
+                        </p>
                     </div>
-
-                    <button
-                        type="submit"
-                        className="w-full bg-[var(--color-secondary)] text-[var(--color-primary)] py-3 rounded-xl font-bold hover:opacity-90 transition-all shadow-lg"
-                    >
-                        Create Account
-                    </button>
-                </form>
-
-                <div className="mt-6 text-center">
-                    <p className="text-gray-400">
-                        Already have an account?{' '}
-                        <Link to="/login" className="text-[var(--color-secondary)] font-bold hover:underline">
-                            Sign In
-                        </Link>
-                    </p>
                 </div>
             </div>
+            <Footer/>
         </div>
     );
 };

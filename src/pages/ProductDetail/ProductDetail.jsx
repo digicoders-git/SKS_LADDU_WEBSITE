@@ -10,6 +10,7 @@ import heroLaddus from '../../assets/images/hero-laddus.png';
 
 import { getProductApi } from '../../api/product';
 import { addToCartApi } from '../../api/cart';
+import Footer from '../../components/layout/Footer';
 
 
 const ProductDetail = () => {
@@ -118,15 +119,16 @@ const ProductDetail = () => {
     };
 
     return (
-        <div className="bg-[var(--color-primary)] min-h-screen py-12 px-6 md:px-24 font-[var(--font-body)] relative overflow-hidden">
-            {/* Background Decorative Elements */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
-                <div className="detail-bubble detail-bubble-1"></div>
-                <div className="detail-bubble detail-bubble-2"></div>
-            </div>
+        <div>
+            <div className="bg-[var(--color-primary)] min-h-screen pb-8 pt-4 px-6 md:px-24 font-[var(--font-body)] relative overflow-hidden">
+                {/* Background Decorative Elements */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
+                    <div className="detail-bubble detail-bubble-1"></div>
+                    <div className="detail-bubble detail-bubble-2"></div>
+                </div>
 
-            <style dangerouslySetInnerHTML={{
-                __html: `
+                <style dangerouslySetInnerHTML={{
+                    __html: `
                     .detail-bubble {
                         position: absolute;
                         background: var(--color-secondary);
@@ -141,121 +143,123 @@ const ProductDetail = () => {
                         50% { transform: translate(30px, -40px) scale(1.05); }
                     }
                 `
-            }} />
+                }} />
 
-            {/* Back Button */}
-            <button
-                onClick={() => navigate(-1)}
-                className="flex items-center gap-2 text-[var(--color-secondary)] hover:text-white mb-8 font-semibold transition-colors relative z-10"
-            >
-                <ArrowLeft size={20} />
-                Back
-            </button>
+                {/* Back Button */}
+                <button
+                    onClick={() => navigate(-1)}
+                    className="flex items-center gap-2 text-[var(--color-secondary)] hover:text-white mb-8 font-semibold transition-colors relative z-10"
+                >
+                    <ArrowLeft size={20} />
+                    Back
+                </button>
 
-            <div className="max-w-6xl mx-auto bg-[var(--color-muted)] rounded-[40px] shadow-2xl overflow-hidden border border-[var(--color-secondary)]/10 relative z-10 backdrop-blur-sm">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                    {/* Product Image */}
-                    <div className="p-8 md:p-16 flex items-center justify-center bg-gradient-to-br from-[var(--color-primary)]/50 to-[var(--color-muted)] relative overflow-hidden">
-                        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${heroLaddus})`, backgroundSize: 'cover', filter: 'blur(20px)' }}></div>
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(242,183,5,0.15)_0%,transparent_70%)]"></div>
-                        <img
-                            src={product.img}
-                            alt={product.name}
-                            className="w-full max-w-sm rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.3)] transform hover:scale-105 transition-transform duration-500 relative z-10 border border-white/10"
-                        />
-                    </div>
-
-                    {/* Product Details */}
-                    <div className="p-8 md:p-12 flex flex-col justify-center">
-                        <div className="inline-block px-4 py-1 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-full text-sm font-bold mb-4 w-fit">
-                            {product.category}
+                <div className="max-w-6xl mx-auto bg-[var(--color-muted)] rounded-[40px] shadow-2xl overflow-hidden border border-[var(--color-secondary)]/10 relative z-10 backdrop-blur-sm">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                        {/* Product Image */}
+                        <div className="p-8 md:p-16 flex items-center justify-center bg-gradient-to-br from-[var(--color-primary)]/50 to-[var(--color-muted)] relative overflow-hidden">
+                            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `url(${heroLaddus})`, backgroundSize: 'cover', filter: 'blur(20px)' }}></div>
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(242,183,5,0.15)_0%,transparent_70%)]"></div>
+                            <img
+                                src={product.img}
+                                alt={product.name}
+                                className="w-full max-w-sm rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.3)] transform hover:scale-105 transition-transform duration-500 relative z-10 border border-white/10"
+                            />
                         </div>
 
-                        <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-text)] mb-4 font-[var(--font-heading)]">
-                            {product.name}
-                        </h1>
-
-                        <div className="flex items-center gap-2 mb-6">
-                            {[...Array(5)].map((_, i) => (
-                                <Star key={i} size={20} className="fill-[var(--color-secondary)] text-[var(--color-secondary)]" />
-                            ))}
-                            <span className="text-[var(--color-text-muted)] text-sm ml-2">(4.9/5 from 120 reviews)</span>
-                        </div>
-
-                        <p className="text-[var(--color-text)] text-lg leading-relaxed mb-6 opacity-80">
-                            {product.description}
-                        </p>
-
-                        <div className="bg-[var(--color-primary)]/50 rounded-2xl p-6 mb-6 border border-[var(--color-secondary)]/10">
-                            <h3 className="font-bold text-[var(--color-secondary)] mb-3 flex items-center gap-2">
-                                <Package size={20} />
-                                Product Details
-                            </h3>
-                            <div className="space-y-2 text-sm text-[var(--color-text-muted)]">
-                                <p><span className="font-semibold text-[var(--color-text)]">Ingredients:</span> {product.ingredients}</p>
-                                <p><span className="font-semibold text-[var(--color-text)]">Shelf Life:</span> {product.shelfLife}</p>
-                                <p><span className="font-semibold text-[var(--color-text)]">Net Weight:</span> {product.netWeight}</p>
+                        {/* Product Details */}
+                        <div className="p-8 md:p-12 flex flex-col justify-center">
+                            <div className="inline-block px-4 py-1 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-full text-sm font-bold mb-4 w-fit">
+                                {product.category}
                             </div>
-                        </div>
 
-                        <div className="flex items-center justify-between mb-8">
-                            <div>
-                                <p className="text-sm text-gray-400 mb-1">Price per kg</p>
-                                <div className="flex items-center gap-3">
-                                    <p className="text-4xl font-bold text-[var(--color-secondary)]">₹{product.finalPrice}</p>
-                                    {product.discountPercent > 0 && (
-                                        <>
-                                            <p className="text-xl text-gray-500 line-through">₹{product.price}</p>
-                                            <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">
-                                                {product.discountPercent}% OFF
-                                            </span>
-                                        </>
-                                    )}
+                            <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-text)] mb-4 font-[var(--font-heading)]">
+                                {product.name}
+                            </h1>
+
+                            <div className="flex items-center gap-2 mb-6">
+                                {[...Array(5)].map((_, i) => (
+                                    <Star key={i} size={20} className="fill-[var(--color-secondary)] text-[var(--color-secondary)]" />
+                                ))}
+                                <span className="text-[var(--color-text-muted)] text-sm ml-2">(4.9/5 from 120 reviews)</span>
+                            </div>
+
+                            <p className="text-[var(--color-text)] text-lg leading-relaxed mb-6 opacity-80">
+                                {product.description}
+                            </p>
+
+                            <div className="bg-[var(--color-primary)]/50 rounded-2xl p-6 mb-6 border border-[var(--color-secondary)]/10">
+                                <h3 className="font-bold text-[var(--color-secondary)] mb-3 flex items-center gap-2">
+                                    <Package size={20} />
+                                    Product Details
+                                </h3>
+                                <div className="space-y-2 text-sm text-[var(--color-text-muted)]">
+                                    <p><span className="font-semibold text-[var(--color-text)]">Ingredients:</span> {product.ingredients}</p>
+                                    <p><span className="font-semibold text-[var(--color-text)]">Shelf Life:</span> {product.shelfLife}</p>
+                                    <p><span className="font-semibold text-[var(--color-text)]">Net Weight:</span> {product.netWeight}</p>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="flex gap-4 mb-8">
-                            <button
-                                onClick={handleAddToCart}
-                                className="flex-1 bg-[var(--color-secondary)] text-[var(--color-primary)] py-2 md:py-4 rounded-xl font-bold text-sm md:text-lg hover:bg-[#ffe033] transition-all shadow-[0_4px_15px_rgba(255,212,0,0.3)] hover:shadow-[0_6px_20px_rgba(255,212,0,0.4)] flex items-center justify-center gap-2"
-                            >
-                                <ShoppingCart size={18} className="md:w-[22px] md:h-[22px]" />
-                                <span className="text-xs md:text-base">Add to Cart</span>
-                            </button>
-                            <button
-                                onClick={async () => {
-                                    const isAuth = await checkAuth();
-                                    if (!isAuth) return;
-
-                                    try {
-                                        await addToCartApi({ productId: product.id, quantity: 1 });
-                                        window.dispatchEvent(new Event('cart-updated'));
-                                        navigate('/shop');
-                                    } catch (error) {
-                                        console.error("Buy now failed:", error);
-                                    }
-                                }}
-                                className="px-4 md:px-8 py-2 md:py-4 border-2 border-[var(--color-secondary)] text-[var(--color-secondary)] rounded-xl font-bold hover:bg-[var(--color-secondary)] hover:text-[var(--color-primary)] transition-all flex items-center justify-center no-underline text-xs md:text-base cursor-pointer"
-                            >
-                                Buy Now
-                            </button>
-                        </div>
-
-                        {/* Features */}
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="flex items-center gap-3 text-sm text-gray-400">
-                                <Truck className="text-[var(--color-secondary)]" size={20} />
-                                <span className="text-gray-300">Fast Delivery</span>
+                            <div className="flex items-center justify-between mb-8">
+                                <div>
+                                    <p className="text-sm text-gray-400 mb-1">Price per kg</p>
+                                    <div className="flex items-center gap-3">
+                                        <p className="text-4xl font-bold text-[var(--color-secondary)]">₹{product.finalPrice}</p>
+                                        {product.discountPercent > 0 && (
+                                            <>
+                                                <p className="text-xl text-gray-500 line-through">₹{product.price}</p>
+                                                <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">
+                                                    {product.discountPercent}% OFF
+                                                </span>
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
-                            <div className="flex items-center gap-3 text-sm text-gray-400">
-                                <Shield className="text-[var(--color-secondary)]" size={20} />
-                                <span className="text-gray-300">100% Authentic</span>
+
+                            <div className="flex gap-4 mb-8">
+                                <button
+                                    onClick={handleAddToCart}
+                                    className="flex-1 bg-[var(--color-secondary)] text-[var(--color-primary)] py-2 md:py-4 rounded-xl font-bold text-sm md:text-lg hover:bg-[#ffe033] transition-all shadow-[0_4px_15px_rgba(255,212,0,0.3)] hover:shadow-[0_6px_20px_rgba(255,212,0,0.4)] flex items-center justify-center gap-2"
+                                >
+                                    <ShoppingCart size={18} className="md:w-[22px] md:h-[22px]" />
+                                    <span className="text-xs md:text-base">Add to Cart</span>
+                                </button>
+                                <button
+                                    onClick={async () => {
+                                        const isAuth = await checkAuth();
+                                        if (!isAuth) return;
+
+                                        try {
+                                            await addToCartApi({ productId: product.id, quantity: 1 });
+                                            window.dispatchEvent(new Event('cart-updated'));
+                                            navigate('/shop');
+                                        } catch (error) {
+                                            console.error("Buy now failed:", error);
+                                        }
+                                    }}
+                                    className="px-4 md:px-8 py-2 md:py-4 border-2 border-[var(--color-secondary)] text-[var(--color-secondary)] rounded-xl font-bold hover:bg-[var(--color-secondary)] hover:text-[var(--color-primary)] transition-all flex items-center justify-center no-underline text-xs md:text-base cursor-pointer"
+                                >
+                                    Buy Now
+                                </button>
+                            </div>
+
+                            {/* Features */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="flex items-center gap-3 text-sm text-gray-400">
+                                    <Truck className="text-[var(--color-secondary)]" size={20} />
+                                    <span className="text-zinc-600">Fast Delivery</span>
+                                </div>
+                                <div className="flex items-center gap-3 text-sm text-gray-400">
+                                    <Shield className="text-[var(--color-secondary)]" size={20} />
+                                    <span className="text-zinc-600">100% Authentic</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <Footer/>
         </div>
     );
 };

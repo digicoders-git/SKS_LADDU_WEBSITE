@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { Star } from 'lucide-react';
 
-const TestimonialCard = ({ quote, name, color, initial, location, rating = 5 }) => {
+const TestimonialCard = memo(({ quote, name, color, initial, location, rating = 5 }) => {
     return (
         <div className="bg-[var(--color-muted)] p-5 md:p-6 rounded-2xl shadow-md border border-[var(--color-secondary)]/10 hover:shadow-xl transition-all duration-300 flex flex-col h-full group">
             <div className="text-3xl text-[var(--color-secondary)] mb-3 opacity-30 italic font-serif leading-none">"</div>
@@ -36,6 +36,8 @@ const TestimonialCard = ({ quote, name, color, initial, location, rating = 5 }) 
             </div>
         </div>
     );
-};
+});
+
+TestimonialCard.displayName = 'TestimonialCard';
 
 export default TestimonialCard;

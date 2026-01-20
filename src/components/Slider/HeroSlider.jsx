@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo, useCallback } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination, EffectFade } from 'swiper/modules';
 import { Link } from 'react-router-dom';
@@ -11,26 +11,33 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
 
-const HeroSlider = () => {
+const HeroSlider = memo(() => {
     const [sliders, setSliders] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchSliders = async () => {
-            try {
-                const data = await getActiveSlidersApi();
-                setSliders(data.sliders || []);
-            } catch (error) {
-                console.error("Failed to fetch sliders:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchSliders();
+    const fetchSliders = useCallback(async () => {
+        try {
+            const data = await getActiveSlidersApi();
+            setSliders(data.sliders || []);
+        } catch (error) {
+            console.error("Failed to fetch sliders:", error);
+        } finally {
+            setLoading(false);
+        }
     }, []);
 
+    useEffect(() => {
+        fetchSliders();
+    }, [fetchSliders]);
+
     if (loading) {
-        return null;
+        return (
+            <section className="relative w-full h-[60vh] sm:h-[70vh] md:h-[75vh] lg:h-[80vh] bg-gray-200 animate-pulse">
+                <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-12 h-12 border-4 border-[var(--color-secondary)] border-t-transparent rounded-full animate-spin"></div>
+                </div>
+            </section>
+        );
     }
 
     if (sliders.length === 0) return null;
@@ -60,6 +67,7 @@ const HeroSlider = () => {
                                     src={slider.image?.url}
                                     alt={slider.title || 'SKS Laddu'}
                                     className="w-full h-full object-cover object-center md:object-top lg:object-center"
+                                    loading="eager"
                                 />
                             </div>
 
@@ -111,6 +119,8 @@ const HeroSlider = () => {
             `}</style>
         </section>
     );
-};
+});
+
+HeroSlider.displayName = 'HeroSlider';
 
 export default HeroSlider;

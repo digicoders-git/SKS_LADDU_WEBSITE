@@ -4,6 +4,8 @@ import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'react-toastify';
 
 import { loginUserApi } from '../../api/user';
+import Footer from '../../components/layout/Footer';
+import Navbar from '../../components/Navbar/Navbar';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -47,7 +49,9 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[var(--color-primary)] flex items-center justify-center py-12 px-4">
+        <div>
+            <Navbar />
+            <div className="min-h-screen bg-[var(--color-primary)] flex items-center justify-center px-4 -mb-20">
             <div className="max-w-md w-full bg-[var(--color-muted)] rounded-3xl shadow-2xl p-8 border border-[var(--color-secondary)]/20">
                 <div className="text-center mb-8">
                     <h2 className="text-3xl font-bold text-[var(--color-secondary)] mb-2">Welcome Back</h2>
@@ -112,6 +116,8 @@ const Login = () => {
                     </p>
                 </div>
             </div>
+        </div>
+        <Footer/>
         </div>
     );
 };

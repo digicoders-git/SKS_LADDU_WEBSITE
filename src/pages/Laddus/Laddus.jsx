@@ -148,7 +148,7 @@ const Laddus = () => {
             </section>
 
             {/* Filters Section - Static for stability */}
-            <section className={`py-8 md:py-12 px-6 md:px-8 flex flex-col items-center gap-6 md:gap-10 relative ${isDropdownOpen ? 'z-50' : 'z-10'}`}>
+            <section className={`py-8 px-6 md:px-8 flex flex-col items-center gap-6 md:gap-10 relative ${isDropdownOpen ? 'z-50' : 'z-10'}`}>
 
                 {/* Mobile View: Premium Custom Dropdown Filter */}
                 <div

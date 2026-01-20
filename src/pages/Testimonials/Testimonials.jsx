@@ -1,27 +1,30 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState, useEffect, useRef, lazy, Suspense, memo, useCallback } from 'react';
 import { Play, X } from 'lucide-react';
-import TestimonialCard from '../../components/cards/TestimonialCard';
-import VideoReviewCard from '../../components/cards/VideoReviewCard';
-import Footer from '../../components/layout/Footer';
-import { getAllVideosApi, getSingleVideoApi } from '../../api/video';
+import { getAllVideosApi } from '../../api/video';
+import { throttle, debounce } from '../../utils/performance';
 
-const Testimonials = () => {
+// Lazy load components
+const TestimonialCard = lazy(() => import('../../components/cards/TestimonialCard'));
+const Footer = lazy(() => import('../../components/layout/Footer'));
+
+const Testimonials = memo(() => {
     const [activeTab, setActiveTab] = useState('text');
     const sectionRefs = useRef([]);
     const [videos, setVideos] = useState([]);
     const [selectedVideo, setSelectedVideo] = useState(null);
+    const [videosLoaded, setVideosLoaded] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
-            (entries) => {
+            throttle((entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
                     }
                 });
-            },
-            { threshold: 0.1 }
+            }, 100),
+            { threshold: 0.1, rootMargin: '50px 0px' }
         );
 
         sectionRefs.current.forEach((ref) => {
@@ -31,17 +34,28 @@ const Testimonials = () => {
         return () => observer.disconnect();
     }, []);
 
-    useEffect(() => {
-        const fetchVideos = async () => {
+    const fetchVideos = useCallback(
+        debounce(async () => {
+            if (isLoading || videosLoaded) return;
+            setIsLoading(true);
             try {
                 const data = await getAllVideosApi();
-                setVideos(data.videos || []);
+                setVideos(data.videos?.slice(0, 6) || []);
+                setVideosLoaded(true);
             } catch (error) {
                 console.error("Failed to fetch videos:", error);
+            } finally {
+                setIsLoading(false);
             }
-        };
-        fetchVideos();
-    }, []);
+        }, 300),
+        [isLoading, videosLoaded]
+    );
+
+    useEffect(() => {
+        if (activeTab === 'video' && !videosLoaded && !isLoading) {
+            fetchVideos();
+        }
+    }, [activeTab, videosLoaded, isLoading, fetchVideos]);
 
     const addToRefs = (el) => {
         if (el && !sectionRefs.current.includes(el)) {
@@ -140,38 +154,52 @@ const Testimonials = () => {
                 {activeTab === 'text' ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
                         {textReviews.map((item, i) => (
-                            <TestimonialCard key={i} {...item} />
+                            <Suspense key={i} fallback={<div className="h-48 bg-gray-200 animate-pulse rounded-xl"></div>}>
+                                <TestimonialCard {...item} />
+                            </Suspense>
                         ))}
                     </div>
                 ) : (
                     <div>
-                        {videos.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-                                {videos.map((video) => (
-                                    <div
-                                        key={video._id}
-                                        className="rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group cursor-pointer"
-                                        onClick={() => setSelectedVideo(video)}
-                                    >
-                                        <div className="relative aspect-video bg-black group-hover:scale-105 transition-transform duration-500 overflow-hidden">
-                                            <video
-                                                src={video.url}
-                                                className="w-full h-full object-cover opacity-80"
-                                                muted
-                                                loop
-                                                autoPlay
-                                                playsInline
-                                            />
-                                            <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                                                <Play className="w-16 h-16 text-white" />
+                        {videosLoaded ? (
+                            videos.length > 0 ? (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+                                    {videos.map((video) => (
+                                        <div
+                                            key={video._id}
+                                            className="rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group cursor-pointer"
+                                            onClick={() => setSelectedVideo(video)}
+                                        >
+                                            <div className="relative aspect-video bg-black group-hover:scale-105 transition-transform duration-500 overflow-hidden">
+                                                <video
+                                                    src={video.url}
+                                                    className="w-full h-full object-cover opacity-80"
+                                                    muted
+                                                    loop
+                                                    playsInline
+                                                    preload="metadata"
+                                                    loading="lazy"
+                                                />
+                                                <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                                                    <Play className="w-16 h-16 text-white" />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="text-center py-12">
+                                    <p className="text-gray-400 text-lg">No video reviews available</p>
+                                </div>
+                            )
+                        ) : isLoading ? (
+                            <div className="text-center py-12">
+                                <div className="w-12 h-12 border-4 border-[var(--color-secondary)] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                                <p className="text-gray-400 text-lg">Loading video reviews...</p>
                             </div>
                         ) : (
                             <div className="text-center py-12">
-                                <p className="text-gray-400 text-lg">Loading video reviews...</p>
+                                <p className="text-gray-400 text-lg">Click to load video reviews</p>
                             </div>
                         )}
                     </div>
@@ -206,10 +234,14 @@ const Testimonials = () => {
 
 
             <div className="mt-16">
-                <Footer />
+                <Suspense fallback={<div className="h-96 bg-gray-200 animate-pulse"></div>}>
+                    <Footer />
+                </Suspense>
             </div>
         </div>
     );
-};
+});
+
+Testimonials.displayName = 'Testimonials';
 
 export default Testimonials;

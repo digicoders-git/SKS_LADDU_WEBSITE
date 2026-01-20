@@ -1,23 +1,24 @@
 import { createBrowserRouter } from "react-router-dom";
-import Layout from "../components/layout/Layout";
-import Home from "../pages/Home/Home";
-import About from "../pages/About/About";
-import Laddus from "../pages/Laddus/Laddus";
-import Testimonials from "../pages/Testimonials/Testimonials";
-import Contact from "../pages/Contact/Contact";
-import NotFound from "../pages/NotFound/NotFound";
-import ProductDetail from "../pages/ProductDetail/ProductDetail";
-import Login from "../pages/auth/Login";
-import Registration from "../pages/auth/Registration";
-import Profile from "../pages/auth/Profile";
+import { lazy } from "react";
 
-
-import Shop from "../pages/Shop/Shop";
-import Orders from "../pages/Orders/Orders";
-import ReturnPolicy from "../pages/Policies/ReturnPolicy";
-import ShippingPolicy from "../pages/Policies/ShippingPolicy";
-import TermsOfService from "../pages/Policies/TermsOfService";
-import ErrorPage from "../components/common/ErrorPage";
+// Lazy load all components for better performance
+const Layout = lazy(() => import("../components/layout/Layout"));
+const Home = lazy(() => import("../pages/Home/Home"));
+const About = lazy(() => import("../pages/About/About"));
+const Laddus = lazy(() => import("../pages/Laddus/Laddus"));
+const Testimonials = lazy(() => import("../pages/Testimonials/Testimonials"));
+const Contact = lazy(() => import("../pages/Contact/Contact"));
+const NotFound = lazy(() => import("../pages/NotFound/NotFound"));
+const ProductDetail = lazy(() => import("../pages/ProductDetail/ProductDetail"));
+const Login = lazy(() => import("../pages/auth/Login"));
+const Registration = lazy(() => import("../pages/auth/Registration"));
+const Profile = lazy(() => import("../pages/auth/Profile"));
+const Shop = lazy(() => import("../pages/Shop/Shop"));
+const Orders = lazy(() => import("../pages/Orders/Orders"));
+const ReturnPolicy = lazy(() => import("../pages/Policies/ReturnPolicy"));
+const ShippingPolicy = lazy(() => import("../pages/Policies/ShippingPolicy"));
+const TermsOfService = lazy(() => import("../pages/Policies/TermsOfService"));
+const ErrorPage = lazy(() => import("../components/common/ErrorPage"));
 
 export const router = createBrowserRouter([
   { path: "/login", element: <Login /> },

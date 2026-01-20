@@ -126,7 +126,7 @@ const Profile = () => {
             confirmButtonColor: 'var(--color-secondary)',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, Logout',
-            background: 'var(--color-muted)',
+            background: '#1f2937',
             color: '#fff'
         });
 

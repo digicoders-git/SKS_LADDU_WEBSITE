@@ -1,18 +1,23 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { User, Heart, Castle, Film, Truck, Play, X, Shield, Droplets, Leaf, Heart as HeartIcon } from 'lucide-react';
-import LadduCard from '../../components/cards/LadduCard';
-import Footer from '../../components/layout/Footer';
+import React, { useEffect, useRef, useState, memo, useCallback, lazy, Suspense } from 'react';
+import { Shield, Droplets, Leaf, Heart as HeartIcon } from 'lucide-react';
+import { listProductsApi } from '../../api/product';
+import { debounce, throttle } from '../../utils/performance';
+
+// Lazy load all heavy components
+const Footer = lazy(() => import('../../components/layout/Footer'));
+const LadduCard = lazy(() => import('../../components/cards/LadduCard'));
+const LazyVideoReviews = lazy(() => import('../../components/sections/LazyVideoReviews'));
+const HeroSlider = lazy(() => import('../../components/Slider/HeroSlider'));
+const BrandAdvertisement = lazy(() => import('../../components/sections/BrandAdvertisement'));
+
+// Import images directly
 import big from '../../assets/images/big.png';
 import kulhad from '../../assets/images/kulhad.png';
 import moti from '../../assets/images/moti.png';
 import storyMaker from '../../assets/images/story-maker.png';
-import rusticLaddu from '../../assets/images/images.jpg';
+import founder from '../../assets/images/founder.png';
+import coFounder from '../../assets/images/co-founder.jpg';
 import besanLaddu from '../../assets/images/besan-laddu.png';
-
-import { listProductsApi } from '../../api/product';
-import { getAllVideosApi, getSingleVideoApi } from '../../api/video';
-import HeroSlider from '../../components/Slider/HeroSlider';
 
 const SKSBrand = () => (
   <span className="font-[var(--font-accent)] text-[var(--color-secondary)] font-black tracking-tighter inline-flex items-center">
@@ -20,55 +25,46 @@ const SKSBrand = () => (
   </span>
 );
 
-const Home = () => {
+const Home = memo(() => {
   const sectionRefs = useRef([]);
-  const [selectedVideo, setSelectedVideo] = useState(null);
-  const scrollRef = useRef(null);
   const ladduScrollRef = useRef(null);
   const [products, setProducts] = useState([]);
-  const [videos, setVideos] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const data = await listProductsApi();
-        console.log('Home products data:', data);
-        // Check if data has products array or if products are directly in data
-        if (data.products) {
-          setProducts(data.products);
-        } else if (Array.isArray(data)) {
-          setProducts(data);
-        } else {
-          setProducts([]);
-        }
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
+  const fetchProducts = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const data = await listProductsApi();
+      console.log('Home products data:', data);
+      // Check if data has products array or if products are directly in data
+      if (data.products) {
+        setProducts(data.products);
+      } else if (Array.isArray(data)) {
+        setProducts(data);
+      } else {
+        setProducts([]);
       }
-    };
-
-    const fetchVideos = async () => {
-      try {
-        const data = await getAllVideosApi();
-        setVideos(data.videos || []);
-      } catch (error) {
-        console.error("Failed to fetch videos:", error);
-      }
-    };
-
-    fetchProducts();
-    fetchVideos();
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
+
+  useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
+      throttle((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
           }
         });
-      },
-      { threshold: 0, rootMargin: '0px 0px -50px 0px' }
+      }, 100),
+      { threshold: 0.1, rootMargin: '50px 0px' }
     );
 
     sectionRefs.current.forEach((ref) => {
@@ -79,27 +75,15 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const videoContainer = scrollRef.current;
+    if (!products.length) return;
+    
     const ladduContainer = ladduScrollRef.current;
-
-    let videoInterval;
+    if (!ladduContainer) return;
+    
     let ladduInterval;
-    let isVideoHovered = false;
     let isLadduHovered = false;
 
-    const startVideoScroll = () => {
-      if (videoInterval || isVideoHovered) return;
-      videoInterval = setInterval(() => {
-        if (!videoContainer || isVideoHovered) return;
-        if (videoContainer.scrollLeft >= videoContainer.scrollWidth / 3) {
-          videoContainer.scrollLeft = 0;
-        } else {
-          videoContainer.scrollLeft += 1.5;
-        }
-      }, 20);
-    };
-
-    const startLadduScroll = () => {
+    const startLadduScroll = throttle(() => {
       if (ladduInterval || isLadduHovered) return;
       ladduInterval = setInterval(() => {
         if (!ladduContainer || isLadduHovered) return;
@@ -108,15 +92,8 @@ const Home = () => {
         } else {
           ladduContainer.scrollLeft += 1.5;
         }
-      }, 20);
-    };
-
-    const stopVideoScroll = () => {
-      if (videoInterval) {
-        clearInterval(videoInterval);
-        videoInterval = null;
-      }
-    };
+      }, 30);
+    }, 100);
 
     const stopLadduScroll = () => {
       if (ladduInterval) {
@@ -125,35 +102,26 @@ const Home = () => {
       }
     };
 
-    if (videoContainer) {
-      setTimeout(startVideoScroll, 100);
-      videoContainer.addEventListener('mouseenter', () => {
-        isVideoHovered = true;
-        stopVideoScroll();
-      });
-      videoContainer.addEventListener('mouseleave', () => {
-        isVideoHovered = false;
-        startVideoScroll();
-      });
-    }
-
-    if (ladduContainer) {
-      setTimeout(startLadduScroll, 100);
-      ladduContainer.addEventListener('mouseenter', () => {
-        isLadduHovered = true;
-        stopLadduScroll();
-      });
-      ladduContainer.addEventListener('mouseleave', () => {
-        isLadduHovered = false;
-        startLadduScroll();
-      });
-    }
-
-    return () => {
-      stopVideoScroll();
+    const handleMouseEnter = () => {
+      isLadduHovered = true;
       stopLadduScroll();
     };
-  }, [products, videos]);
+
+    const handleMouseLeave = () => {
+      isLadduHovered = false;
+      startLadduScroll();
+    };
+
+    setTimeout(startLadduScroll, 200);
+    ladduContainer.addEventListener('mouseenter', handleMouseEnter, { passive: true });
+    ladduContainer.addEventListener('mouseleave', handleMouseLeave, { passive: true });
+
+    return () => {
+      stopLadduScroll();
+      ladduContainer.removeEventListener('mouseenter', handleMouseEnter);
+      ladduContainer.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, [products]);
 
   const addToRefs = (el) => {
     if (el && !sectionRefs.current.includes(el)) {
@@ -165,7 +133,9 @@ const Home = () => {
     <div className="bg-[var(--color-primary)] text-[var(--color-text)] font-[var(--font-body)] overflow-x-hidden">
 
       {/* Hero Slider Section */}
-      <HeroSlider />
+      <Suspense fallback={<div className="h-screen bg-gray-200 animate-pulse"></div>}>
+        <HeroSlider />
+      </Suspense>
 
       {/* Our Special Laddus Section - Grid Layout First */}
       <section ref={addToRefs} className="scroll-section py-12 px-8 md:px-24 text-center bg-[var(--color-primary)] relative z-10 shadow-sm border-y border-[var(--color-secondary)]/10 overflow-hidden" id="laddus">
@@ -203,29 +173,36 @@ const Home = () => {
           <p className="italic text-[var(--color-text-muted)] mb-16 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">Handcrafted with over 100 years of love and ancestral tradition, bringing the soul of Sandila to your home.</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-14 px-2 sm:px-4">
-            {products.slice(0, 6).map((item) => (
-              <div key={item._id} className="h-full transform hover:-translate-y-2 transition-transform duration-300">
-                <LadduCard
-                  product={{
-                    id: item._id,
-                    name: item.name,
-                    img: item.mainImage?.url || besanLaddu,
-                    price: item.price,
-                    finalPrice: item.finalPrice,
-                    discountPercent: item.discountPercent,
-                    priceStr: `₹${item.finalPrice} / kg`,
-                    description: item.description,
-                    category: item.category?.name || 'Traditional'
-                  }}
-                />
-              </div>
-            ))}
+            {isLoading ? (
+              Array.from({ length: 6 }).map((_, index) => (
+                <div key={index} className="h-96 bg-gray-200 rounded-xl animate-pulse"></div>
+              ))
+            ) : (
+              products.slice(0, 6).map((item) => (
+                <div key={item._id} className="h-full transform hover:-translate-y-2 transition-transform duration-300">
+                  <Suspense fallback={<div className="h-96 bg-gray-200 rounded-xl animate-pulse"></div>}>
+                    <LadduCard
+                      product={{
+                        id: item._id,
+                        name: item.name,
+                        img: item.mainImage?.url || '/src/assets/images/besan-laddu.png',
+                        price: item.price,
+                        finalPrice: item.finalPrice,
+                        discountPercent: item.discountPercent,
+                        priceStr: `₹${item.finalPrice} / kg`,
+                        description: item.description,
+                        category: item.category?.name || 'Traditional'
+                      }}
+                    />
+                  </Suspense>
+                </div>
+              ))
+            )}
           </div>
 
-          {products.length === 0 && (
+          {!isLoading && products.length === 0 && (
             <div className="py-20 flex flex-col items-center">
-              <div className="w-16 h-16 border-4 border-[var(--color-secondary)] border-t-transparent rounded-full animate-spin mb-4"></div>
-              <p className="text-[var(--color-text-muted)] font-medium">Preparing fresh laddus for you...</p>
+              <p className="text-[var(--color-text-muted)] font-medium">No products available</p>
             </div>
           )}
         </div>
@@ -250,18 +227,24 @@ const Home = () => {
             {/* Left Column: Multi-Image Grid with HD Quality Focus */}
             <div className="grid grid-cols-2 gap-6 h-full min-h-[600px]">
               <div className="col-span-2 relative group overflow-hidden rounded-[40px] shadow-2xl">
-                <img src={big} alt="Sandila Railway Station Heritage" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 brightness-90 group-hover:brightness-100" />
+                <Suspense fallback={<div className="w-full h-full bg-gray-200 animate-pulse rounded-[40px]"></div>}>
+                  <img src={big} alt="Sandila Railway Station Heritage" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 brightness-90 group-hover:brightness-100" loading="lazy" />
+                </Suspense>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 <div className="absolute bottom-6 left-8">
                   <p className="text-white font-bold text-xl drop-shadow-lg">A Nostalgic Railway Icon</p>
                 </div>
               </div>
               <div className="relative group overflow-hidden rounded-[30px] shadow-xl border-2 border-white/10">
-                <img src={kulhad} alt="Traditional Preparation" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <Suspense fallback={<div className="w-full h-full bg-gray-200 animate-pulse rounded-[30px]"></div>}>
+                  <img src={kulhad} alt="Traditional Preparation" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" />
+                </Suspense>
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
               </div>
               <div className="relative group overflow-hidden rounded-[30px] shadow-xl border-4 border-[var(--color-secondary)]/20">
-                <img src={moti} alt="Sandila Laddoo Kulhad" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <Suspense fallback={<div className="w-full h-full bg-gray-200 animate-pulse rounded-[30px]"></div>}>
+                  <img src={moti} alt="Sandila Laddoo Kulhad" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" />
+                </Suspense>
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">
                   <span className="text-[var(--color-secondary)] font-bold tracking-widest uppercase">Pure Sandila</span>
                 </div>
@@ -335,77 +318,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Video Reviews Section */}
-      <section ref={addToRefs} className="scroll-section py-20 px-8 md:px-24 bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-surface)] text-center relative z-10 shadow-sm overflow-hidden" id="testimonials">
-        <div className="relative z-10">
-          <div className="inline-block px-4 py-1.5 bg-[var(--color-secondary)]/10 text-[var(--color-secondary)] rounded-full text-[10px] font-bold uppercase tracking-[0.3em] mb-6 border border-[var(--color-secondary)]/20">
-            Real Stories
-          </div>
-          <h2 className="text-4xl md:text-7xl text-[var(--color-secondary)] mb-12 font-bold font-[var(--font-heading)] drop-shadow-sm">Loved by Customers</h2>
-
-          {videos.length > 0 ? (
-            <div className="relative group">
-              <div
-                ref={scrollRef}
-                className="flex gap-4 md:gap-10 overflow-x-auto pb-12 scroll-smooth no-scrollbar px-2"
-              >
-                {[...videos, ...videos, ...videos].map((video, index) => (
-                  <div
-                    key={`${video._id}-${index}`}
-                    className="flex-shrink-0 w-56 md:w-80 h-80 md:h-96 bg-[var(--color-muted)] rounded-[30px] shadow-2xl overflow-hidden cursor-pointer hover:scale-[1.03] transition-all duration-500 border border-[var(--color-secondary)]/10 group relative"
-                    onClick={() => setSelectedVideo(video)}
-                  >
-                    <video
-                      src={video.url}
-                      className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
-                      muted
-                      loop
-                      autoPlay
-                      playsInline
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <div className="py-20 flex flex-col items-center">
-              <div className="w-12 h-12 border-4 border-[var(--color-secondary)] border-t-transparent rounded-full animate-spin mb-4"></div>
-              <p className="text-[var(--color-text-muted)] font-medium">Loading customer stories...</p>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Video Modal */}
-      {selectedVideo && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-40 p-4 pt-32">
-          <div className="bg-white rounded-lg max-w-3xl w-full max-h-[70vh] overflow-hidden relative">
-            <button
-              onClick={() => setSelectedVideo(null)}
-              className="absolute bottom-4 right-4 p-1 md:p-2 bg-black text-white rounded-full transition-colors z-10 hover:bg-gray-800"
-            >
-              <X className="w-4 h-4 md:w-6 md:h-6" />
-            </button>
-            <div className="p-6">
-              <video
-                src={selectedVideo.url}
-                className="w-full aspect-video rounded-lg"
-                controls
-                autoPlay
-                onLoadedData={(e) => {
-                  setTimeout(() => {
-                    e.target.pause();
-                  }, 5000);
-                }}
-              />
-              <div className="mt-4 text-center">
-                <p className="text-gray-600">Customer Review</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Founder Section */}
       <section ref={addToRefs} className="scroll-section py-6 px-4 md:px-24 bg-[var(--color-primary)] relative z-10 shadow-sm overflow-hidden" id="founders">
@@ -423,37 +335,49 @@ const Home = () => {
             <p className="italic text-[var(--color-text-muted)] mt-6 text-base md:text-2xl max-w-2xl mx-auto opacity-80 leading-relaxed px-4">Preserving the legacy of Sandila for future generations with every handcrafted batch.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
-            <div className="flex flex-col gap-6 md:gap-8 bg-[var(--color-primary)] p-6 md:p-10 rounded-[40px] shadow-xl border border-[var(--color-secondary)]/10 text-left hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
-              <div className="w-full h-80 rounded-[30px] overflow-hidden border-4 border-white shadow-lg group-hover:border-[var(--color-secondary)]/30 transition-all">
-                <img src={storyMaker} alt="Satish Kumar - Founder" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+          <div className="space-y-16 lg:space-y-24">
+            {/* Founder */}
+            <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 lg:gap-16 bg-[var(--color-primary)] p-6 lg:p-12 rounded-[40px] shadow-xl border border-[var(--color-secondary)]/10 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
+              <div className="w-48 h-64 sm:w-56 sm:h-72 lg:w-80 lg:h-96 xl:w-96 xl:h-[28rem] rounded-[30px] overflow-hidden border-4 border-white shadow-lg group-hover:border-[var(--color-secondary)]/30 transition-all flex-shrink-0">
+                <Suspense fallback={<div className="w-full h-full bg-gray-200 animate-pulse rounded-[30px]"></div>}>
+                  <img src={founder} alt="Satish Kumar - Founder" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+                </Suspense>
               </div>
-              <div>
-                <h3 className="text-2xl md:text-4xl font-bold text-[var(--color-secondary)] mb-2 font-[var(--font-heading)] drop-shadow-sm">Satish Kumar</h3>
-                <p className="text-[var(--color-primary)] bg-[var(--color-secondary)] inline-block px-5 py-1.5 rounded-full font-bold mb-8 text-xs uppercase tracking-widest shadow-md">Founder & Master Craftsman</p>
-                <p className="text-[var(--color-text-muted)] leading-relaxed text-base md:text-lg italic border-l-4 border-[var(--color-secondary)]/30 pl-4">
+              <div className="flex-1 text-center lg:text-left space-y-6">
+                <h3 className="text-2xl lg:text-4xl xl:text-5xl font-bold text-[var(--color-secondary)] font-[var(--font-heading)] drop-shadow-sm">Satish Kumar</h3>
+                <p className="text-[var(--color-primary)] bg-[var(--color-secondary)] inline-block px-6 py-2 rounded-full font-bold text-sm uppercase tracking-widest shadow-md">Founder & Master Craftsman</p>
+                <p className="text-[var(--color-text-muted)] leading-relaxed text-base lg:text-lg xl:text-xl italic border-l-4 border-[var(--color-secondary)]/30 pl-6">
                   Born and raised in Sandila, Satish has been perfecting the art of laddu making for over 25 years.
                   His passion for preserving traditional recipes and bringing authentic flavors to modern homes drives our mission.
+                  Every laddu crafted under his guidance carries the essence of generations of expertise.
                 </p>
               </div>
             </div>
 
-            <div className="flex flex-col gap-6 md:gap-8 bg-[var(--color-primary)] p-6 md:p-10 rounded-[40px] shadow-xl border border-[var(--color-secondary)]/10 text-left hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
-              <div className="w-full h-80 rounded-[30px] overflow-hidden border-4 border-white shadow-lg group-hover:border-[var(--color-secondary)]/30 transition-all">
-                <img src={storyMaker} alt="Co-Founder" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+            {/* Co-Founder */}
+            <div className="flex flex-col lg:flex-row-reverse items-center lg:items-start gap-8 lg:gap-16 bg-[var(--color-primary)] p-6 lg:p-12 rounded-[40px] shadow-xl border border-[var(--color-secondary)]/10 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
+              <div className="w-48 h-64 sm:w-56 sm:h-72 lg:w-80 lg:h-96 xl:w-96 xl:h-[28rem] rounded-[30px] overflow-hidden border-4 border-white shadow-lg group-hover:border-[var(--color-secondary)]/30 transition-all flex-shrink-0">
+                <Suspense fallback={<div className="w-full h-full bg-gray-200 animate-pulse rounded-[30px]"></div>}>
+                  <img src={coFounder} alt="Co-Founder" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+                </Suspense>
               </div>
-              <div>
-                <h3 className="text-2xl md:text-4xl font-bold text-[var(--color-secondary)] mb-2 font-[var(--font-heading)] drop-shadow-sm">Priya Kumar</h3>
-                <p className="text-[var(--color-primary)] bg-[var(--color-secondary)] inline-block px-5 py-1.5 rounded-full font-bold mb-8 text-xs uppercase tracking-widest shadow-md">Co-Founder & Quality Head</p>
-                <p className="text-[var(--color-text-muted)] leading-relaxed text-base md:text-lg italic border-l-4 border-[var(--color-secondary)]/30 pl-4">
+              <div className="flex-1 text-center lg:text-left space-y-6">
+                <h3 className="text-2xl lg:text-4xl xl:text-5xl font-bold text-[var(--color-secondary)] font-[var(--font-heading)] drop-shadow-sm">Adarsh Bharti</h3>
+                <p className="text-[var(--color-primary)] bg-[var(--color-secondary)] inline-block px-6 py-2 rounded-full font-bold text-sm uppercase tracking-widest shadow-md">Co-Founder & Quality Head</p>
+                <p className="text-[var(--color-text-muted)] leading-relaxed text-base lg:text-lg xl:text-xl italic border-l-4 border-[var(--color-secondary)]/30 pl-6">
                   With a background in food technology, Priya ensures every batch meets our highest quality standards.
                   She oversees packaging, hygiene protocols, and customer satisfaction to maintain our legacy of excellence.
+                  Her dedication to quality makes every SKS laddu a testament to perfection.
                 </p>
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      <Suspense fallback={<div className="h-96 bg-gray-200 animate-pulse"></div>}>
+        <LazyVideoReviews addToRefs={addToRefs} />
+      </Suspense>
 
       {/* As Seen On - Media Coverage Section */}
      
@@ -493,11 +417,20 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Brand Advertisement Section */}
+      <Suspense fallback={<div className="h-96 bg-gray-900 animate-pulse"></div>}>
+        <BrandAdvertisement addToRefs={addToRefs} />
+      </Suspense>
 
 
-      <Footer />
+
+      <Suspense fallback={<div className="h-96 bg-gray-200 animate-pulse"></div>}>
+        <Footer />
+      </Suspense>
     </div>
   );
-};
+});
+
+Home.displayName = 'Home';
 
 export default Home;

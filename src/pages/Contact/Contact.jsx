@@ -40,16 +40,61 @@ const Contact = () => {
         }
     };
 
+    const [errors, setErrors] = useState({});
+
+    const validateForm = () => {
+        const newErrors = {};
+        
+        if (!formData.name.trim()) {
+            newErrors.name = 'Name is required';
+        }
+        
+        if (!formData.phone.trim()) {
+            newErrors.phone = 'Phone number is required';
+        } else if (!/^[0-9]{10}$/.test(formData.phone.replace(/[^0-9]/g, ''))) {
+            newErrors.phone = 'Please enter a valid 10-digit phone number';
+        }
+        
+        if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            newErrors.email = 'Please enter a valid email address';
+        }
+        
+        if (!formData.message.trim()) {
+            newErrors.message = 'Message is required';
+        } else if (formData.message.trim().length < 10) {
+            newErrors.message = 'Message must be at least 10 characters long';
+        }
+        
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        
+        if (name === 'phone') {
+            // Only allow numbers and limit to 10 digits
+            const numbersOnly = value.replace(/[^0-9]/g, '').slice(0, 10);
+            setFormData({ ...formData, [name]: numbersOnly });
+        } else if (name === 'name') {
+            // Only allow letters and spaces in name field
+            const lettersOnly = value.replace(/[^a-zA-Z\s]/g, '');
+            setFormData({ ...formData, [name]: lettersOnly });
+        } else {
+            setFormData({ ...formData, [name]: value });
+        }
+        
+        // Clear error when user starts typing
+        if (errors[name]) {
+            setErrors({ ...errors, [name]: '' });
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Basic validation
-        if (!formData.name || !formData.phone || !formData.message) {
-            toast.error("Please fill in required fields (Name, Phone, Message)");
+        if (!validateForm()) {
+            toast.error("Please fix the errors below");
             return;
         }
 
@@ -64,6 +109,7 @@ const Contact = () => {
                 subject: '',
                 message: ''
             });
+            setErrors({});
         } catch (error) {
             console.error("Enquiry submission failed:", error);
             toast.error(error.response?.data?.message || "Something went wrong. Please try again.");
@@ -182,7 +228,7 @@ const Contact = () => {
                                         rel="noopener noreferrer"
                                         className="text-[var(--color-text-muted)] hover:text-[var(--color-secondary)] transition-colors underline decoration-dotted underline-offset-4 text-xs md:text-sm break-words"
                                     >
-                                        Ahirawan, Sandila, Hardoi, Uttar Pradesh
+                                        Address--Ahirawan, berua, Sandila, hardoi, U P
                                     </a>
                                 </div>
                             </div>
@@ -206,9 +252,12 @@ const Contact = () => {
                                         value={formData.name}
                                         onChange={handleChange}
                                         placeholder="Your Name"
-                                        className="w-full px-6 py-4 bg-[var(--color-surface)] text-[var(--color-text)] rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all placeholder-gray-400"
+                                        className={`w-full px-6 py-4 bg-[var(--color-surface)] text-[var(--color-text)] rounded-xl outline-none border transition-all placeholder-gray-400 ${
+                                            errors.name ? 'border-red-500 focus:border-red-500' : 'border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)]'
+                                        }`}
                                         required
                                     />
+                                    {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Email Address</label>
@@ -218,8 +267,11 @@ const Contact = () => {
                                         value={formData.email}
                                         onChange={handleChange}
                                         placeholder="Your Email"
-                                        className="w-full px-6 py-4 bg-[var(--color-surface)] text-[var(--color-text)] rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all placeholder-gray-400"
+                                        className={`w-full px-6 py-4 bg-[var(--color-surface)] text-[var(--color-text)] rounded-xl outline-none border transition-all placeholder-gray-400 ${
+                                            errors.email ? 'border-red-500 focus:border-red-500' : 'border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)]'
+                                        }`}
                                     />
+                                    {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -231,9 +283,12 @@ const Contact = () => {
                                         value={formData.phone}
                                         onChange={handleChange}
                                         placeholder="Your Phone Number"
-                                        className="w-full px-6 py-4 bg-[var(--color-surface)] text-[var(--color-text)] rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all placeholder-gray-400"
+                                        className={`w-full px-6 py-4 bg-[var(--color-surface)] text-[var(--color-text)] rounded-xl outline-none border transition-all placeholder-gray-400 ${
+                                            errors.phone ? 'border-red-500 focus:border-red-500' : 'border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)]'
+                                        }`}
                                         required
                                     />
+                                    {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Subject</label>
@@ -255,9 +310,12 @@ const Contact = () => {
                                     onChange={handleChange}
                                     placeholder="Tell us what you're looking for..."
                                     rows="5"
-                                    className="w-full px-6 py-4 bg-[var(--color-surface)] text-[var(--color-text)] rounded-xl outline-none border border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)] transition-all resize-none placeholder-gray-400"
+                                    className={`w-full px-6 py-4 bg-[var(--color-surface)] text-[var(--color-text)] rounded-xl outline-none border transition-all resize-none placeholder-gray-400 ${
+                                        errors.message ? 'border-red-500 focus:border-red-500' : 'border-[var(--color-secondary)]/20 focus:border-[var(--color-secondary)]'
+                                    }`}
                                     required
                                 ></textarea>
+                                {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
                             </div>
                             <button
                                 type="submit"
