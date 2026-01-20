@@ -15,7 +15,7 @@ import big from '../../assets/images/big.png';
 import kulhad from '../../assets/images/kulhad.png';
 import moti from '../../assets/images/moti.png';
 import founder from '../../assets/images/founder.PNG';
-import coFounder from '../../assets/images/co-founder.jpg';
+import coFounder from '../../assets/images/co-founder.JPG';
 
 const SKSBrand = () => (
   <span className="font-[var(--font-accent)] text-[var(--color-secondary)] font-black tracking-tighter inline-flex items-center">
@@ -74,10 +74,10 @@ const Home = memo(() => {
 
   useEffect(() => {
     if (!products.length) return;
-    
+
     const ladduContainer = ladduScrollRef.current;
     if (!ladduContainer) return;
-    
+
     let ladduInterval;
     let isLadduHovered = false;
 
@@ -378,7 +378,7 @@ const Home = memo(() => {
       </Suspense>
 
       {/* As Seen On - Media Coverage Section */}
-     
+
 
       {/* Our Priorities Section */}
       <section ref={addToRefs} className="scroll-section py-10 px-8 md:px-24 bg-[var(--color-accent)]/10 relative z-10 shadow-sm mb-2" id="priorities">

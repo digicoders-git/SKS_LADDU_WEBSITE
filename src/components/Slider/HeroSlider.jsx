@@ -43,7 +43,16 @@ const HeroSlider = memo(() => {
     if (sliders.length === 0) return null;
 
     return (
-        <section className="relative w-full aspect-[1060/595] overflow-hidden">
+        <section
+            className="
+    relative w-full overflow-hidden
+    h-[60vh]
+    sm:h-[70vh]
+    lg:h-[80vh]
+    max-h-[650px]
+  "
+        >
+
             <Swiper
                 modules={[Autoplay, Pagination, EffectFade]}
                 effect="fade"

@@ -12,8 +12,8 @@ export const theme = {
     shadow: "rgba(0, 0, 0, 0.08)",     // Subtle soft shadow
   },
   fonts: {
-    heading: "'Cormorant Garamond', serif",
-    body: "'Outfit', sans-serif",
-    accent: "'Cinzel', serif"
+    heading: "'Poppins', sans-serif",
+    body: "'Poppins', sans-serif",
+    accent: "'Poppins', sans-serif"
   }
 };

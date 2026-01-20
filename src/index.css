@@ -13,9 +13,9 @@
   --color-shadow: rgba(0, 0, 0, 0.08);
 
   /* Fonts */
-  --font-heading: 'Cormorant Garamond', serif;
-  --font-body: 'Outfit', sans-serif;
-  --font-accent: 'Cinzel', serif;
+  --font-heading: 'Poppins', sans-serif;
+  --font-body: 'Poppins', sans-serif;
+  --font-accent: 'Poppins', sans-serif;
 }
 
 html,
