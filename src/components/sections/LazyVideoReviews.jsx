@@ -93,12 +93,12 @@ const LazyVideoReviews = memo(({ addToRefs, isHomePage = false }) => {
 
     return (
         <>
-            <section 
+            <section
                 ref={(el) => {
                     sectionRef.current = el;
                     addToRefs(el);
-                }} 
-                className="scroll-section py-20 px-8 md:px-24 bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-surface)] text-center relative z-10 shadow-sm overflow-hidden" 
+                }}
+                className="scroll-section py-20 px-8 md:px-24 bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-surface)] text-center relative z-10 shadow-sm overflow-hidden"
                 id="testimonials"
             >
                 <div className="relative z-10">
@@ -119,8 +119,8 @@ const LazyVideoReviews = memo(({ addToRefs, isHomePage = false }) => {
                                         <Suspense key={`${video._id}-${index}`} fallback={
                                             <div className="flex-shrink-0 w-56 md:w-80 h-80 md:h-96 bg-gray-200 rounded-[30px] animate-pulse"></div>
                                         }>
-                                            <LazyVideo 
-                                                video={video} 
+                                            <LazyVideo
+                                                video={video}
                                                 onClick={() => setSelectedVideo(video)}
                                                 isHomePage={isHomePage}
                                             />
@@ -151,7 +151,7 @@ const LazyVideoReviews = memo(({ addToRefs, isHomePage = false }) => {
                     <div className="bg-white rounded-lg max-w-3xl w-full max-h-[70vh] overflow-hidden relative">
                         <div className="p-6">
                             <video
-                                src={selectedVideo.url}
+                                src={selectedVideo.url?.replace('http://', 'https://')}
                                 className="w-full aspect-video rounded-lg"
                                 controls
                                 autoPlay

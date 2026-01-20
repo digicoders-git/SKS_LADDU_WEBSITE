@@ -16,7 +16,7 @@ export const debounce = (func, wait) => {
 // Throttle function for scroll events
 export const throttle = (func, limit) => {
   let inThrottle;
-  return function() {
+  return function () {
     const args = arguments;
     const context = this;
     if (!inThrottle) {
@@ -34,7 +34,7 @@ export const createIntersectionObserver = (callback, options = {}) => {
     rootMargin: '50px 0px',
     ...options
   };
-  
+
   return new IntersectionObserver(callback, defaultOptions);
 };
 
@@ -50,7 +50,7 @@ export const lazyLoadImage = (img, src) => {
       }
     });
   });
-  
+
   observer.observe(img);
 };
 
@@ -78,7 +78,7 @@ export const cleanup = (refs) => {
 // Request Animation Frame throttle
 export const rafThrottle = (func) => {
   let ticking = false;
-  return function(...args) {
+  return function (...args) {
     if (!ticking) {
       requestAnimationFrame(() => {
         func.apply(this, args);
@@ -92,9 +92,8 @@ export const rafThrottle = (func) => {
 // Optimize video loading
 export const optimizeVideo = (videoElement) => {
   if (!videoElement) return;
-  
-  videoElement.preload = 'metadata';
-  videoElement.loading = 'lazy';
+
+  videoElement.preload = 'auto';
   videoElement.muted = true;
   videoElement.playsInline = true;
 };

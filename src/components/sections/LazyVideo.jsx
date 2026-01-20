@@ -28,23 +28,34 @@ const LazyVideo = memo(({ video, onClick, isHomePage = false }) => {
 
     useEffect(() => {
         if (!isHomePage) return;
-        
+
         // Auto-play video on home page when in view and keep playing
         if (isInView && isLoaded && videoRef.current) {
             videoRef.current.loop = true;
-            videoRef.current.play().catch(() => {});
+            videoRef.current.play().catch(() => { });
         }
     }, [isInView, isLoaded, isHomePage]);
 
     const handleVideoLoad = () => {
-        setIsLoaded(true);
-        // Seek to 1 second to show a proper thumbnail
+        if (!isLoaded) setIsLoaded(true);
         if (videoRef.current) {
-            videoRef.current.currentTime = 1;
-            // Auto-play immediately on home page
+            try {
+                // Only seek if metadata is loaded (readyState >= 1)
+                if (videoRef.current.readyState >= 1) {
+                    videoRef.current.currentTime = 1;
+                }
+            } catch (e) {
+                console.warn("Could not seek video:", e);
+            }
+
             if (isHomePage) {
                 videoRef.current.loop = true;
-                videoRef.current.play().catch(() => {});
+                const playPromise = videoRef.current.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(() => {
+                        // Autoplay policy prevented playback
+                    });
+                }
             }
         }
     };
@@ -53,7 +64,7 @@ const LazyVideo = memo(({ video, onClick, isHomePage = false }) => {
         setIsHovered(true);
         // Only play on hover for non-home pages
         if (videoRef.current && isLoaded && !isHomePage) {
-            videoRef.current.play().catch(() => {});
+            videoRef.current.play().catch(() => { });
         }
     };
 
@@ -78,15 +89,15 @@ const LazyVideo = memo(({ video, onClick, isHomePage = false }) => {
                 <>
                     <video
                         ref={videoRef}
-                        src={video.url}
+                        src={video.url?.replace('http://', 'https://')}
                         className={`w-full h-full object-cover transition-opacity duration-300 ${isLoaded ? 'opacity-90 group-hover:opacity-100' : 'opacity-0'}`}
                         muted
                         loop={isHomePage}
                         autoPlay={isHomePage}
                         playsInline
                         onLoadedData={handleVideoLoad}
+                        onLoadedMetadata={handleVideoLoad}
                         preload="metadata"
-                        loading="lazy"
                     />
                     {!isLoaded && (
                         <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">

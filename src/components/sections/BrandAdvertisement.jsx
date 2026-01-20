@@ -28,7 +28,7 @@ const BrandAdvertisement = memo(({ addToRefs }) => {
           setIsPlaying([false, false]);
         }
       }, 200),
-      { threshold: 0.3 }
+      { threshold: 0.1 }
     );
 
     if (sectionRef.current) {
@@ -68,7 +68,7 @@ const BrandAdvertisement = memo(({ addToRefs }) => {
   };
 
   return (
-    <section 
+    <section
       ref={(el) => {
         sectionRef.current = el;
         addToRefs(el);
@@ -108,13 +108,19 @@ const BrandAdvertisement = memo(({ addToRefs }) => {
                   muted={isMuted[index]}
                   loop
                   playsInline
-                  preload="metadata"
+                  preload="auto"
                 />
 
+                {/* Loading Spinner */}
+                {!isPlaying[index] && !isVisible && (
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-[2px]">
+                    <div className="w-10 h-10 border-4 border-[var(--color-secondary)] border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                )}
+
                 {/* Video Overlay Controls */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-                    {/* Play/Pause Button */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                  <div className="flex items-center justify-between">
                     <button
                       onClick={() => togglePlay(index)}
                       className="w-12 h-12 bg-[var(--color-secondary)] rounded-full flex items-center justify-center hover:bg-[var(--color-secondary)]/80 transition-colors shadow-lg"
@@ -126,7 +132,6 @@ const BrandAdvertisement = memo(({ addToRefs }) => {
                       )}
                     </button>
 
-                    {/* Mute Button */}
                     <button
                       onClick={() => toggleMute(index)}
                       className="w-10 h-10 bg-black/50 rounded-full flex items-center justify-center hover:bg-black/70 transition-colors"
@@ -139,15 +144,8 @@ const BrandAdvertisement = memo(({ addToRefs }) => {
                     </button>
                   </div>
                 </div>
-
-                {/* Loading State */}
-                {!isVisible && (
-                  <div className="absolute inset-0 bg-gray-900 flex items-center justify-center">
-                    <div className="w-12 h-12 border-4 border-[var(--color-secondary)] border-t-transparent rounded-full animate-spin"></div>
-                  </div>
-                )}
               </div>
-              
+
               {/* Video Title */}
               <div className="text-center mt-4">
                 <h3 className="text-white font-bold text-lg md:text-xl drop-shadow-lg">
