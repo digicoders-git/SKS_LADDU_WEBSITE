@@ -142,7 +142,7 @@ const ProductDetail = () => {
                 {/* Back Button */}
                 <button
                     onClick={() => navigate(-1)}
-                    className="flex items-center gap-2 text-[var(--color-secondary)] hover:text-white mb-8 font-semibold transition-colors relative z-10"
+                    className="flex items-center gap-2 text-[var(--color-secondary)] hover:text-yellow-700 mb-8 font-semibold transition-colors relative z-10"
                 >
                     <ArrowLeft size={20} />
                     Back
@@ -253,7 +253,7 @@ const ProductDetail = () => {
                     </div>
                 </div>
             </div>
-            <Footer/>
+            <Footer />
         </div>
     );
 };
