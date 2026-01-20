@@ -87,8 +87,8 @@ const BrandAdvertisement = memo(({ addToRefs }) => {
           <div className="inline-block px-6 py-2 bg-[var(--color-secondary)]/20 text-[var(--color-secondary)] rounded-full text-xs font-bold uppercase tracking-[0.4em] mb-6 border border-[var(--color-secondary)]/30 backdrop-blur-sm">
             Brand Story
           </div>
-          <h2 className="text-4xl md:text-7xl font-bold text-white font-[var(--font-heading)] tracking-tighter drop-shadow-2xl mb-4">
-            Experience the <span className="text-[var(--color-secondary)] drop-shadow-[0_0_20px_rgba(242,183,5,0.5)]">Legacy</span>
+          <h2 className="text-4xl md:text-7xl font-bold font-[var(--font-heading)] tracking-tighter drop-shadow-2xl mb-4">
+            <span className="text-zinc-500">Experience the</span> <span className="text-zinc-200 drop-shadow-[0_0_20px_rgba(242,183,5,0.5)]">Legacy</span>
           </h2>
           <p className="text-gray-300 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed opacity-90">
             Witness the journey of authentic Sandila laddus through cinematic storytelling

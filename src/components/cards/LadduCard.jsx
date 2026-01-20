@@ -56,13 +56,7 @@ const LadduCard = memo(({ product }) => {
             await addToCartApi({ productId: id, quantity: 1 });
             window.dispatchEvent(new Event('cart-updated')); // Notify Navbar
             setAdded(true);
-            toast.success(`${name} added to cart!`, {
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-            });
+            toast.success(`${name} added to cart!`, { position: "top-right" });
             setTimeout(() => setAdded(false), 2000);
         } catch (error) {
             console.error("Failed to add to cart:", error);

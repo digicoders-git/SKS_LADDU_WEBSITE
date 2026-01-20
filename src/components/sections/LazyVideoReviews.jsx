@@ -5,7 +5,7 @@ import { throttle, debounce } from '../../utils/performance';
 
 const LazyVideo = lazy(() => import('./LazyVideo'));
 
-const LazyVideoReviews = memo(({ addToRefs }) => {
+const LazyVideoReviews = memo(({ addToRefs, isHomePage = false }) => {
     const [videos, setVideos] = useState([]);
     const [selectedVideo, setSelectedVideo] = useState(null);
     const [isVisible, setIsVisible] = useState(false);
@@ -45,7 +45,7 @@ const LazyVideoReviews = memo(({ addToRefs }) => {
     }, [isVisible, fetchVideos]);
 
     useEffect(() => {
-        if (!videos.length || !scrollRef.current) return;
+        if (!videos.length || !scrollRef.current || !isHomePage) return;
 
         const videoContainer = scrollRef.current;
         let videoInterval;
@@ -55,7 +55,7 @@ const LazyVideoReviews = memo(({ addToRefs }) => {
             if (videoInterval || isVideoHovered) return;
             videoInterval = setInterval(() => {
                 if (!videoContainer || isVideoHovered) return;
-                if (videoContainer.scrollLeft >= videoContainer.scrollWidth / 3) {
+                if (videoContainer.scrollLeft >= videoContainer.scrollWidth / 2) {
                     videoContainer.scrollLeft = 0;
                 } else {
                     videoContainer.scrollLeft += 1.5;
@@ -89,7 +89,7 @@ const LazyVideoReviews = memo(({ addToRefs }) => {
             videoContainer.removeEventListener('mouseenter', handleMouseEnter);
             videoContainer.removeEventListener('mouseleave', handleMouseLeave);
         };
-    }, [videos]);
+    }, [videos, isHomePage]);
 
     return (
         <>
@@ -114,13 +114,15 @@ const LazyVideoReviews = memo(({ addToRefs }) => {
                                     ref={scrollRef}
                                     className="flex gap-4 md:gap-10 overflow-x-auto pb-12 scroll-smooth no-scrollbar px-2"
                                 >
-                                    {videos.slice(0, 4).map((video, index) => (
+                                    {/* Duplicate videos for infinite scroll */}
+                                    {videos.concat(videos).map((video, index) => (
                                         <Suspense key={`${video._id}-${index}`} fallback={
                                             <div className="flex-shrink-0 w-56 md:w-80 h-80 md:h-96 bg-gray-200 rounded-[30px] animate-pulse"></div>
                                         }>
                                             <LazyVideo 
                                                 video={video} 
                                                 onClick={() => setSelectedVideo(video)}
+                                                isHomePage={isHomePage}
                                             />
                                         </Suspense>
                                     ))}

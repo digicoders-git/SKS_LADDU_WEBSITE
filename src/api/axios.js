@@ -9,9 +9,19 @@ const api = axios.create({
 
 // Attach token for every request (Optional if using Cookies, but kept for compatibility)
 api.interceptors.request.use((config) => {
-    const token = localStorage.getItem("userToken");
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+    try {
+        const tokenData = localStorage.getItem("userToken");
+        if (tokenData) {
+            const parsed = JSON.parse(tokenData);
+            // Check if token has expired
+            if (Date.now() > parsed.expiresAt) {
+                localStorage.removeItem("userToken");
+                return config;
+            }
+            config.headers.Authorization = `Bearer ${parsed.token}`;
+        }
+    } catch (error) {
+        localStorage.removeItem("userToken");
     }
     return config;
 });

@@ -106,13 +106,7 @@ const ProductDetail = () => {
         try {
             await addToCartApi({ productId: product.id, quantity: 1 });
             window.dispatchEvent(new Event('cart-updated')); // Notify Navbar
-            toast.success(`${product.name} added to cart!`, {
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-            });
+            toast.success(`${product.name} added to cart!`, { position: "top-right" });
         } catch (error) {
             console.error("Failed to add to cart:", error);
         }

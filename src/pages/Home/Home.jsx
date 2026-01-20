@@ -33,7 +33,7 @@ const Home = memo(() => {
     try {
       setIsLoading(true);
       const data = await listProductsApi();
-      console.log('Home products data:', data);
+      // console.log('Home products data:', data);
       // Check if data has products array or if products are directly in data
       if (data.products) {
         setProducts(data.products);
@@ -128,7 +128,7 @@ const Home = memo(() => {
   };
 
   return (
-    <div className="bg-[var(--color-primary)] text-[var(--color-text)] font-[var(--font-body)] overflow-x-hidden">
+    <div className="bg-[var(--color-primary)] text-[var(--color-text)] font-[var(--font-body)] overflow-x-hidden mt-20 md:mt-24">
 
       {/* Hero Slider Section */}
       <Suspense fallback={<div className="h-screen bg-gray-200 animate-pulse"></div>}>
@@ -374,7 +374,7 @@ const Home = memo(() => {
       </section>
 
       <Suspense fallback={<div className="h-96 bg-gray-200 animate-pulse"></div>}>
-        <LazyVideoReviews addToRefs={addToRefs} />
+        <LazyVideoReviews addToRefs={addToRefs} isHomePage={true} />
       </Suspense>
 
       {/* As Seen On - Media Coverage Section */}

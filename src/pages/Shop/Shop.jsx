@@ -139,10 +139,10 @@ const Shop = () => {
             await removeFromCartApi(itemId);
             fetchCart();
             window.dispatchEvent(new Event('cart-updated'));
-            toast.success("Item removed from cart!");
+            toast.success("Item removed from cart!", { position: "top-right" });
         } catch (error) {
             console.error("Failed to remove item:", error);
-            toast.error("Failed to remove item. Please try again.");
+            toast.error("Failed to remove item. Please try again.", { position: "top-right" });
         }
     };
 
@@ -171,10 +171,10 @@ const Shop = () => {
             await clearCartApi();
             fetchCart();
             window.dispatchEvent(new Event('cart-updated'));
-            toast.success("Cart cleared!");
+            toast.success("Cart cleared!", { position: "top-right" });
         } catch (error) {
             console.error("Failed to clear cart:", error);
-            toast.error("Failed to clear cart. Please try again.");
+            toast.error("Failed to clear cart. Please try again.", { position: "top-right" });
         }
     };
 
@@ -246,7 +246,7 @@ const Shop = () => {
 
     const handleSaveAddress = async () => {
         if (!addressForm.name || !addressForm.phone || !addressForm.addressLine1 || !addressForm.city || !addressForm.state || !addressForm.pincode) {
-            toast.error("Please fill in all required fields.");
+            toast.error("Please fill in all required fields.", { position: "top-right" });
             return;
         }
 
@@ -270,10 +270,10 @@ const Shop = () => {
                 addressType: 'home'
             });
             fetchAddresses();
-            toast.success("Address saved successfully!");
+            toast.success("Address saved successfully!", { position: "top-right" });
         } catch (error) {
             console.error("Failed to save address:", error);
-            toast.error("Failed to save address. Please try again.");
+            toast.error("Failed to save address. Please try again.", { position: "top-right" });
         }
     };
 
@@ -309,11 +309,11 @@ const Shop = () => {
 
     const handleConfirmOrder = async () => {
         if (cartItems.length === 0) {
-            toast.error("Your cart is empty!");
+            toast.error("Your cart is empty!", { position: "top-right" });
             return;
         }
         if (!selectedAddressId) {
-            toast.error("Please select a delivery address!");
+            toast.error("Please select a delivery address!", { position: "top-right" });
             // Scroll to address section
             const addressSection = document.getElementById('delivery-address-section');
             if (addressSection) addressSection.scrollIntoView({ behavior: 'smooth' });
@@ -370,19 +370,19 @@ const Shop = () => {
                 const response = await placeOrderApi(orderData);
 
                 if (response && (response.order || response.message === "Order placed successfully")) {
-                    toast.success(response.message || "Order placed successfully!");
+                    toast.success(response.message || "Order placed successfully!", { position: "top-right" });
                     try { await clearCartApi(); } catch (e) { console.error("Manual clear failed", e); } // Force clear cart on backend
                     setCartItems([]); // Explicitly clear cart state
                     setCartTotal(0);
                     window.dispatchEvent(new Event('cart-updated')); // Notify Navbar
                     navigate('/orders'); // Navigate to orders page
                 } else {
-                    toast.error(response.message || "Failed to place order.");
+                    toast.error(response.message || "Failed to place order.", { position: "top-right" });
                 }
             } catch (error) {
                 console.error("COD placement error:", error);
                 const errorMsg = error.response?.data?.message || "Failed to place order. Please try again.";
-                toast.error(errorMsg);
+                toast.error(errorMsg, { position: "top-right" });
             }
             return;
         }
@@ -390,7 +390,7 @@ const Shop = () => {
         if (paymentMethod === 'upi') {
             const res = await loadRazorpay();
             if (!res) {
-                toast.error("Razorpay SDK failed to load. Please check your internet connection.");
+                toast.error("Razorpay SDK failed to load. Please check your internet connection.", { position: "top-right" });
                 return;
             }
 
@@ -403,7 +403,7 @@ const Shop = () => {
                 });
 
                 if (!orderData || !orderData.success) {
-                    toast.error("Could not create order. Please try again.");
+                    toast.error("Could not create order. Please try again.", { position: "top-right" });
                     return;
                 }
 
@@ -429,18 +429,18 @@ const Shop = () => {
                             const verifyRes = await verifyPaymentApi(verifyData);
 
                             if (verifyRes.success) {
-                                toast.success("Payment Successful! Order Placed.");
+                                toast.success("Payment Successful! Order Placed.", { position: "top-right" });
                                 try { await clearCartApi(); } catch (e) { console.error("Manual clear failed", e); } // Force clear cart on backend
                                 setCartItems([]); // Explicitly clear cart state
                                 setCartTotal(0);
                                 window.dispatchEvent(new Event('cart-updated')); // Notify Navbar
                                 navigate('/orders'); // Navigate to orders page
                             } else {
-                                toast.error("Payment verification failed. Please contact support.");
+                                toast.error("Payment verification failed. Please contact support.", { position: "top-right" });
                             }
                         } catch (error) {
                             console.error(error);
-                            toast.error("Payment verification failed.");
+                            toast.error("Payment verification failed.", { position: "top-right" });
                         }
                     },
                     prefill: {
@@ -461,13 +461,13 @@ const Shop = () => {
                         razorpay_order_id: orderData.order.id,
                         error: response.error
                     });
-                    toast.error(`Payment Failed: ${response.error.description}`);
+                    toast.error(`Payment Failed: ${response.error.description}`, { position: "top-right" });
                 });
                 paymentObject.open();
 
             } catch (error) {
                 console.error(error);
-                toast.error("Something went wrong during payment initialization.");
+                toast.error("Something went wrong during payment initialization.", { position: "top-right" });
             }
         }
     };

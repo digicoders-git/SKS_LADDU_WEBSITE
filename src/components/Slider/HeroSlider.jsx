@@ -32,7 +32,7 @@ const HeroSlider = memo(() => {
 
     if (loading) {
         return (
-            <section className="relative w-full h-[60vh] sm:h-[70vh] md:h-[75vh] lg:h-[80vh] bg-gray-200 animate-pulse">
+            <section className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[85vh] bg-gray-200 animate-pulse">
                 <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-12 h-12 border-4 border-[var(--color-secondary)] border-t-transparent rounded-full animate-spin"></div>
                 </div>
@@ -43,7 +43,7 @@ const HeroSlider = memo(() => {
     if (sliders.length === 0) return null;
 
     return (
-        <section className="relative w-full h-[60vh] sm:h-[70vh] md:h-[75vh] lg:h-[80vh] overflow-hidden">
+        <section className="relative w-full aspect-[1060/595] overflow-hidden">
             <Swiper
                 modules={[Autoplay, Pagination, EffectFade]}
                 effect="fade"
@@ -66,7 +66,7 @@ const HeroSlider = memo(() => {
                                 <img
                                     src={slider.image?.url}
                                     alt={slider.title || 'SKS Laddu'}
-                                    className="w-full h-full object-cover object-center md:object-top lg:object-center"
+                                    className="w-full h-full object-cover"
                                     loading="eager"
                                 />
                             </div>

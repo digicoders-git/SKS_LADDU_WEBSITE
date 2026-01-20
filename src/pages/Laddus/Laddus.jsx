@@ -62,7 +62,7 @@ const Laddus = () => {
                 let data;
                 if (activeCategory.id === 'all') {
                     data = await listProductsApi();
-                    console.log('All products data:', data);
+                    // console.log('All products data:', data);
                     // Check if data has products array or if products are directly in data
                     if (data.products) {
                         setProducts(data.products);

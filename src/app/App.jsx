@@ -42,6 +42,7 @@ function App() {
           draggable
           pauseOnHover
           limit={3}
+          style={{ zIndex: 9999 }}
         />
       </CartProvider>
     </ThemeProvider>
