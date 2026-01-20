@@ -4,6 +4,7 @@ import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'react-toastify';
 
 import { loginUserApi } from '../../api/user';
+import { saveToken } from '../../utils/auth';
 import Footer from '../../components/layout/Footer';
 import Navbar from '../../components/Navbar/Navbar';
 
@@ -35,7 +36,7 @@ const Login = () => {
         try {
             const response = await loginUserApi(formData);
             if (response.token) {
-                localStorage.setItem('userToken', response.token);
+                saveToken(response.token);
                 toast.success('Login successful!');
                 navigate('/');
             }

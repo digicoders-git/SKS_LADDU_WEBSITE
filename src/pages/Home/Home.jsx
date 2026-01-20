@@ -14,10 +14,8 @@ const BrandAdvertisement = lazy(() => import('../../components/sections/BrandAdv
 import big from '../../assets/images/big.png';
 import kulhad from '../../assets/images/kulhad.png';
 import moti from '../../assets/images/moti.png';
-import storyMaker from '../../assets/images/story-maker.png';
-import founder from '../../assets/images/founder.png';
+import founder from '../../assets/images/founder.PNG';
 import coFounder from '../../assets/images/co-founder.jpg';
-import besanLaddu from '../../assets/images/besan-laddu.png';
 
 const SKSBrand = () => (
   <span className="font-[var(--font-accent)] text-[var(--color-secondary)] font-black tracking-tighter inline-flex items-center">

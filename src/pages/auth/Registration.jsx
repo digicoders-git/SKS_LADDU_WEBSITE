@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { User, Mail, Lock, Phone, Calendar, Eye, EyeOff, ChevronDown } from 'lucide-react';
 import { createUserApi } from '../../api/user';
+import { saveToken } from '../../utils/auth';
 import { toast } from 'react-toastify';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/layout/Footer';
@@ -101,7 +102,7 @@ const Registration = () => {
                 const response = await createUserApi(payload);
 
                 if (response.token) {
-                    localStorage.setItem('userToken', response.token);
+                    saveToken(response.token);
                     toast.success('Registration successful!');
                     navigate('/');
                 }

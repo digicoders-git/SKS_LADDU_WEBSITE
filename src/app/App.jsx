@@ -4,7 +4,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ThemeProvider } from "../context/ThemeContext";
 import { CartProvider } from "../context/CartContext";
 import { router } from "./routes";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
+import { isTokenValid, removeToken } from "../utils/auth";
 
 // Loading component
 const AppLoader = () => (
@@ -17,6 +18,13 @@ const AppLoader = () => (
 );
 
 function App() {
+  useEffect(() => {
+    // Check token validity on app load
+    if (!isTokenValid()) {
+      removeToken();
+    }
+  }, []);
+
   return (
     <ThemeProvider>
       <CartProvider>
