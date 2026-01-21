@@ -2,10 +2,145 @@ import React, { useState, useEffect } from 'react';
 import { getUserOrdersApi, cancelOrderApi } from '../../api/order';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { XCircle, Package, Calendar, MapPin, CreditCard, ShoppingBag, CheckCircle2, Eye, X, Clock, Info } from 'lucide-react';
+import { XCircle, Package, Calendar, MapPin, CreditCard, ShoppingBag, CheckCircle2, Eye, X, Clock, Info, Printer, Download } from 'lucide-react';
 import Swal from 'sweetalert2';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import Footer from '../../components/layout/Footer';
 import Loader from '../../components/common/Loader';
+
+const InvoiceModal = ({ order, isOpen, onClose }) => {
+    if (!isOpen || !order) return null;
+
+    const [isGenerating, setIsGenerating] = useState(false);
+
+    const handleDownloadPdf = async () => {
+        const element = document.getElementById('printable-invoice');
+        if (!element) return;
+
+        setIsGenerating(true);
+        try {
+            const canvas = await html2canvas(element, {
+                scale: 2,
+                useCORS: true,
+                logging: false,
+                backgroundColor: '#ffffff',
+                windowWidth: 800
+            });
+
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
+
+            const imgProps = pdf.getImageProperties(imgData);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save(`Invoice_${order._id.slice(-6).toUpperCase()}.pdf`);
+        } catch (error) {
+            console.error("PDF generation failed:", error);
+            toast.error("Failed to download PDF. Try again.");
+        } finally {
+            setIsGenerating(false);
+        }
+    };
+
+    const today = new Date().toLocaleDateString('en-IN', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+
+    return (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all duration-300">
+            <div className="bg-[#ffffff] w-full max-w-lg rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 relative">
+                {/* Close Button */}
+                <button onClick={onClose} className="absolute top-1 right-1 md:top-3 md:right-3 p-1.5 hover:bg-[#f3f4f6] rounded-full transition-colors z-10">
+                    <X size={20} style={{ color: '#9ca3af' }} />
+                </button>
+
+                {/* Invoice Content */}
+                <div id="printable-invoice" className="p-6 md:p-8 overflow-y-auto bg-[#ffffff]" style={{ color: '#000000', fontFamily: 'sans-serif' }}>
+                    {/* Header Row */}
+                    <div className="flex flex-row justify-between items-start mb-4">
+                        <div className="w-16">
+                            <img src="/sks-logo.png" alt="SKS Logo" className="w-full h-auto" />
+                        </div>
+                        <div className="text-right text-[11px] leading-tight mt-4">
+                            <p className="font-bold" style={{ color: '#363131ff' }}>Date: {today}</p>
+                            <p className="font-bold" style={{ color: '#363131ff' }}>Invoice: #{order._id.slice(-6).toUpperCase()}</p>
+                        </div>
+                    </div>
+
+                    <div style={{ height: '1px', backgroundColor: '#f3f4f6', marginBottom: '16px' }} />
+
+                    {/* Bill Info */}
+                    <div className="mb-4">
+                        <p style={{ fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', color: '#9ca3af', marginBottom: '4px' }}>Bill From:</p>
+                        <div className="text-xs">
+                            <p className="font-bold" style={{ color: '#111827' }}>SKS Laddu</p>
+                            <p style={{ color: '#6b7280' }}>Ahirawan, Sandila, UP</p>
+                            <p style={{ color: '#6b7280', marginTop: '4px' }}>8467831372, 6307736698</p>
+                        </div>
+                    </div>
+
+                    <div style={{ height: '1px', backgroundColor: '#f3f4f6', marginBottom: '16px' }} />
+
+                    {/* Table */}
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-xs border-collapse">
+                            <thead>
+                                <tr style={{ borderBottom: '1px solid #f3f4f6', color: '#9ca3af', fontSize: '9px', textTransform: 'uppercase' }}>
+                                    <th className="text-left py-2 font-black">Product</th>
+                                    <th className="text-center py-2 font-black">Qty</th>
+                                    <th className="text-right py-2 font-black">Rate</th>
+                                    <th className="text-right py-2 font-black">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {order.items.map((item, index) => (
+                                    <tr key={index} style={{ borderBottom: '1px solid #f9fafb' }}>
+                                        <td className="py-2 text-left font-bold" style={{ color: '#1f2937' }}>{item.productName}</td>
+                                        <td className="py-2 text-center" style={{ color: '#4b5563' }}>{item.quantity}</td>
+                                        <td className="py-2 text-right" style={{ color: '#4b5563' }}>₹{item.productPrice}</td>
+                                        <td className="py-2 text-right font-bold" style={{ color: '#111827' }}>₹{item.productPrice * item.quantity}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* Total Row */}
+                    <div className="flex justify-between items-center mt-6">
+                        <div>
+                            <p style={{ fontSize: '14px', fontWeight: '900', color: '#111827' }}>
+                                Total: <span style={{ color: '#F2B705' }}>₹{order.total}</span>
+                            </p>
+                        </div>
+                        <button
+                            onClick={handleDownloadPdf}
+                            disabled={isGenerating}
+                            data-html2canvas-ignore
+                            className={`bg-[#111827] text-white px-4 py-2 rounded-lg text-[10px] font-bold flex items-center gap-2 hover:bg-[#1f2937] transition-all active:scale-95 ${isGenerating ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        >
+                            {isGenerating ? (
+                                <>Generating...</>
+                            ) : (
+                                <>
+                                    <Download size={14} /> PDF
+                                </>
+                            )}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 const OrderDetailsModal = ({ order, isOpen, onClose, onCancel, getStatusColor, formatDate }) => {
     if (!isOpen || !order) return null;
@@ -126,13 +261,15 @@ const OrderDetailsModal = ({ order, isOpen, onClose, onCancel, getStatusColor, f
 
                 {/* Footer */}
                 <div className="px-6 py-5 bg-gray-50/80 border-t border-gray-100 flex gap-3 justify-end items-center font-[var(--font-body)]">
-                    <button
-                        onClick={handleCancelClick}
-                        className="text-xs font-bold text-red-500 hover:text-red-600 transition-colors mr-auto"
-                    >
-                        <span className="hidden sm:inline">Cancel Request</span>
-                        <span className="sm:hidden">Cancel</span>
-                    </button>
+                    {order.status?.toLowerCase() !== 'delivered' && (
+                        <button
+                            onClick={handleCancelClick}
+                            className="text-xs font-bold text-red-500 hover:text-red-600 transition-colors mr-auto"
+                        >
+                            <span className="hidden sm:inline">Cancel Request</span>
+                            <span className="sm:hidden">Cancel</span>
+                        </button>
+                    )}
                     <button
                         onClick={onClose}
                         className="px-8 py-2.5 bg-gray-900 text-white text-xs font-bold rounded-xl hover:bg-gray-800 transition-all shadow-md active:scale-95"
@@ -157,6 +294,8 @@ const Orders = () => {
     const [loading, setLoading] = useState(true);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [invoiceOrder, setInvoiceOrder] = useState(null);
+    const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
     const navigate = useNavigate();
 
     const fetchOrders = async () => {
@@ -212,6 +351,11 @@ const Orders = () => {
     const openOrderDetails = (order) => {
         setSelectedOrder(order);
         setIsModalOpen(true);
+    };
+
+    const openInvoice = (order) => {
+        setInvoiceOrder(order);
+        setIsInvoiceModalOpen(true);
     };
 
     const getStatusColor = (status) => {
@@ -274,20 +418,21 @@ const Orders = () => {
                     ) : (
                         <div className="space-y-4">
                             {/* Simple Table Header */}
-                            <div className="hidden md:grid grid-cols-6 gap-4 px-10 py-3 text-[10px] font-black uppercase tracking-[0.2em] text-gray-600">
+                            <div className="hidden md:grid grid-cols-7 gap-4 px-10 py-3 text-[10px] font-black uppercase tracking-[0.2em] text-gray-600">
                                 <div className="col-span-2">Order Identification</div>
                                 <div>Placement Date</div>
                                 <div>Order Total</div>
                                 <div>Status</div>
+                                <div>Invoice</div>
                                 <div className="text-right">Manage</div>
                             </div>
 
                             {orders.map((order) => (
                                 <div key={order._id} className="bg-white/[0.03] rounded-[2rem] p-5 md:px-10 md:py-6 border border-white/5 hover:border-[var(--color-secondary)]/30 transition-all group shadow-sm">
-                                    <div className="flex flex-col md:grid md:grid-cols-6 items-start md:items-center gap-4">
+                                    <div className="flex flex-col md:grid md:grid-cols-7 items-start md:items-center gap-4">
                                         <div className="w-full md:col-span-2 flex items-center gap-5">
-                                            <div className="bg-white/5 w-12 h-12 rounded-2xl flex items-center justify-center border border-white/5 shrink-0 transition-transform group-hover:scale-105">
-                                                <Package size={22} className="text-[var(--color-secondary)]" />
+                                            <div className="bg-white/5 w-10 h-10 rounded-2xl flex items-center justify-center border border-white/5 shrink-0 transition-transform group-hover:scale-105">
+                                                <Package size={20} className="text-[var(--color-secondary)]" />
                                             </div>
                                             <div className="flex-grow min-w-0">
                                                 <p className="text-base font-bold text-zinc-700 leading-tight">Order #{order._id.slice(-6).toUpperCase()}</p>
@@ -315,6 +460,15 @@ const Orders = () => {
                                             </span>
                                         </div>
 
+                                        <div className="w-full md:w-auto">
+                                            <button
+                                                onClick={() => openInvoice(order)}
+                                                className="flex items-center justify-center gap-2 w-full md:w-auto px-4 py-2 bg-zinc-100 text-zinc-600 rounded-xl font-bold text-[10px] hover:bg-zinc-200 transition-all active:scale-95 uppercase tracking-wider"
+                                            >
+                                                Invoice
+                                            </button>
+                                        </div>
+
                                         <div className="w-full md:block md:text-right">
                                             <button
                                                 onClick={() => openOrderDetails(order)}
@@ -338,6 +492,12 @@ const Orders = () => {
                 onCancel={handleCancelOrder}
                 getStatusColor={getStatusColor}
                 formatDate={formatDate}
+            />
+
+            <InvoiceModal
+                order={invoiceOrder}
+                isOpen={isInvoiceModalOpen}
+                onClose={() => setIsInvoiceModalOpen(false)}
             />
 
             <Footer />

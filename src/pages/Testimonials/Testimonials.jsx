@@ -37,27 +37,32 @@ const Testimonials = memo(() => {
 
     useEffect(() => {
         let isMounted = true;
-        if (activeTab === 'video' && !videosLoaded && !isLoading) {
-            const fetchVideos = async () => {
-                setIsLoading(true);
-                try {
-                    const data = await getAllVideosApi();
-                    if (isMounted) {
-                        setVideos(data.videos?.slice(0, 6) || []);
-                        setVideosLoaded(true);
-                    }
-                } catch (error) {
-                    console.error("Failed to fetch videos:", error);
-                } finally {
-                    if (isMounted) {
-                        setIsLoading(false);
-                    }
+
+        const fetchVideos = async () => {
+            if (!isMounted) return;
+            setIsLoading(true);
+            try {
+                const data = await getAllVideosApi();
+                if (isMounted) {
+                    const videoData = data.videos || (Array.isArray(data) ? data : []);
+                    setVideos(videoData.slice(0, 6));
+                    setVideosLoaded(true);
                 }
-            };
+            } catch (error) {
+                console.error("Failed to fetch videos:", error);
+            } finally {
+                if (isMounted) {
+                    setIsLoading(false);
+                }
+            }
+        };
+
+        if (activeTab === 'video' && !videosLoaded && !isLoading) {
             fetchVideos();
         }
+
         return () => { isMounted = false; };
-    }, [activeTab, videosLoaded, isLoading]);
+    }, [activeTab, videosLoaded]);
 
     const addToRefs = (el) => {
         if (el && !sectionRefs.current.includes(el)) {
@@ -223,7 +228,7 @@ const Testimonials = memo(() => {
                         </div>
                         <div className="p-6">
                             <video
-                                src={selectedVideo.url}
+                                src={selectedVideo.url?.replace('http://', 'https://')}
                                 className="w-full aspect-video rounded-lg"
                                 controls
                                 autoPlay
