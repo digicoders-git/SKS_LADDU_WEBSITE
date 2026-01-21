@@ -22,6 +22,7 @@ const Registration = () => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [showGenderDropdown, setShowGenderDropdown] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [errors, setErrors] = useState({});
     const navigate = useNavigate();
 
     const handleChange = (e) => {
