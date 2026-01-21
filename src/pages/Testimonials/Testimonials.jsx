@@ -34,28 +34,30 @@ const Testimonials = memo(() => {
         return () => observer.disconnect();
     }, []);
 
-    const fetchVideos = useCallback(
-        debounce(async () => {
-            if (isLoading || videosLoaded) return;
-            setIsLoading(true);
-            try {
-                const data = await getAllVideosApi();
-                setVideos(data.videos?.slice(0, 6) || []);
-                setVideosLoaded(true);
-            } catch (error) {
-                console.error("Failed to fetch videos:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        }, 300),
-        [isLoading, videosLoaded]
-    );
 
     useEffect(() => {
+        let isMounted = true;
         if (activeTab === 'video' && !videosLoaded && !isLoading) {
+            const fetchVideos = async () => {
+                setIsLoading(true);
+                try {
+                    const data = await getAllVideosApi();
+                    if (isMounted) {
+                        setVideos(data.videos?.slice(0, 6) || []);
+                        setVideosLoaded(true);
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch videos:", error);
+                } finally {
+                    if (isMounted) {
+                        setIsLoading(false);
+                    }
+                }
+            };
             fetchVideos();
         }
-    }, [activeTab, videosLoaded, isLoading, fetchVideos]);
+        return () => { isMounted = false; };
+    }, [activeTab, videosLoaded, isLoading]);
 
     const addToRefs = (el) => {
         if (el && !sectionRefs.current.includes(el)) {

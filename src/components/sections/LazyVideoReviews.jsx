@@ -13,19 +13,7 @@ const LazyVideoReviews = memo(({ addToRefs, isHomePage = false }) => {
     const [isLoading, setIsLoading] = useState(false);
     const scrollRef = useRef(null);
     const sectionRef = useRef(null);
-
-    const fetchVideos = useCallback(async () => {
-        if (isLoading) return;
-        setIsLoading(true);
-        try {
-            const data = await getAllVideosApi();
-            setVideos(data.videos || []);
-        } catch (error) {
-            console.error("Failed to fetch videos:", error);
-        } finally {
-            setIsLoading(false);
-        }
-    }, [isLoading]);
+    const hasFetched = useRef(false);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -45,10 +33,23 @@ const LazyVideoReviews = memo(({ addToRefs, isHomePage = false }) => {
     }, [isVisible]);
 
     useEffect(() => {
-        if (isVisible) {
+        if (isVisible && !hasFetched.current) {
+            const fetchVideos = async () => {
+                setIsLoading(true);
+                try {
+                    const data = await getAllVideosApi();
+                    const videoData = data.videos || (Array.isArray(data) ? data : []);
+                    setVideos(videoData);
+                    hasFetched.current = true;
+                } catch (error) {
+                    console.error("Failed to fetch videos:", error);
+                } finally {
+                    setIsLoading(false);
+                }
+            };
             fetchVideos();
         }
-    }, [isVisible, fetchVideos]);
+    }, [isVisible]);
 
     useEffect(() => {
         if (!videos.length || !scrollRef.current || !isHomePage) return;
