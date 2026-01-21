@@ -233,17 +233,22 @@ const Shop = () => {
 
     const handleEditAddress = (addr) => {
         setAddressForm({
-            name: addr.name,
-            phone: addr.phone,
-            addressLine1: addr.addressLine1,
+            name: addr.name || '',
+            phone: addr.phone || '',
+            addressLine1: addr.addressLine1 || '',
             addressLine2: addr.addressLine2 || '',
-            city: addr.city,
-            state: addr.state,
-            pincode: addr.pincode,
-            addressType: addr.addressType === 'work' ? 'office' : addr.addressType
+            city: addr.city || '',
+            state: addr.state || '',
+            pincode: addr.pincode || '',
+            addressType: (addr.addressType?.toLowerCase() === 'work' || addr.addressType?.toLowerCase() === 'office') ? 'office' : (addr.addressType?.toLowerCase() || 'home')
         });
         setEditingAddressId(addr._id);
         setShowAddressForm(true);
+        // Scroll to form location
+        const section = document.getElementById('delivery-address-section');
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     };
 
     const handleSaveAddress = async () => {
@@ -370,7 +375,9 @@ const Shop = () => {
                         state: selectedAddress.state,
                         pincode: selectedAddress.pincode,
                         country: "India"
-                    }
+                    },
+                    handlingFee: 20,
+                    shippingCharges: 50
                 };
 
                 const response = await placeOrderApi(orderData);
@@ -405,9 +412,30 @@ const Shop = () => {
             try {
                 // 1. Create Order
                 const orderData = await createPaymentOrderApi({
+                    shippingCharges: 50,
+                    handlingFee: 20,
+                    shippingCharge: 50, // Variation
+                    handling_fee: 20,   // Variation
+                    subtotal: Number(cartTotal),
+                    total: Number(finalAmount),
                     amount: finalAmount,
                     currency: "INR",
-                    receipt: `receipt_${Date.now()}`
+                    receipt: `receipt_${Date.now()}`,
+                    userId: userId,
+                    addressId: selectedAddressId,
+                    paymentMethod: "Online",
+                    items: cartItems.map(item => ({
+                        productId: item.productId,
+                        quantity: item.quantity,
+                        size: "Standard",
+                        color: "Default"
+                    })),
+                    notes: {
+                        shippingCharges: 50,
+                        handlingFee: 20,
+                        userId: userId,
+                        paymentMethod: "Online"
+                    }
                 });
 
                 if (!orderData || !orderData.success) {
@@ -421,34 +449,55 @@ const Shop = () => {
                     amount: orderData.order.amount,
                     currency: orderData.order.currency,
                     name: "SKS Laddu",
-                    description: "Delicious Laddus Order",
-                    image: "/sks-logo.png",
+                    description: "Order for Delicious Laddus",
                     order_id: orderData.order.id,
                     handler: async function (response) {
                         try {
-                            const verifyData = {
-                                razorpay_order_id: response.razorpay_order_id,
-                                razorpay_payment_id: response.razorpay_payment_id,
-                                razorpay_signature: response.razorpay_signature,
-                                shippingAddress: selectedAddress,
-                                notes: "Online Order",
+                            const orderData = {
+                                userId: userId,
+                                addressId: selectedAddressId,
+                                paymentMethod: "Online",
+                                subtotal: Number(cartTotal),
+                                shippingCharges: 50,
+                                handlingFee: 20,
+                                total: Number(finalAmount),
+                                razorpayOrderId: response.razorpay_order_id,
+                                razorpayPaymentId: response.razorpay_payment_id,
+                                razorpaySignature: response.razorpay_signature,
+                                items: cartItems.map(item => ({
+                                    productId: item.productId,
+                                    quantity: item.quantity,
+                                    size: "Standard",
+                                    color: "Default"
+                                })),
+                                shippingAddress: {
+                                    name: selectedAddress.name,
+                                    phone: selectedAddress.phone,
+                                    addressLine1: selectedAddress.addressLine1,
+                                    addressLine2: selectedAddress.addressLine2 || "",
+                                    city: selectedAddress.city,
+                                    state: selectedAddress.state,
+                                    pincode: selectedAddress.pincode,
+                                    country: "India"
+                                },
+                                notes: "Online Order"
                             };
 
-                            const verifyRes = await verifyPaymentApi(verifyData);
+                            const orderRes = await placeOrderApi(orderData);
 
-                            if (verifyRes.success) {
+                            if (orderRes && (orderRes.order || orderRes.message === "Order placed successfully")) {
                                 toast.success("Payment Successful! Order Placed.", { position: "top-right" });
-                                try { await clearCartApi(); } catch (e) { console.error("Manual clear failed", e); } // Force clear cart on backend
-                                setCartItems([]); // Explicitly clear cart state
+                                try { await clearCartApi(); } catch (e) { console.error("Manual clear failed", e); }
+                                setCartItems([]);
                                 setCartTotal(0);
-                                window.dispatchEvent(new Event('cart-updated')); // Notify Navbar
-                                navigate('/orders'); // Navigate to orders page
+                                window.dispatchEvent(new Event('cart-updated'));
+                                navigate('/orders');
                             } else {
-                                toast.error("Payment verification failed. Please contact support.", { position: "top-right" });
+                                toast.error(orderRes.message || "Payment verification failed.", { position: "top-right" });
                             }
                         } catch (error) {
-                            console.error(error);
-                            toast.error("Payment verification failed.", { position: "top-right" });
+                            console.error("Online placement error:", error);
+                            toast.error("Failed to sync order after payment.", { position: "top-right" });
                         }
                     },
                     prefill: {
@@ -456,7 +505,10 @@ const Shop = () => {
                         contact: selectedAddress.phone,
                     },
                     notes: {
-                        address: `${selectedAddress.addressLine1}, ${selectedAddress.city}`
+                        address: `${selectedAddress.addressLine1}, ${selectedAddress.city}`,
+                        shippingCharges: 50,
+                        handlingFee: 20,
+                        totalAmount: finalAmount
                     },
                     theme: {
                         color: "#FFD700"
@@ -674,6 +726,10 @@ const Shop = () => {
                                                     addressType: 'home'
                                                 });
                                                 setShowAddressForm(true);
+                                                const section = document.getElementById('delivery-address-section');
+                                                if (section) {
+                                                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                                }
                                             }}
                                             className="flex items-center justify-center gap-2 px-4 py-2 bg-[var(--color-secondary)]/10 text-[var(--color-secondary)] border border-[var(--color-secondary)]/20 rounded-xl text-xs md:text-xs font-bold hover:bg-[var(--color-secondary)]/20 transition-all shadow-sm w-full md:w-auto"
                                         >
@@ -734,7 +790,7 @@ const Shop = () => {
 
                                     {/* Add/Edit Address Form */}
                                     {(showAddressForm || savedAddresses.length === 0) && (
-                                        <div className="bg-[var(--color-muted)] p-6 md:p-8 rounded-[35px] shadow-lg border border-[var(--color-secondary)]/10 space-y-5 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                        <div className="bg-[var(--color-muted)] p-6 md:p-8 rounded-[35px] shadow-lg border border-[var(--color-secondary)]/10 space-y-5">
                                             <div className="flex justify-between items-center mb-2">
                                                 <h3 className="font-bold text-white text-lg">
                                                     {editingAddressId ? 'Edit Address' : 'Add New Address'}
