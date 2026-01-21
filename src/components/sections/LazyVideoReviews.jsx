@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, lazy, Suspense, memo, useCallback }
 import { X } from 'lucide-react';
 import { getAllVideosApi } from '../../api/video';
 import { throttle, debounce } from '../../utils/performance';
+import Loader from '../common/Loader';
 
 const LazyVideo = lazy(() => import('./LazyVideo'));
 
@@ -28,13 +29,12 @@ const LazyVideoReviews = memo(({ addToRefs, isHomePage = false }) => {
 
     useEffect(() => {
         const observer = new IntersectionObserver(
-            debounce(([entry]) => {
+            ([entry]) => {
                 if (entry.isIntersecting && !isVisible) {
                     setIsVisible(true);
-                    fetchVideos();
                 }
-            }, 200),
-            { threshold: 0.1, rootMargin: '100px 0px' }
+            },
+            { threshold: 0.1, rootMargin: '200px 0px' }
         );
 
         if (sectionRef.current) {
@@ -42,6 +42,12 @@ const LazyVideoReviews = memo(({ addToRefs, isHomePage = false }) => {
         }
 
         return () => observer.disconnect();
+    }, [isVisible]);
+
+    useEffect(() => {
+        if (isVisible) {
+            fetchVideos();
+        }
     }, [isVisible, fetchVideos]);
 
     useEffect(() => {
@@ -98,7 +104,7 @@ const LazyVideoReviews = memo(({ addToRefs, isHomePage = false }) => {
                     sectionRef.current = el;
                     addToRefs(el);
                 }}
-                className="scroll-section py-20 px-8 md:px-24 bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-surface)] text-center relative z-10 shadow-sm overflow-hidden"
+                className={`scroll-section ${isVisible ? 'visible' : ''} py-20 px-8 md:px-24 bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-surface)] text-center relative z-10 shadow-sm overflow-hidden`}
                 id="testimonials"
             >
                 <div className="relative z-10">
@@ -109,15 +115,15 @@ const LazyVideoReviews = memo(({ addToRefs, isHomePage = false }) => {
 
                     {isVisible ? (
                         videos.length > 0 ? (
-                            <div className="relative group">
+                            <div className="relative group min-h-[400px]">
                                 <div
                                     ref={scrollRef}
                                     className="flex gap-4 md:gap-10 overflow-x-auto pb-12 scroll-smooth no-scrollbar px-2"
                                 >
-                                    {/* Duplicate videos for infinite scroll */}
-                                    {videos.concat(videos).map((video, index) => (
+                                    {/* Using a fixed number of repetitions for better performance */}
+                                    {(videos.length > 3 ? videos.concat(videos) : videos.concat(videos, videos)).map((video, index) => (
                                         <Suspense key={`${video._id}-${index}`} fallback={
-                                            <div className="flex-shrink-0 w-56 md:w-80 h-80 md:h-96 bg-gray-200 rounded-[30px] animate-pulse"></div>
+                                            <div className="flex-shrink-0 w-56 md:w-80 h-80 md:h-96 bg-gray-200/50 rounded-[30px] animate-pulse"></div>
                                         }>
                                             <LazyVideo
                                                 video={video}
@@ -129,18 +135,19 @@ const LazyVideoReviews = memo(({ addToRefs, isHomePage = false }) => {
                                 </div>
                             </div>
                         ) : isLoading ? (
-                            <div className="py-20 flex flex-col items-center">
-                                <div className="w-12 h-12 border-4 border-[var(--color-secondary)] border-t-transparent rounded-full animate-spin mb-4"></div>
-                                <p className="text-[var(--color-text-muted)] font-medium">Loading customer stories...</p>
+                            <div className="py-24 flex items-center justify-center min-h-[400px]">
+                                <Loader text="Fetching Stories..." />
                             </div>
                         ) : (
-                            <div className="py-20 flex flex-col items-center">
-                                <p className="text-[var(--color-text-muted)] font-medium">No videos available</p>
+                            <div className="py-24 flex flex-col items-center justify-center min-h-[400px]">
+                                <p className="text-[var(--color-text-muted)] font-medium text-lg">Coming Soon: Customer Stories</p>
                             </div>
                         )
                     ) : (
-                        <div className="py-20 flex flex-col items-center">
-                            <div className="w-56 md:w-80 h-80 md:h-96 bg-gray-200 rounded-[30px] animate-pulse mx-auto"></div>
+                        <div className="py-12 flex gap-6 overflow-hidden">
+                            {[1, 2, 3, 4].map((i) => (
+                                <div key={i} className="flex-shrink-0 w-64 md:w-80 h-80 md:h-96 bg-gray-200/50 rounded-[40px] animate-pulse"></div>
+                            ))}
                         </div>
                     )}
                 </div>

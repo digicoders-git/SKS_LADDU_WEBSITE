@@ -9,6 +9,7 @@ const LadduCard = lazy(() => import('../../components/cards/LadduCard'));
 const LazyVideoReviews = lazy(() => import('../../components/sections/LazyVideoReviews'));
 const HeroSlider = lazy(() => import('../../components/Slider/HeroSlider'));
 const BrandAdvertisement = lazy(() => import('../../components/sections/BrandAdvertisement'));
+import Loader from '../../components/common/Loader';
 
 // Import images directly
 import big from '../../assets/images/big.png';
@@ -53,8 +54,10 @@ const Home = memo(() => {
     fetchProducts();
   }, [fetchProducts]);
 
+  const observerRef = useRef(null);
+
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    observerRef.current = new IntersectionObserver(
       throttle((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
@@ -66,10 +69,12 @@ const Home = memo(() => {
     );
 
     sectionRefs.current.forEach((ref) => {
-      if (ref) observer.observe(ref);
+      if (ref) observerRef.current.observe(ref);
     });
 
-    return () => observer.disconnect();
+    return () => {
+      if (observerRef.current) observerRef.current.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -124,6 +129,9 @@ const Home = memo(() => {
   const addToRefs = (el) => {
     if (el && !sectionRefs.current.includes(el)) {
       sectionRefs.current.push(el);
+      if (observerRef.current) {
+        observerRef.current.observe(el);
+      }
     }
   };
 
@@ -131,7 +139,11 @@ const Home = memo(() => {
     <div className="bg-[var(--color-primary)] text-[var(--color-text)] font-[var(--font-body)] overflow-x-hidden mt-20 md:mt-24">
 
       {/* Hero Slider Section */}
-      <Suspense fallback={<div className="h-screen bg-gray-200 animate-pulse"></div>}>
+      <Suspense fallback={
+        <div className="h-[50vh] md:h-[80vh] bg-[var(--color-muted)] flex items-center justify-center">
+          <Loader text="Preparing Sweetness..." />
+        </div>
+      }>
         <HeroSlider />
       </Suspense>
 
@@ -373,7 +385,13 @@ const Home = memo(() => {
         </div>
       </section>
 
-      <Suspense fallback={<div className="h-96 bg-gray-200 animate-pulse"></div>}>
+      <Suspense fallback={
+        <div className="py-20 px-8 md:px-24 bg-white text-center border-y border-[var(--color-secondary)]/10">
+          <div className="max-w-7xl mx-auto flex flex-col items-center">
+            <Loader text="Loading Loved Stories..." />
+          </div>
+        </div>
+      }>
         <LazyVideoReviews addToRefs={addToRefs} isHomePage={true} />
       </Suspense>
 
@@ -415,14 +433,17 @@ const Home = memo(() => {
         </div>
       </section>
 
-      {/* Brand Advertisement Section */}
-      <Suspense fallback={<div className="h-96 bg-gray-900 animate-pulse"></div>}>
+      <Suspense fallback={
+        <div className="py-20 px-4 md:px-24 bg-zinc-950 flex flex-col items-center justify-center border-y border-[var(--color-secondary)]/20">
+          <Loader text="Crafting Brand Legacy..." />
+        </div>
+      }>
         <BrandAdvertisement addToRefs={addToRefs} />
       </Suspense>
 
 
 
-      <Suspense fallback={<div className="h-96 bg-gray-200 animate-pulse"></div>}>
+      <Suspense fallback={<div className="h-64 bg-[var(--color-surface)] animate-pulse border-t border-[var(--color-secondary)]/10"></div>}>
         <Footer />
       </Suspense>
     </div>

@@ -124,7 +124,7 @@ const Footer = () => {
             </a>
             <a href="tel:+916307736698" className="flex items-center gap-3 hover:text-[var(--color-secondary)] transition-colors no-underline text-gray-400">
               <Phone className="w-5 h-5 text-[var(--color-secondary)]" />
-              +91 6307736698
+              +91 6307736698 , +91 8467831372
             </a>
             <a
               href="https://www.google.com/maps/search/?api=1&query=Ahirawan,+Sandila,+Hardoi,+Uttar+Pradesh"

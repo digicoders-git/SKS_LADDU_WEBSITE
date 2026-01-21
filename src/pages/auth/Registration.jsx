@@ -21,7 +21,7 @@ const Registration = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [showGenderDropdown, setShowGenderDropdown] = useState(false);
-    const [errors, setErrors] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -88,6 +88,7 @@ const Registration = () => {
         const newErrors = validateForm();
 
         if (Object.keys(newErrors).length === 0) {
+            setIsLoading(true);
             try {
                 const payload = {
                     firstName: formData.firstName,
@@ -110,6 +111,8 @@ const Registration = () => {
                 console.error('Registration failed:', error);
                 const errorMessage = error.response?.data?.message || 'Registration failed. Please try again.';
                 toast.error(errorMessage);
+            } finally {
+                setIsLoading(false);
             }
         } else {
             setErrors(newErrors);
@@ -299,9 +302,17 @@ const Registration = () => {
 
                         <button
                             type="submit"
-                            className="w-full bg-[var(--color-secondary)] text-[var(--color-primary)] py-3 rounded-xl font-bold hover:opacity-90 transition-all shadow-lg"
+                            disabled={isLoading}
+                            className="w-full bg-[var(--color-secondary)] text-[var(--color-primary)] py-3 rounded-xl font-bold hover:opacity-90 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                         >
-                            Create Account
+                            {isLoading ? (
+                                <>
+                                    <div className="w-5 h-5 border-2 border-[var(--color-primary)] border-t-transparent rounded-full animate-spin"></div>
+                                    <span>Creating Account...</span>
+                                </>
+                            ) : (
+                                'Create Account'
+                            )}
                         </button>
                     </form>
 
@@ -315,7 +326,7 @@ const Registration = () => {
                     </div>
                 </div>
             </div>
-            <Footer/>
+            <Footer />
         </div>
     );
 };

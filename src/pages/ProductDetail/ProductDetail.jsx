@@ -11,6 +11,7 @@ import heroLaddus from '../../assets/images/hero-laddus.png';
 import { getProductApi } from '../../api/product';
 import { addToCartApi } from '../../api/cart';
 import Footer from '../../components/layout/Footer';
+import Loader from '../../components/common/Loader';
 
 
 const ProductDetail = () => {
@@ -56,7 +57,7 @@ const ProductDetail = () => {
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-[var(--color-primary)]">
-                <p className="text-[var(--color-secondary)] text-xl animate-pulse">Loading delicious details...</p>
+                <Loader text="Loading delicious details..." />
             </div>
         );
     }

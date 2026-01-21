@@ -7,6 +7,7 @@ import besanLaddu from '../../assets/images/besan-laddu.png';
 import { listCategoriesApi } from '../../api/categories';
 
 import { listProductsApi, listProductsByCategoryApi } from '../../api/product';
+import Loader from '../../components/common/Loader';
 
 const Laddus = () => {
     const [activeCategory, setActiveCategory] = useState({ name: 'All', id: 'all' });
@@ -213,8 +214,8 @@ const Laddus = () => {
                 </div>
 
                 {loading ? (
-                    <div className="text-center py-20 text-[var(--color-secondary)] animate-pulse text-xl">
-                        Fetching delicious laddus...
+                    <div className="py-24 flex items-center justify-center">
+                        <Loader text="Fetching delicious laddus..." />
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">

@@ -46,7 +46,7 @@ const Navbar = () => {
     const navLinks = [
         { to: "/", label: "Home" },
         { to: "/laddus", label: "Our Laddus" },
-        { to: "/orders", label: "Our Orders" },
+        { to: "/orders", label: "My Orders" },
         { to: "/about", label: "About Us" },
         { to: "/testimonials", label: "Testimonials" },
         { to: "/contact", label: "Contact" },

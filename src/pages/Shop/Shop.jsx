@@ -25,6 +25,8 @@ const Shop = () => {
     const [showAddressForm, setShowAddressForm] = useState(false);
     const [loadingAddresses, setLoadingAddresses] = useState(false);
     const [editingAddressId, setEditingAddressId] = useState(null);
+    const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+    const [isAddressSaving, setIsAddressSaving] = useState(false);
 
     // Address Form State
     const [addressForm, setAddressForm] = useState({
@@ -250,6 +252,7 @@ const Shop = () => {
             return;
         }
 
+        setIsAddressSaving(true);
         try {
             if (editingAddressId) {
                 await updateAddressApi(editingAddressId, addressForm);
@@ -274,6 +277,8 @@ const Shop = () => {
         } catch (error) {
             console.error("Failed to save address:", error);
             toast.error("Failed to save address. Please try again.", { position: "top-right" });
+        } finally {
+            setIsAddressSaving(false);
         }
     };
 
@@ -338,6 +343,7 @@ const Shop = () => {
         const selectedAddress = savedAddresses.find(addr => addr._id === selectedAddressId);
         const finalAmount = cartTotal + 70; // Including shipping and handling
 
+        setIsPlacingOrder(true);
         if (paymentMethod === 'cod') {
             try {
                 // Prepare address object from savedAddresses
@@ -383,6 +389,8 @@ const Shop = () => {
                 console.error("COD placement error:", error);
                 const errorMsg = error.response?.data?.message || "Failed to place order. Please try again.";
                 toast.error(errorMsg, { position: "top-right" });
+            } finally {
+                setIsPlacingOrder(false);
             }
             return;
         }
@@ -468,6 +476,8 @@ const Shop = () => {
             } catch (error) {
                 console.error(error);
                 toast.error("Something went wrong during payment initialization.", { position: "top-right" });
+            } finally {
+                setIsPlacingOrder(false);
             }
         }
     };
@@ -850,9 +860,17 @@ const Shop = () => {
 
                                             <button
                                                 onClick={handleSaveAddress}
-                                                className="w-full py-3.5 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-2xl font-bold hover:bg-[#ffe033] transition-all shadow-[0_4px_15px_rgba(255,212,0,0.3)] mt-4"
+                                                disabled={isAddressSaving}
+                                                className="w-full py-3.5 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-2xl font-bold hover:bg-[#ffe033] transition-all shadow-[0_4px_15px_rgba(255,212,0,0.3)] mt-4 flex items-center justify-center gap-2 disabled:opacity-70"
                                             >
-                                                {editingAddressId ? 'Update Address' : 'Save Address'}
+                                                {isAddressSaving ? (
+                                                    <>
+                                                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                        <span>Saving Address...</span>
+                                                    </>
+                                                ) : (
+                                                    editingAddressId ? 'Update Address' : 'Save Address'
+                                                )}
                                             </button>
                                         </div>
                                     )}
@@ -893,11 +911,19 @@ const Shop = () => {
                                     </div>
                                 </div>
                                 <button
-                                        onClick={handleConfirmOrder}
-                                        className="w-full py-4 md:py-5 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-2xl font-bold text-base md:text-lg mt-8 md:mt-10 hover:bg-[#ffe033] transition-all shadow-[0_4px_15px_rgba(255,212,0,0.3)] hover:shadow-[0_6px_20px_rgba(255,212,0,0.4)] active:scale-95"
-                                    >
-                                        Place Order
-                                    </button>
+                                    onClick={handleConfirmOrder}
+                                    disabled={isPlacingOrder}
+                                    className="w-full py-4 md:py-5 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-2xl font-bold text-base md:text-lg mt-8 md:mt-10 hover:bg-[#ffe033] transition-all shadow-[0_4px_15px_rgba(255,212,0,0.3)] hover:shadow-[0_6px_20px_rgba(255,212,0,0.4)] active:scale-95 flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed"
+                                >
+                                    {isPlacingOrder ? (
+                                        <>
+                                            <div className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+                                            <span>Placing Order...</span>
+                                        </>
+                                    ) : (
+                                        'Place Order'
+                                    )}
+                                </button>
                             </div>
                         </div>
 
@@ -933,9 +959,17 @@ const Shop = () => {
 
                                     <button
                                         onClick={handleConfirmOrder}
-                                        className="w-full py-4 md:py-5 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-2xl font-bold text-base md:text-lg mt-8 md:mt-10 hover:bg-[#ffe033] transition-all shadow-[0_4px_15px_rgba(255,212,0,0.3)] hover:shadow-[0_6px_20px_rgba(255,212,0,0.4)] active:scale-95"
+                                        disabled={isPlacingOrder}
+                                        className="w-full py-4 md:py-5 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-2xl font-bold text-base md:text-lg mt-8 md:mt-10 hover:bg-[#ffe033] transition-all shadow-[0_4px_15px_rgba(255,212,0,0.3)] hover:shadow-[0_6px_20px_rgba(255,212,0,0.4)] active:scale-95 flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed"
                                     >
-                                        Place Order
+                                        {isPlacingOrder ? (
+                                            <>
+                                                <div className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                <span>Placing Order...</span>
+                                            </>
+                                        ) : (
+                                            'Place Order'
+                                        )}
                                     </button>
 
                                     <p className="text-center text-[9px] md:text-[10px] text-gray-500 mt-6 leading-relaxed px-2">

@@ -4,7 +4,7 @@ import Footer from '../../components/layout/Footer';
 const ReturnPolicy = () => {
     return (
         <div>
-            <div className="bg-[var(--color-primary)] text-[var(--color-text)] font-[var(--font-main)] min-h-screen">
+            <div className="bg-[var(--color-primary)] text-[var(--color-text)] font-[var(--font-main)] min-h-screen -mt-4">
                 <section className="py-20 px-8 md:px-24 bg-[var(--color-secondary)] text-[var(--color-primary)] text-center rounded-b-[50px]">
                     <h1 className="text-4xl md:text-6xl font-bold mb-6">Return Policy</h1>
                     <p className="text-xl opacity-90 max-w-2xl mx-auto italic">
@@ -39,7 +39,7 @@ const ReturnPolicy = () => {
                     </div>
                 </section>
             </div>
-            <Footer/>
+            <Footer />
         </div>
     );
 };

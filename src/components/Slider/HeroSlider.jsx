@@ -1,15 +1,11 @@
 import React, { useEffect, useState, memo, useCallback } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Navigation, Pagination, EffectFade } from 'swiper/modules';
+import Slider from "react-slick";
 import { Link } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
 import { getActiveSlidersApi } from '../../api/slider';
 
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/effect-fade';
+// Import Slick styles
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const HeroSlider = memo(() => {
     const [sliders, setSliders] = useState([]);
@@ -32,7 +28,7 @@ const HeroSlider = memo(() => {
 
     if (loading) {
         return (
-            <section className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[85vh] bg-gray-200 animate-pulse">
+            <section className="relative w-full aspect-[21/9] bg-gray-200 animate-pulse">
                 <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-12 h-12 border-4 border-[var(--color-secondary)] border-t-transparent rounded-full animate-spin"></div>
                 </div>
@@ -42,81 +38,77 @@ const HeroSlider = memo(() => {
 
     if (sliders.length === 0) return null;
 
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 5000,
+        arrows: false,
+        dotsClass: "slick-dots custom-dots-container",
+    };
+
     return (
-        <section
-            className="
-    relative w-full overflow-hidden
-    h-[60vh]
-    sm:h-[70vh]
-    lg:h-[80vh]
-    max-h-[650px]
-  "
-        >
-
-            <Swiper
-                modules={[Autoplay, Pagination, EffectFade]}
-                effect="fade"
-                speed={1000}
-                autoplay={{
-                    delay: 5000,
-                    disableOnInteraction: false,
-                }}
-                pagination={{
-                    clickable: true,
-                }}
-                loop={true}
-                grabCursor={true}
-                className="w-full h-full hero-swiper"
-            >
+        <section className="relative w-full slider-container overflow-hidden">
+            <Slider {...settings}>
                 {sliders.map((slider) => (
-                    <SwiperSlide key={slider._id}>
-                        <div className="relative w-full h-full flex items-end justify-center pb-12 md:pb-24">
-                            <div className="absolute inset-0 bg-[var(--color-primary)]">
-                                <img
-                                    src={slider.image?.url}
-                                    alt={slider.title || 'SKS Laddu'}
-                                    className="w-full h-full object-cover"
-                                    loading="eager"
-                                />
-                            </div>
+                    <div key={slider._id} className="relative w-full outline-none">
+                        {/* Fluid Ratio Container - Matches shuddhswad.shop logic */}
+                        <div className="relative w-full aspect-[16/9] md:aspect-[3/1] lg:aspect-[21/7] overflow-hidden">
+                            <img
+                                src={slider.image?.url}
+                                alt={slider.title || 'SKS Laddu'}
+                                className="absolute inset-0 w-full h-full object-cover"
+                                loading="eager"
+                            />
 
-                            <div className="relative z-10 px-4 flex flex-col items-center">
-                                <div className="flex flex-row justify-center items-center gap-3 md:gap-8 opacity-0 animate-slide-up" style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}>
+                            {/* Content Overlay */}
+                            <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-[10%] md:pb-[5%]">
+                                <div className="px-4 flex flex-row justify-center items-center gap-3 md:gap-8 opacity-0 animate-slide-up" style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}>
                                     <Link
                                         to="/laddus"
-                                        className="inline-flex items-center justify-center px-6 py-3 md:px-10 md:py-5 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-full text-sm md:text-xl font-bold shadow-xl hover:scale-105 transition-transform"
+                                        className="inline-flex items-center justify-center px-4 py-2 md:px-10 md:py-4 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-full text-[10px] md:text-xl font-bold shadow-xl hover:scale-105 transition-transform"
                                     >
                                         Order Now
                                     </Link>
                                     <Link
                                         to="/about"
-                                        className="inline-flex items-center justify-center px-6 py-3 md:px-10 md:py-5 bg-white/40 backdrop-blur-md border border-white/20 text-black rounded-full text-sm md:text-xl font-bold shadow-lg hover:scale-105 transition-transform"
+                                        className="inline-flex items-center justify-center px-4 py-2 md:px-10 md:py-4 bg-white/40 backdrop-blur-md border border-white/20 text-black rounded-full text-[10px] md:text-xl font-bold shadow-lg hover:scale-105 transition-transform"
                                     >
                                         Our Story
                                     </Link>
                                 </div>
                             </div>
                         </div>
-                    </SwiperSlide>
+                    </div>
                 ))}
-            </Swiper>
+            </Slider>
 
             <style>{`
-                .hero-swiper .swiper-pagination {
-                    bottom: 20px !important;
+                .custom-dots-container {
+                    bottom: 10px !important;
                 }
-                .hero-swiper .swiper-pagination-bullet {
-                    background: white;
-                    opacity: 0.6;
-                    width: 7px;
-                    height: 7px;
+                .custom-dots-container li {
+                    margin: 0 4px;
+                    display: inline-block;
+                }
+                .slick-dots li button {
+                    width: 6px;
+                    height: 6px;
+                    padding: 0;
+                    background: rgba(255,255,255,0.4);
+                    border-radius: 50%;
                     transition: all 0.3s ease;
                 }
-                .hero-swiper .swiper-pagination-bullet-active {
+                .slick-dots li.slick-active button {
                     background: var(--color-secondary);
-                    opacity: 1;
-                    width: 20px;
+                    width: 18px;
                     border-radius: 4px;
+                }
+                .slick-dots li button:before {
+                    content: '' !important;
                 }
                 @keyframes slide-up {
                     from { transform: translateY(20px); opacity: 0; }

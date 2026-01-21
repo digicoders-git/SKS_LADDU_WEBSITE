@@ -12,6 +12,8 @@ const Profile = () => {
     const [showCurrentPassword, setShowCurrentPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isPasswordLoading, setIsPasswordLoading] = useState(false);
 
     const [profileData, setProfileData] = useState({
         firstName: '',
@@ -70,6 +72,7 @@ const Profile = () => {
     };
 
     const handleSaveProfile = async () => {
+        setIsLoading(true);
         try {
             const profilePayload = {
                 firstName: profileData.firstName,
@@ -86,6 +89,8 @@ const Profile = () => {
             console.error("Update failed:", error);
             const message = error.response?.data?.message || 'Failed to update profile. Please try again.';
             toast.error(message);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -100,6 +105,7 @@ const Profile = () => {
             return;
         }
 
+        setIsPasswordLoading(true);
         try {
             const passwordPayload = {
                 currentPassword: passwordData.currentPassword,
@@ -114,6 +120,8 @@ const Profile = () => {
             console.error("Password update failed:", error);
             const message = error.response?.data?.message || 'Failed to update password. Please try again.';
             toast.error(message);
+        } finally {
+            setIsPasswordLoading(false);
         }
     };
 
@@ -163,14 +171,20 @@ const Profile = () => {
                                 <div className="flex flex-col sm:flex-row gap-2">
                                     <button
                                         onClick={handleSaveProfile}
-                                        className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-all text-sm min-w-0"
+                                        disabled={isLoading}
+                                        className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-all text-sm min-w-[80px] disabled:opacity-50"
                                     >
-                                        <Save size={16} />
-                                        <span className="whitespace-nowrap">Save</span>
+                                        {isLoading ? (
+                                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                        ) : (
+                                            <Save size={16} />
+                                        )}
+                                        <span className="whitespace-nowrap">{isLoading ? 'Saving...' : 'Save'}</span>
                                     </button>
                                     <button
                                         onClick={() => setIsEditing(false)}
-                                        className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-all text-sm min-w-0"
+                                        disabled={isLoading}
+                                        className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-all text-sm min-w-[80px] disabled:opacity-50"
                                     >
                                         <X size={16} />
                                         <span className="whitespace-nowrap">Cancel</span>
@@ -290,7 +304,7 @@ const Profile = () => {
                             <h2 className="text-xl font-bold text-[var(--color-secondary)] mb-4">Change Password</h2>
                             <form onSubmit={handleChangePassword} className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-bold text-gray-300 mb-2">Current Password</label>
+                                    <label className="block text-sm font-bold text-zinc-600 mb-2">Current Password</label>
                                     <div className="relative">
                                         <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
                                         <input
@@ -312,7 +326,7 @@ const Profile = () => {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-bold text-gray-300 mb-2">New Password</label>
+                                    <label className="block text-sm font-bold text-zinc-600 mb-2">New Password</label>
                                     <div className="relative">
                                         <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
                                         <input
@@ -334,7 +348,7 @@ const Profile = () => {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-bold text-gray-300 mb-2">Confirm Password</label>
+                                    <label className="block text-sm font-bold text-zinc-600 mb-2">Confirm Password</label>
                                     <div className="relative">
                                         <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
                                         <input
@@ -357,9 +371,17 @@ const Profile = () => {
 
                                 <button
                                     type="submit"
-                                    className="w-full bg-[var(--color-secondary)] text-[var(--color-primary)] py-2.5 rounded-lg font-bold hover:opacity-90 transition-all text-sm"
+                                    disabled={isPasswordLoading}
+                                    className="w-full bg-[var(--color-secondary)] text-[var(--color-primary)] py-2.5 rounded-lg font-bold hover:opacity-90 transition-all text-sm disabled:opacity-50 flex items-center justify-center gap-2"
                                 >
-                                    Update Password
+                                    {isPasswordLoading ? (
+                                        <>
+                                            <div className="w-4 h-4 border-2 border-[var(--color-primary)] border-t-transparent rounded-full animate-spin"></div>
+                                            <span>Updating...</span>
+                                        </>
+                                    ) : (
+                                        'Update Password'
+                                    )}
                                 </button>
                             </form>
                         </div>

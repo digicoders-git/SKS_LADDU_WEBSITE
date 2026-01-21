@@ -13,21 +13,20 @@ const SingleBrandVideo = memo(({ src, title, isSectionVisible }) => {
   const videoRef = useRef(null);
 
   useEffect(() => {
-    if (isSectionVisible && videoRef.current && isLoaded) {
+    if (!videoRef.current) return;
+
+    if (isSectionVisible) {
       const playPromise = videoRef.current.play();
       if (playPromise !== undefined) {
         playPromise
-          .then(() => {
-            setIsPlaying(true);
-            setIsLoaded(true); // Failsafe: if it's playing, it's definitely loaded
-          })
+          .then(() => setIsPlaying(true))
           .catch(() => setIsPlaying(false));
       }
-    } else if (!isSectionVisible && videoRef.current) {
+    } else {
       videoRef.current.pause();
       setIsPlaying(false);
     }
-  }, [isSectionVisible, isLoaded]);
+  }, [isSectionVisible]);
 
   const togglePlay = (e) => {
     e.stopPropagation();
@@ -53,7 +52,7 @@ const SingleBrandVideo = memo(({ src, title, isSectionVisible }) => {
         <video
           ref={videoRef}
           src={src}
-          className={`w-full h-full object-cover transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+          className={`w-full h-full object-cover transition-opacity duration-800 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
           muted={isMuted}
           loop
           playsInline
@@ -62,6 +61,8 @@ const SingleBrandVideo = memo(({ src, title, isSectionVisible }) => {
           onCanPlay={() => setIsLoaded(true)}
           onCanPlayThrough={() => setIsLoaded(true)}
           onPlay={() => setIsLoaded(true)}
+          onPlaying={() => setIsLoaded(true)}
+          onError={() => setIsLoaded(true)} // Failsafe to show something
         />
 
         {/* Loading Spinner - disappears if loaded OR if the video is actually playing */}
@@ -123,14 +124,10 @@ const BrandAdvertisement = memo(({ addToRefs }) => {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      throttle(([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        } else {
-          setIsVisible(false);
-        }
-      }, 200),
-      { threshold: 0.1 }
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.1, rootMargin: '100px 0px' }
     );
 
     if (sectionRef.current) {
@@ -146,7 +143,7 @@ const BrandAdvertisement = memo(({ addToRefs }) => {
         sectionRef.current = el;
         addToRefs(el);
       }}
-      className="scroll-section py-16 px-4 md:px-24 bg-gradient-to-br from-black via-gray-900 to-black relative overflow-hidden"
+      className={`scroll-section ${isVisible ? 'visible' : ''} py-16 px-4 md:px-24 bg-gradient-to-br from-black via-gray-900 to-black relative overflow-hidden`}
       id="brand-story"
     >
       <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/80 z-10"></div>

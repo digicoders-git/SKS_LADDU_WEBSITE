@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect, memo } from 'react';
-import { debounce } from '../../utils/performance';
 import { Play } from 'lucide-react';
 
 const LazyVideo = memo(({ video, onClick, isHomePage = false }) => {
@@ -11,12 +10,12 @@ const LazyVideo = memo(({ video, onClick, isHomePage = false }) => {
 
     useEffect(() => {
         const observer = new IntersectionObserver(
-            debounce(([entry]) => {
+            ([entry]) => {
                 if (entry.isIntersecting) {
                     setIsInView(true);
                 }
-            }, 100),
-            { threshold: 0.2, rootMargin: '50px 0px' }
+            },
+            { threshold: 0.1, rootMargin: '100px 0px' }
         );
 
         if (containerRef.current) {
@@ -29,40 +28,26 @@ const LazyVideo = memo(({ video, onClick, isHomePage = false }) => {
     useEffect(() => {
         if (!isHomePage) return;
 
-        // Auto-play video on home page when in view and keep playing
+        // Auto-play video on home page when in view
         if (isInView && isLoaded && videoRef.current) {
-            videoRef.current.loop = true;
-            videoRef.current.play().catch(() => { });
+            const playPromise = videoRef.current.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(() => {
+                    // Autoplay prevented
+                });
+            }
         }
     }, [isInView, isLoaded, isHomePage]);
 
     const handleVideoLoad = () => {
-        if (!isLoaded) setIsLoaded(true);
-        if (videoRef.current) {
-            try {
-                // Only seek if metadata is loaded (readyState >= 1)
-                if (videoRef.current.readyState >= 1) {
-                    videoRef.current.currentTime = 1;
-                }
-            } catch (e) {
-                console.warn("Could not seek video:", e);
-            }
-
-            if (isHomePage) {
-                videoRef.current.loop = true;
-                const playPromise = videoRef.current.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(() => {
-                        // Autoplay policy prevented playback
-                    });
-                }
-            }
+        setIsLoaded(true);
+        if (videoRef.current && isHomePage) {
+            videoRef.current.play().catch(() => { });
         }
     };
 
     const handleMouseEnter = () => {
         setIsHovered(true);
-        // Only play on hover for non-home pages
         if (videoRef.current && isLoaded && !isHomePage) {
             videoRef.current.play().catch(() => { });
         }
@@ -70,10 +55,8 @@ const LazyVideo = memo(({ video, onClick, isHomePage = false }) => {
 
     const handleMouseLeave = () => {
         setIsHovered(false);
-        // Only pause on mouse leave for non-home pages
         if (videoRef.current && !isHomePage) {
             videoRef.current.pause();
-            videoRef.current.currentTime = 1;
         }
     };
 
@@ -92,19 +75,20 @@ const LazyVideo = memo(({ video, onClick, isHomePage = false }) => {
                         src={video.url?.replace('http://', 'https://')}
                         className={`w-full h-full object-cover transition-opacity duration-300 ${isLoaded ? 'opacity-90 group-hover:opacity-100' : 'opacity-0'}`}
                         muted
-                        loop={isHomePage}
-                        autoPlay={isHomePage}
+                        loop
                         playsInline
                         onLoadedData={handleVideoLoad}
                         onLoadedMetadata={handleVideoLoad}
-                        preload="metadata"
+                        onCanPlay={() => setIsLoaded(true)}
+                        preload="auto"
                     />
                     {!isLoaded && (
-                        <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
-                            <div className="w-8 h-8 border-2 border-[var(--color-secondary)] border-t-transparent rounded-full animate-spin"></div>
+                        <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center z-10">
+                            <div className="w-10 h-10 border-4 border-[var(--color-secondary)] border-t-transparent rounded-full animate-spin"></div>
                         </div>
                     )}
-                    {/* Play button overlay - hide on home page */}
+
+                    {/* Thumbnail Play button overlay */}
                     {!isHomePage && (
                         <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${isHovered ? 'opacity-0' : 'opacity-100'}`}>
                             <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg">
@@ -116,7 +100,7 @@ const LazyVideo = memo(({ video, onClick, isHomePage = false }) => {
             ) : (
                 <div className="w-full h-full bg-gray-200 animate-pulse"></div>
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
         </div>
     );
 });
