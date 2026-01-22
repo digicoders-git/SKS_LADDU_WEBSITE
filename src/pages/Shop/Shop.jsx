@@ -257,6 +257,11 @@ const Shop = () => {
             return;
         }
 
+        if (addressForm.pincode.length !== 6) {
+            toast.error("Pincode must be exactly 6 digits.", { position: "top-right" });
+            return;
+        }
+
         setIsAddressSaving(true);
         try {
             if (editingAddressId) {
@@ -881,6 +886,8 @@ const Shop = () => {
                                                     <label className="text-xs font-bold text-gray-400 uppercase">Pincode</label>
                                                     <input
                                                         type="text"
+                                                        min={6}
+                                                        max={6}
                                                         placeholder="Pin Code"
                                                         className="w-full px-5 py-3.5 bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-secondary)]/10 rounded-2xl focus:border-[var(--color-secondary)] outline-none text-sm font-medium transition-colors placeholder-gray-400"
                                                         value={addressForm.pincode}

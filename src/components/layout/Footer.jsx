@@ -38,7 +38,7 @@ const Footer = () => {
           {/* About Section */}
           <div className="col-span-1 md:col-span-2">
             <div className="mb-6">
-              <img src="/sks-logo.png" alt="SKS Logo" className="w-20 h-20 rounded-full border-2 border-[var(--color-secondary)] shadow-sm object-cover" />
+              <img src="/sks-logo.png" alt="SKS Logo" className="w-20 h-20 object-cover" />
             </div>
             <p className="text-gray-400 mb-4 leading-relaxed max-w-md">
               Bringing you the authentic taste of Sandila's traditional laddus for over 100 years.

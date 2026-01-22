@@ -19,13 +19,33 @@ const InvoiceModal = ({ order, isOpen, onClose }) => {
         if (!element) return;
 
         setIsGenerating(true);
+
+        const styleElements = Array.from(document.querySelectorAll('style'));
+        const originalStyles = styleElements.map(el => el.innerHTML);
+
         try {
+            styleElements.forEach(el => {
+                el.innerHTML = el.innerHTML.replace(/oklch\([^)]+\)/g, '#000000');
+            });
+
             const canvas = await html2canvas(element, {
-                scale: 2,
+                scale: 3,
                 useCORS: true,
                 logging: false,
                 backgroundColor: '#ffffff',
-                windowWidth: 800
+                windowWidth: 800,
+                onclone: (clonedDoc) => {
+                    const content = clonedDoc.querySelector('.printable-content');
+                    const wrapper = clonedDoc.getElementById('printable-invoice');
+                    if (content && wrapper) {
+                        wrapper.style.height = 'auto';
+                        wrapper.style.maxHeight = 'none';
+                        wrapper.style.overflow = 'visible';
+                        content.style.height = 'auto';
+                        content.style.maxHeight = 'none';
+                        content.style.overflow = 'visible';
+                    }
+                }
             });
 
             const imgData = canvas.toDataURL('image/png');
@@ -45,6 +65,9 @@ const InvoiceModal = ({ order, isOpen, onClose }) => {
             console.error("PDF generation failed:", error);
             toast.error("Failed to download PDF. Try again.");
         } finally {
+            styleElements.forEach((el, i) => {
+                el.innerHTML = originalStyles[i];
+            });
             setIsGenerating(false);
         }
     };
@@ -57,87 +80,121 @@ const InvoiceModal = ({ order, isOpen, onClose }) => {
 
     return (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all duration-300">
-            <div className="bg-[#ffffff] w-full max-w-lg rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 relative">
-                {/* Close Button */}
-                <button onClick={onClose} className="absolute top-1 right-1 md:top-3 md:right-3 p-1.5 hover:bg-[#f3f4f6] rounded-full transition-colors z-10">
-                    <X size={20} style={{ color: '#9ca3af' }} />
-                </button>
-
-                {/* Invoice Content */}
-                <div id="printable-invoice" className="p-6 md:p-8 overflow-y-auto bg-[#ffffff]" style={{ color: '#000000', fontFamily: 'sans-serif' }}>
-                    {/* Header Row */}
-                    <div className="flex flex-row justify-between items-start mb-4">
+            <div className="bg-[#ffffff] w-full max-w-lg rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[70vh] animate-in zoom-in-95 relative border border-gray-100">
+                <div id="printable-invoice" className="flex flex-col flex-1 overflow-hidden bg-white">
+                    <div className="flex flex-row justify-between items-start p-6 pb-4 border-b border-gray-50 bg-white relative">
                         <div className="w-16">
                             <img src="/sks-logo.png" alt="SKS Logo" className="w-full h-auto" />
                         </div>
                         <div className="text-right text-[11px] leading-tight mt-4">
-                            <p className="font-bold" style={{ color: '#363131ff' }}>Date: {today}</p>
-                            <p className="font-bold" style={{ color: '#363131ff' }}>Invoice: #{order._id.slice(-6).toUpperCase()}</p>
-                        </div>
-                    </div>
-
-                    <div style={{ height: '1px', backgroundColor: '#f3f4f6', marginBottom: '16px' }} />
-
-                    {/* Bill Info */}
-                    <div className="mb-4">
-                        <p style={{ fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', color: '#9ca3af', marginBottom: '4px' }}>Bill From:</p>
-                        <div className="text-xs">
-                            <p className="font-bold" style={{ color: '#111827' }}>SKS Laddu</p>
-                            <p style={{ color: '#6b7280' }}>Ahirawan, Sandila, UP</p>
-                            <p style={{ color: '#6b7280', marginTop: '4px' }}>8467831372, 6307736698</p>
-                        </div>
-                    </div>
-
-                    <div style={{ height: '1px', backgroundColor: '#f3f4f6', marginBottom: '16px' }} />
-
-                    {/* Table */}
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-xs border-collapse">
-                            <thead>
-                                <tr style={{ borderBottom: '1px solid #f3f4f6', color: '#9ca3af', fontSize: '9px', textTransform: 'uppercase' }}>
-                                    <th className="text-left py-2 font-black">Product</th>
-                                    <th className="text-center py-2 font-black">Qty</th>
-                                    <th className="text-right py-2 font-black">Rate</th>
-                                    <th className="text-right py-2 font-black">Price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {order.items.map((item, index) => (
-                                    <tr key={index} style={{ borderBottom: '1px solid #f9fafb' }}>
-                                        <td className="py-2 text-left font-bold" style={{ color: '#1f2937' }}>{item.productName}</td>
-                                        <td className="py-2 text-center" style={{ color: '#4b5563' }}>{item.quantity}</td>
-                                        <td className="py-2 text-right" style={{ color: '#4b5563' }}>₹{item.productPrice}</td>
-                                        <td className="py-2 text-right font-bold" style={{ color: '#111827' }}>₹{item.productPrice * item.quantity}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    {/* Total Row */}
-                    <div className="flex justify-between items-center mt-6">
-                        <div>
-                            <p style={{ fontSize: '14px', fontWeight: '900', color: '#111827' }}>
-                                Total: <span style={{ color: '#F2B705' }}>₹{order.total}</span>
-                            </p>
+                            {/* <p className="font-black uppercase tracking-wider text-gray-400 mb-1">Tax Invoice</p> */}
+                            <p className="font-bold text-gray-700">Date: {today}</p>
+                            <p className="font-bold text-gray-700">OrderId: #{order._id.slice(-6).toUpperCase()}</p>
                         </div>
                         <button
-                            onClick={handleDownloadPdf}
-                            disabled={isGenerating}
+                            onClick={onClose}
                             data-html2canvas-ignore
-                            className={`bg-[#111827] text-white px-4 py-2 rounded-lg text-[10px] font-bold flex items-center gap-2 hover:bg-[#1f2937] transition-all active:scale-95 ${isGenerating ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            className="absolute -top-1 -right-1 md:top-2 md:right-2 p-2 hover:bg-gray-100 rounded-full transition-colors z-20"
                         >
-                            {isGenerating ? (
-                                <>Generating...</>
-                            ) : (
-                                <>
-                                    <Download size={14} /> PDF
-                                </>
-                            )}
+                            <X size={20} className="text-gray-400" />
                         </button>
                     </div>
+
+                    <div className="flex-1 overflow-y-auto custom-scrollbar printable-content">
+                        <div className="p-6 md:p-8">
+                            <div className="flex justify-between items-start mb-6 gap-4">
+                                <div>
+                                    <p className="text-[8px] sm:text-[10px] font-black uppercase text-gray-400 mb-1.5">Bill From:</p>
+                                    <div className="text-[9px] sm:text-xs leading-tight">
+                                        <p className="font-bold text-gray-900">SKS Laddu</p>
+                                        <p className="text-gray-500">Ahirawan, Sandila, UP</p>
+                                        <p className="text-gray-500 mt-0.5">8467831372, 6307736698</p>
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-[8px] sm:text-[10px] font-black uppercase text-gray-400 mb-1.5">Bill To:</p>
+                                    <div className="text-[9px] sm:text-xs leading-tight">
+                                        <p className="font-bold text-gray-900">{order.shippingAddress?.name}</p>
+                                        <p className="text-gray-500 break-words max-w-[120px] sm:max-w-none ml-auto">{order.shippingAddress?.addressLine1}</p>
+                                        <p className="text-gray-500">{order.shippingAddress?.city}</p>
+                                        <p className="text-gray-500 mt-0.5">{order.shippingAddress?.phone}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="h-px bg-gray-100 mb-6" />
+
+                            <div className="mb-6">
+                                <table className="w-full text-xs border-collapse">
+                                    <thead>
+                                        <tr className="border-b border-gray-100 text-[9px] text-gray-400 uppercase">
+                                            <th className="text-left py-3 font-black">Item Description</th>
+                                            <th className="text-center py-3 font-black">Qty</th>
+                                            <th className="text-right py-3 font-black">Rate</th>
+                                            <th className="text-right py-3 font-black">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {order.items.map((item, index) => (
+                                            <tr key={index} className="border-b border-gray-50 last:border-0">
+                                                <td className="py-3 text-left font-bold text-gray-700">{item.productName}</td>
+                                                <td className="py-3 text-center text-gray-600">{item.quantity}</td>
+                                                <td className="py-3 text-right text-gray-600">₹{item.productPrice}</td>
+                                                <td className="py-3 text-right font-black text-gray-900">₹{item.productPrice * item.quantity}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div className="flex flex-col items-end gap-1.5 border-t border-gray-100 pt-6">
+                                <div className="flex justify-between w-full md:w-52 text-[10px]">
+                                    <span className="text-gray-400 font-bold uppercase tracking-wider">Subtotal</span>
+                                    <span className="text-gray-900 font-bold">₹{order.subtotal}</span>
+                                </div>
+                                {order.shippingCharges > 0 && (
+                                    <div className="flex justify-between w-full md:w-52 text-[10px]">
+                                        <span className="text-gray-400 font-bold uppercase tracking-wider">Shipping</span>
+                                        <span className="text-gray-900 font-bold">₹{order.shippingCharges}</span>
+                                    </div>
+                                )}
+                                {order.handlingFee > 0 && (
+                                    <div className="flex justify-between w-full md:w-52 text-[10px]">
+                                        <span className="text-gray-400 font-bold uppercase tracking-wider">Handling</span>
+                                        <span className="text-gray-900 font-bold">₹{order.handlingFee}</span>
+                                    </div>
+                                )}
+                                {order.discount > 0 && (
+                                    <div className="flex justify-between w-full md:w-52 text-[10px]">
+                                        <span className="text-red-400 font-bold uppercase tracking-wider">Discount</span>
+                                        <span className="text-red-500 font-bold">-₹{order.discount}</span>
+                                    </div>
+                                )}
+                                <div className="flex justify-between w-full md:w-52 mt-2 pt-2 border-t-2 border-gray-900">
+                                    <span className="text-xs font-black text-gray-900 uppercase">Grand Total</span>
+                                    <span className="text-base font-black text-[var(--color-secondary)]">₹{order.total}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="p-4 bg-gray-50/50 border-t border-gray-100 flex justify-center" data-html2canvas-ignore>
+                    <button
+                        onClick={handleDownloadPdf}
+                        disabled={isGenerating}
+                        className={`bg-gray-900 text-white px-8 py-3 rounded-xl text-xs font-black flex items-center gap-3 hover:bg-black transition-all active:scale-95 shadow-lg shadow-black/10 w-full md:w-auto justify-center ${isGenerating ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                        {isGenerating ? <>GENERATING...</> : <><Download size={16} /> DOWNLOAD INVOICE</>}
+                    </button>
                 </div>
             </div>
+            <style dangerouslySetInnerHTML={{
+                __html: `
+                .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+                .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+                .custom-scrollbar::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+            ` }} />
         </div>
     );
 };
@@ -159,131 +216,138 @@ const OrderDetailsModal = ({ order, isOpen, onClose, onCancel, getStatusColor, f
                 confirmButtonColor: 'var(--color-secondary)',
                 background: '#fff',
                 color: '#000',
-                customClass: {
-                    popup: 'rounded-[2rem]'
-                }
+                customClass: { popup: 'rounded-[2rem]' }
             });
         }
     };
 
     return (
-        <div className="fixed inset-0 z-[50] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all duration-300 mt-24">
-            <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[75vh] animate-in zoom-in-95">
-                {/* Header */}
-                {/* <div className="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+        <div className="fixed inset-0 z-[50] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all duration-300">
+            <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[70vh] animate-in zoom-in-95 relative">
+                <div className="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                     <div className="flex items-center gap-3">
-                        <Package className="text-[var(--color-secondary)]" size={20} />
-                        <h2 className="text-lg font-bold text-gray-900">Order Information</h2>
+                        <div className="bg-[var(--color-secondary)]/10 p-2 rounded-xl">
+                            <Package className="text-[var(--color-secondary)]" size={20} />
+                        </div>
+                        <div>
+                            <h2 className="text-base font-black text-gray-900 leading-none">Order Information</h2>
+                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">#{order._id.slice(-6).toUpperCase()}</p>
+                        </div>
                     </div>
-                    <button onClick={onClose} className="p-1.5 hover:bg-gray-100 rounded-full transition-colors">
+                    <button onClick={onClose} className="p-2 hover:bg-white hover:shadow-md rounded-full transition-all active:scale-90">
                         <X className="text-gray-400" size={22} />
                     </button>
-                </div> */}
+                </div>
 
-                {/* Content */}
                 <div className="p-6 overflow-y-auto custom-scrollbar flex-grow space-y-8 bg-white">
-                    {/* Basic Info Row */}
                     <div className="flex flex-wrap items-center justify-between gap-4 p-5 bg-gray-50 rounded-2xl border border-gray-100">
                         <div className="space-y-1">
-                            <p className="text-[10px] uppercase tracking-wider text-gray-400 font-bold">Order Reference</p>
-                            <p className="text-sm font-mono font-bold text-gray-900 leading-none">#{order._id.slice(-6).toUpperCase()}</p>
+                            <p className="text-[10px] uppercase tracking-wider text-gray-400 font-black">Status</p>
+                            <span className={`px-3 py-1 rounded-lg text-[10px] font-black border ${getStatusColor(order.status)} uppercase tracking-wider block w-fit shadow-sm`}>
+                                {order.status}
+                            </span>
                         </div>
                         <div className="space-y-1 text-right">
-                            <p className="text-[10px] uppercase tracking-wider text-gray-400 font-bold">Dated</p>
+                            <p className="text-[10px] uppercase tracking-wider text-gray-400 font-black">Order Date</p>
                             <p className="text-sm text-gray-900 font-bold">{formatDate(order.createdAt)}</p>
                         </div>
                     </div>
 
-                    {/* Order Items */}
                     <div>
-                        <h3 className="text-xs font-bold text-gray-900 mb-4 px-1 uppercase tracking-widest flex items-center gap-2">
-                            <ShoppingBag size={14} className="text-[var(--color-secondary)]" /> Items Summary ({order.items.length})
+                        <h3 className="text-[10px] font-black text-gray-400 mb-4 px-1 uppercase tracking-[0.2em] flex items-center gap-2">
+                            <ShoppingBag size={14} className="text-[var(--color-secondary)]" /> Items Summary
                         </h3>
                         <div className="space-y-3">
                             {order.items.map((item, index) => (
-                                <div key={index} className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-gray-50 shrink-0 border border-gray-100">
-                                        <img
-                                            src={item.product?.mainImage?.url}
-                                            alt={item.productName}
-                                            className="w-full h-full object-cover"
-                                        />
+                                <div key={index} className="flex items-center gap-4 p-3 bg-white rounded-2xl border border-gray-100 hover:border-[var(--color-secondary)]/30 transition-all">
+                                    <div className="w-14 h-14 rounded-xl overflow-hidden bg-gray-50 shrink-0 border border-gray-50">
+                                        <img src={item.product?.mainImage?.url} alt={item.productName} className="w-full h-full object-cover" />
                                     </div>
                                     <div className="flex-grow min-w-0">
                                         <h4 className="font-bold text-gray-900 text-sm truncate">{item.productName}</h4>
-                                        <p className="text-xs text-gray-500 font-medium tracking-tight">Quantity: {item.quantity} × ₹{item.productPrice}</p>
+                                        <p className="text-[10px] text-gray-400 font-bold uppercase">{item.quantity} Unit × ₹{item.productPrice}</p>
                                     </div>
                                     <div className="text-right">
-                                        <p className="font-bold text-gray-900 text-sm leading-none">₹{item.productPrice * item.quantity}</p>
+                                        <p className="font-black text-gray-900 text-sm leading-none">₹{item.productPrice * item.quantity}</p>
                                     </div>
                                 </div>
                             ))}
                         </div>
                     </div>
 
-                    {/* Shipping and Payment Split */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div className="p-5 bg-gray-50 rounded-2xl border border-gray-100 space-y-3">
-                            <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                            <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
                                 <MapPin size={12} className="text-[var(--color-secondary)]" /> Shipping Address
                             </h4>
-                            <div className="text-xs text-gray-600 space-y-1 leading-relaxed font-medium">
-                                <p className="text-gray-900 font-bold">{order.shippingAddress?.name}</p>
+                            <div className="text-xs text-gray-600 space-y-1.5 font-bold leading-relaxed">
+                                <p className="text-gray-900 font-black text-sm mb-2">{order.shippingAddress?.name}</p>
                                 <p>{order.shippingAddress?.addressLine1}</p>
-                                {order.shippingAddress?.addressLine2 && <p>{order.shippingAddress?.addressLine2}</p>}
                                 <p>{order.shippingAddress?.city}, {order.shippingAddress?.state} - {order.shippingAddress?.pincode}</p>
+                                <p className="pt-2 text-[var(--color-secondary)]">{order.shippingAddress?.phone}</p>
                             </div>
                         </div>
 
                         <div className="p-5 bg-gray-50 rounded-2xl border border-gray-100 space-y-4">
-                            <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
-                                <CreditCard size={12} className="text-[var(--color-secondary)]" /> Payment & Status
+                            <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                                <CreditCard size={12} className="text-[var(--color-secondary)]" /> Billing Summary
                             </h4>
-                            <div className="space-y-3 text-xs">
-                                <div className="flex justify-between items-center">
-                                    <span className="text-gray-500 font-medium">Payment Method</span>
-                                    <span className="text-gray-900 font-bold uppercase">{order.paymentMethod}</span>
+                            <div className="space-y-3">
+                                <div className="space-y-1.5 text-[10px] border-b border-gray-200/60 pb-3">
+                                    <div className="flex justify-between items-center text-gray-500 font-bold">
+                                        <span>SUBTOTAL</span>
+                                        <span className="text-gray-900">₹{order.subtotal}</span>
+                                    </div>
+                                    {order.shippingCharges > 0 && (
+                                        <div className="flex justify-between items-center text-gray-500 font-bold">
+                                            <span>SHIPPING</span>
+                                            <span className="text-gray-900">₹{order.shippingCharges}</span>
+                                        </div>
+                                    )}
+                                    {order.handlingFee > 0 && (
+                                        <div className="flex justify-between items-center text-gray-500 font-bold">
+                                            <span>HANDLING</span>
+                                            <span className="text-gray-900">₹{order.handlingFee}</span>
+                                        </div>
+                                    )}
+                                    {order.discount > 0 && (
+                                        <div className="flex justify-between items-center text-red-400 font-bold">
+                                            <span>DISCOUNT</span>
+                                            <span className="text-red-500">-₹{order.discount}</span>
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-gray-500 font-medium">Current Status</span>
-                                    <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${getStatusColor(order.status)} uppercase tracking-tighter shadow-sm`}>
-                                        {order.status}
-                                    </span>
-                                </div>
-                                <div className="pt-3 mt-1 border-t border-gray-200/60 flex justify-between items-center">
-                                    <span className="text-gray-900 font-bold">Grand Total</span>
-                                    <span className="text-xl font-black text-zinc-900 drop-shadow-sm">₹{order.total}</span>
+                                    <span className="text-gray-900 font-black text-xs">GRAND TOTAL</span>
+                                    <span className="text-xl font-black text-zinc-900">₹{order.total}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Footer */}
-                <div className="px-6 py-5 bg-gray-50/80 border-t border-gray-100 flex gap-3 justify-end items-center font-[var(--font-body)]">
+                <div className="px-6 py-5 bg-gray-50/80 border-t border-gray-100 flex gap-3 justify-end items-center">
                     {order.status?.toLowerCase() !== 'delivered' && (
                         <button
                             onClick={handleCancelClick}
-                            className="text-xs font-bold text-red-500 hover:text-red-600 transition-colors mr-auto"
+                            className="px-5 py-2.5 text-[10px] font-black text-red-500 hover:bg-red-50 rounded-xl transition-all mr-auto uppercase tracking-wider"
                         >
-                            <span className="hidden sm:inline">Cancel Request</span>
-                            <span className="sm:hidden">Cancel</span>
+                            Cancel Order
                         </button>
                     )}
                     <button
                         onClick={onClose}
-                        className="px-8 py-2.5 bg-gray-900 text-white text-xs font-bold rounded-xl hover:bg-gray-800 transition-all shadow-md active:scale-95"
+                        className="px-10 py-3 bg-gray-900 text-white text-[10px] font-black rounded-xl hover:bg-black transition-all shadow-md active:scale-95 uppercase tracking-wider"
                     >
-                        <span className="hidden sm:inline">Close Details</span>
-                        <span className="sm:hidden">Close</span>
+                        Close Details
                     </button>
                 </div>
             </div>
             <style dangerouslySetInnerHTML={{
                 __html: `
                 .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-                .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
-                .custom-scrollbar::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
+                .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+                .custom-scrollbar::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
             `}} />
         </div>
     );
@@ -389,7 +453,6 @@ const Orders = () => {
         <div className="flex flex-col min-h-screen bg-[var(--color-primary)]">
             <div className="flex-grow pt-8 pb-16 px-4 md:px-8">
                 <div className="max-w-6xl mx-auto">
-                    {/* Simplified Header */}
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-6 border-b border-white/10 pb-10">
                         <div>
                             <h1 className="text-4xl font-black text-white mb-2 leading-none uppercase tracking-tight">Orders History</h1>
@@ -417,7 +480,6 @@ const Orders = () => {
                         </div>
                     ) : (
                         <div className="space-y-4">
-                            {/* Simple Table Header */}
                             <div className="hidden md:grid grid-cols-7 gap-4 px-10 py-3 text-[10px] font-black uppercase tracking-[0.2em] text-gray-600">
                                 <div className="col-span-2">Order Identification</div>
                                 <div>Placement Date</div>
