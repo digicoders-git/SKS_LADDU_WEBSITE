@@ -28,7 +28,7 @@ const HeroSlider = memo(() => {
 
     if (loading) {
         return (
-            <section className="relative w-full aspect-[21/9] bg-gray-200 animate-pulse">
+            <section className="relative w-full aspect-[3/1] bg-gray-200 animate-pulse">
                 <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-12 h-12 border-4 border-[var(--color-secondary)] border-t-transparent rounded-full animate-spin"></div>
                 </div>
@@ -56,7 +56,7 @@ const HeroSlider = memo(() => {
                 {sliders.map((slider) => (
                     <div key={slider._id} className="relative w-full outline-none">
                         {/* Fluid Ratio Container - Matches shuddhswad.shop logic */}
-                        <div className="relative w-full aspect-[16/9] md:aspect-[3/1] lg:aspect-[21/7] overflow-hidden">
+                        <div className="relative w-full aspect-[3/1] lg:aspect-[21/7] overflow-hidden">
                             <img
                                 src={slider.image?.url}
                                 alt={slider.title || 'SKS Laddu'}
@@ -65,17 +65,17 @@ const HeroSlider = memo(() => {
                             />
 
                             {/* Content Overlay */}
-                            <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-[10%] md:pb-[5%]">
+                            <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-[4%] md:pb-[5%]">
                                 <div className="px-4 flex flex-row justify-center items-center gap-3 md:gap-8 opacity-0 animate-slide-up" style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}>
                                     <Link
                                         to="/laddus"
-                                        className="inline-flex items-center justify-center px-4 py-2 md:px-10 md:py-4 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-full text-[10px] md:text-xl font-bold shadow-xl hover:scale-105 transition-transform"
+                                        className="inline-flex items-center justify-center px-3 py-1.5 md:px-10 md:py-4 bg-[var(--color-secondary)] text-[var(--color-primary)] rounded-full text-[9px] md:text-xl font-bold shadow-xl hover:scale-105 transition-transform"
                                     >
                                         Order Now
                                     </Link>
                                     <Link
                                         to="/about"
-                                        className="inline-flex items-center justify-center px-4 py-2 md:px-10 md:py-4 bg-white/40 backdrop-blur-md border border-white/20 text-black rounded-full text-[10px] md:text-xl font-bold shadow-lg hover:scale-105 transition-transform"
+                                        className="inline-flex items-center justify-center px-3 py-1.5 md:px-10 md:py-4 bg-white/40 backdrop-blur-md border border-white/20 text-black rounded-full text-[9px] md:text-xl font-bold shadow-lg hover:scale-105 transition-transform"
                                     >
                                         Our Story
                                     </Link>

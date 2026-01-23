@@ -148,7 +148,7 @@ const Home = memo(() => {
       </Suspense>
 
       {/* Our Special Laddus Section - Grid Layout First */}
-      <section ref={addToRefs} className="scroll-section py-12 px-8 md:px-24 text-center bg-[var(--color-primary)] relative z-10 shadow-sm border-y border-[var(--color-secondary)]/10 overflow-hidden" id="laddus">
+      <section ref={addToRefs} className="scroll-section py-12 px-8 md:px-24 text-center bg-[var(--color-primary)] relative z-10 shadow-sm border-y border-[var(--color-secondary)]/10 overflow-hidden -mt-2" id="laddus">
         {/* Decorative Bubbles for This Section */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
           <div className="home-bubble home-bubble-1"></div>
