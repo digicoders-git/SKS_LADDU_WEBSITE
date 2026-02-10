@@ -20,54 +20,73 @@ const InvoiceModal = ({ order, isOpen, onClose }) => {
 
         setIsGenerating(true);
 
-        const styleElements = Array.from(document.querySelectorAll('style'));
-        const originalStyles = styleElements.map(el => el.innerHTML);
-
         try {
-            styleElements.forEach(el => {
-                el.innerHTML = el.innerHTML.replace(/oklch\([^)]+\)/g, '#000000');
-            });
-
             const canvas = await html2canvas(element, {
-                scale: 3,
+                scale: 2,
                 useCORS: true,
                 logging: false,
                 backgroundColor: '#ffffff',
-                windowWidth: 800,
                 onclone: (clonedDoc) => {
-                    const content = clonedDoc.querySelector('.printable-content');
-                    const wrapper = clonedDoc.getElementById('printable-invoice');
-                    if (content && wrapper) {
-                        wrapper.style.height = 'auto';
-                        wrapper.style.maxHeight = 'none';
-                        wrapper.style.overflow = 'visible';
-                        content.style.height = 'auto';
-                        content.style.maxHeight = 'none';
-                        content.style.overflow = 'visible';
+                    const clonedElement = clonedDoc.getElementById('printable-invoice');
+                    if (clonedElement) {
+                        clonedElement.style.height = 'auto';
+                        clonedElement.style.maxHeight = 'none';
+                        clonedElement.style.overflow = 'visible';
+                        clonedElement.style.display = 'block';
+                        const content = clonedElement.querySelector('.printable-content');
+                        if (content) {
+                            content.style.height = 'auto';
+                            content.style.maxHeight = 'none';
+                            content.style.overflow = 'visible';
+                        }
+                        const allElements = clonedElement.querySelectorAll('*');
+                        allElements.forEach(el => {
+                            const computedStyle = window.getComputedStyle(el);
+                            if (computedStyle.color && computedStyle.color.includes('oklch')) {
+                                el.style.color = '#000000';
+                            }
+                            if (computedStyle.backgroundColor && computedStyle.backgroundColor.includes('oklch')) {
+                                el.style.backgroundColor = '#ffffff';
+                            }
+                            if (computedStyle.borderColor && computedStyle.borderColor.includes('oklch')) {
+                                el.style.borderColor = '#000000';
+                            }
+                        });
                     }
                 }
             });
 
-            const imgData = canvas.toDataURL('image/png');
+            const imgData = canvas.toDataURL('image/jpeg', 0.75);
             const pdf = new jsPDF({
                 orientation: 'portrait',
                 unit: 'mm',
-                format: 'a4'
+                format: 'a4',
+                compress: true
             });
 
             const imgProps = pdf.getImageProperties(imgData);
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            const pageHeight = pdf.internal.pageSize.getHeight();
 
-            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            let heightLeft = pdfHeight;
+            let position = 0;
+
+            pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight, undefined, 'FAST');
+            heightLeft -= pageHeight;
+
+            while (heightLeft > 0) {
+                position = heightLeft - pdfHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight, undefined, 'FAST');
+                heightLeft -= pageHeight;
+            }
             pdf.save(`Invoice_${order._id.slice(-6).toUpperCase()}.pdf`);
+            toast.success("Invoice downloaded successfully!");
         } catch (error) {
             console.error("PDF generation failed:", error);
             toast.error("Failed to download PDF. Try again.");
         } finally {
-            styleElements.forEach((el, i) => {
-                el.innerHTML = originalStyles[i];
-            });
             setIsGenerating(false);
         }
     };
@@ -104,20 +123,20 @@ const InvoiceModal = ({ order, isOpen, onClose }) => {
                         <div className="p-6 md:p-8">
                             <div className="flex justify-between items-start mb-6 gap-4">
                                 <div>
-                                    <p className="text-[8px] sm:text-[10px] font-black uppercase text-gray-400 mb-1.5">Bill From:</p>
-                                    <div className="text-[9px] sm:text-xs leading-tight">
-                                        <p className="font-bold text-gray-900">SKS Laddu</p>
-                                        <p className="text-gray-500">Ahirawan, Sandila, UP</p>
-                                        <p className="text-gray-500 mt-0.5">8467831372, 6307736698</p>
+                                    <p className="font-black uppercase text-gray-400 mb-1.5" style={{ fontSize: '8px' }}>Bill From:</p>
+                                    <div className="leading-tight">
+                                        <p className="font-bold text-gray-900" style={{ fontSize: '9px' }}>SKS Laddu</p>
+                                        <p className="text-gray-500" style={{ fontSize: '9px' }}>Ahirawan, Sandila, UP</p>
+                                        <p className="text-gray-500 mt-0.5" style={{ fontSize: '9px' }}>8467831372, 6307736698</p>
                                     </div>
                                 </div>
-                                <div className="text-right">
-                                    <p className="text-[8px] sm:text-[10px] font-black uppercase text-gray-400 mb-1.5">Bill To:</p>
-                                    <div className="text-[9px] sm:text-xs leading-tight">
-                                        <p className="font-bold text-gray-900">{order.shippingAddress?.name}</p>
-                                        <p className="text-gray-500 break-words max-w-[120px] sm:max-w-none ml-auto">{order.shippingAddress?.addressLine1}</p>
-                                        <p className="text-gray-500">{order.shippingAddress?.city}</p>
-                                        <p className="text-gray-500 mt-0.5">{order.shippingAddress?.phone}</p>
+                                <div className="text-right max-w-[180px] ml-auto">
+                                    <p className="font-black uppercase text-gray-400 mb-1.5" style={{ fontSize: '8px' }}>Bill To:</p>
+                                    <div className="leading-tight">
+                                        <p className="font-bold text-gray-900 break-words" style={{ fontSize: '9px', wordWrap: 'break-word' }}>{order.shippingAddress?.name}</p>
+                                        <p className="text-gray-500 break-words" style={{ fontSize: '9px', wordWrap: 'break-word' }}>{order.shippingAddress?.addressLine1}</p>
+                                        <p className="text-gray-500 break-words" style={{ fontSize: '9px', wordWrap: 'break-word' }}>{order.shippingAddress?.city}</p>
+                                        <p className="text-gray-500 mt-0.5 break-words" style={{ fontSize: '9px', wordWrap: 'break-word' }}>{order.shippingAddress?.phone}</p>
                                     </div>
                                 </div>
                             </div>

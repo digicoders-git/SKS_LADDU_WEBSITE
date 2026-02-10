@@ -8,6 +8,7 @@ import { getAddressesApi, addAddressApi, updateAddressApi } from '../../api/addr
 import { getCartApi, updateCartItemApi, removeFromCartApi, clearCartApi } from '../../api/cart';
 import { createPaymentOrderApi, verifyPaymentApi, handlePaymentFailureApi, placeOrderApi } from '../../api/payment';
 import { getProfileApi } from '../../api/user';
+import { getPaymentMethodsApi } from '../../api/method';
 
 const Shop = () => {
     const navigate = useNavigate();
@@ -43,6 +44,7 @@ const Shop = () => {
 
     const [userId, setUserId] = useState(null);
     const [profileData, setProfileData] = useState({ name: '', phone: '' });
+    const [paymentMethods, setPaymentMethods] = useState([]);
 
     // Fetch User Profile on mount
     useEffect(() => {
@@ -196,6 +198,7 @@ const Shop = () => {
     // Fetch addresses on mount
     useEffect(() => {
         fetchAddresses();
+        fetchPaymentMethods();
     }, []);
 
     const fetchAddresses = async () => {
@@ -204,18 +207,32 @@ const Shop = () => {
             const data = await getAddressesApi();
             if (data && data.addresses && data.addresses.length > 0) {
                 setSavedAddresses(data.addresses);
-                // Pre-fill/Select the default or first address IF none selected
                 if (!selectedAddressId) {
                     const defaultAddr = data.addresses.find(addr => addr.isDefault) || data.addresses[0];
                     setSelectedAddressId(defaultAddr._id);
                 }
             } else {
-                setShowAddressForm(true); // Show form if no addresses found
+                setShowAddressForm(true);
             }
         } catch (error) {
             console.error("Failed to fetch addresses:", error);
         } finally {
             setLoadingAddresses(false);
+        }
+    };
+
+    const fetchPaymentMethods = async () => {
+        try {
+            const data = await getPaymentMethodsApi();
+            if (data && Array.isArray(data)) {
+                setPaymentMethods(data);
+                if (data.length > 0) {
+                    const defaultMethod = data.find(m => m.name.toLowerCase().includes('cash')) || data[0];
+                    setPaymentMethod(defaultMethod.name.toLowerCase().includes('cash') ? 'cod' : 'upi');
+                }
+            }
+        } catch (error) {
+            console.error("Failed to fetch payment methods:", error);
         }
     };
 
@@ -993,35 +1010,34 @@ const Shop = () => {
                             <div ref={addToRefs} className="scroll-section space-y-6">
                                 <h2 className="text-lg md:text-xl font-bold text-[var(--color-secondary)] mb-4 flex items-center gap-2 font-[var(--font-heading)]">
                                     <CreditCard size={20} className="text-[var(--color-secondary)]" />
-                                    Payment Method
+                                    Payment Method ({paymentMethods.length} methods available)
                                 </h2>
+                                {paymentMethods.length === 0 ? (
+                                    <p className="text-red-500">No payment methods available</p>
+                                ) : (
                                 <div className="grid grid-cols-2 md:grid-cols-2 gap-3">
-                                    <div
-                                        onClick={() => setPaymentMethod('cod')}
-                                        className={`p-3 md:p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-center gap-3 ${paymentMethod === 'cod' ? 'border-[var(--color-secondary)] bg-[var(--color-secondary)]/5 shadow-[0_0_15px_rgba(242,183,5,0.1)]' : 'border-gray-200 bg-white hover:border-[var(--color-secondary)]/30'}`}
-                                    >
-                                        <div className={`w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${paymentMethod === 'cod' ? 'bg-[var(--color-secondary)] text-white' : 'bg-gray-100 text-gray-400'}`}>
-                                            <Banknote size={18} />
-                                        </div>
-                                        <div className="min-w-0">
-                                            <h4 className={`font-bold text-[11px] md:text-sm whitespace-nowrap ${paymentMethod === 'cod' ? 'text-[var(--color-text)]' : 'text-gray-500'}`}>Cash On Delivery</h4>
-                                        </div>
-                                        {paymentMethod === 'cod' && <Check size={14} className="text-[var(--color-secondary)] ml-auto" />}
-                                    </div>
-
-                                    <div
-                                        onClick={() => setPaymentMethod('upi')}
-                                        className={`p-3 md:p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-center gap-3 ${paymentMethod === 'upi' ? 'border-[var(--color-secondary)] bg-[var(--color-secondary)]/5 shadow-[0_0_15px_rgba(242,183,5,0.1)]' : 'border-gray-200 bg-white hover:border-[var(--color-secondary)]/30'}`}
-                                    >
-                                        <div className={`w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${paymentMethod === 'upi' ? 'bg-[var(--color-secondary)] text-white' : 'bg-gray-100 text-gray-400'}`}>
-                                            <Smartphone size={18} />
-                                        </div>
-                                        <div className="min-w-0">
-                                            <h4 className={`font-bold text-[11px] md:text-sm whitespace-nowrap ${paymentMethod === 'upi' ? 'text-[var(--color-text)]' : 'text-gray-500'}`}>Online Payment</h4>
-                                        </div>
-                                        {paymentMethod === 'upi' && <Check size={14} className="text-[var(--color-secondary)] ml-auto" />}
-                                    </div>
+                                    {paymentMethods.map((method) => {
+                                        const isCOD = method.name.toLowerCase().includes('cash');
+                                        const methodKey = isCOD ? 'cod' : 'upi';
+                                        return (
+                                            <div
+                                                key={method._id}
+                                                onClick={() => setPaymentMethod(methodKey)}
+                                                className={`p-3 md:p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-center gap-3 ${paymentMethod === methodKey ? 'border-[var(--color-secondary)] bg-[var(--color-secondary)]/5 shadow-[0_0_15px_rgba(242,183,5,0.1)]' : 'border-gray-200 bg-white hover:border-[var(--color-secondary)]/30'}`}
+                                            >
+                                                <div className={`w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${paymentMethod === methodKey ? 'bg-[var(--color-secondary)] text-white' : 'bg-gray-100 text-gray-400'}`}>
+                                                    {isCOD ? <Banknote size={18} /> : <Smartphone size={18} />}
+                                                </div>
+                                                <div className="min-w-0">
+                                                    <h4 className={`font-bold text-[11px] md:text-sm whitespace-nowrap ${paymentMethod === methodKey ? 'text-[var(--color-text)]' : 'text-gray-500'}`}>{method.name}</h4>
+                                                </div>
+                                                {paymentMethod === methodKey && <Check size={14} className="text-[var(--color-secondary)] ml-auto" />}
+                                            </div>
+                                        );
+                                    })}
                                 </div>
+                                )}
+                                {paymentMethods.length > 0 && (
                                 <button
                                     onClick={handleConfirmOrder}
                                     disabled={isPlacingOrder}
@@ -1036,6 +1052,7 @@ const Shop = () => {
                                         'Place Order'
                                     )}
                                 </button>
+                                )}
                             </div>
                         </div>
 
@@ -1069,6 +1086,7 @@ const Shop = () => {
                                         <p className="text-[10px] text-gray-400 text-right italic">Inclusive of all taxes</p>
                                     </div>
 
+                                    {paymentMethods.length > 0 && (
                                     <button
                                         onClick={handleConfirmOrder}
                                         disabled={isPlacingOrder}
@@ -1083,6 +1101,7 @@ const Shop = () => {
                                             'Place Order'
                                         )}
                                     </button>
+                                    )}
 
                                     <p className="text-center text-[9px] md:text-[10px] text-gray-500 mt-6 leading-relaxed px-2">
                                         By clicking place order, you agree to our Terms of Service and Privacy Policy. Our delivery partner will contact you for location verification.
