@@ -84,7 +84,7 @@ const InvoiceModal = ({ order, isOpen, onClose }) => {
                 <div id="printable-invoice" className="flex flex-col flex-1 overflow-hidden bg-white">
                     <div className="flex flex-row justify-between items-start p-6 pb-4 border-b border-gray-50 bg-white relative">
                         <div className="w-16">
-                            <img src="/sks-logo.png" alt="SKS Logo" className="w-full h-auto" />
+                            <img src="/sks-logo.jpg" alt="SKS Logo" className="w-full h-auto" />
                         </div>
                         <div className="text-right text-[11px] leading-tight mt-4">
                             {/* <p className="font-black uppercase tracking-wider text-gray-400 mb-1">Tax Invoice</p> */}

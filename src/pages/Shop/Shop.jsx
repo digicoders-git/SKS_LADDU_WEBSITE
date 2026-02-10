@@ -27,6 +27,7 @@ const Shop = () => {
     const [editingAddressId, setEditingAddressId] = useState(null);
     const [isPlacingOrder, setIsPlacingOrder] = useState(false);
     const [isAddressSaving, setIsAddressSaving] = useState(false);
+    const [isPincodeFetching, setIsPincodeFetching] = useState(false);
 
     // Address Form State
     const [addressForm, setAddressForm] = useState({
@@ -41,6 +42,7 @@ const Shop = () => {
     });
 
     const [userId, setUserId] = useState(null);
+    const [profileData, setProfileData] = useState({ name: '', phone: '' });
 
     // Fetch User Profile on mount
     useEffect(() => {
@@ -49,6 +51,17 @@ const Shop = () => {
                 const data = await getProfileApi();
                 if (data && data.user) {
                     setUserId(data.user._id);
+                    const name = data.user.firstName && data.user.lastName 
+                        ? `${data.user.firstName} ${data.user.lastName}` 
+                        : '';
+                    const phone = data.user.phone || '';
+                    setProfileData({ name, phone });
+                    // Autofill address form with profile data
+                    setAddressForm(prev => ({
+                        ...prev,
+                        name: name || prev.name,
+                        phone: phone || prev.phone
+                    }));
                 }
             } catch (error) {
                 console.error("Failed to fetch user profile:", error);
@@ -228,6 +241,27 @@ const Shop = () => {
     const addToRefs = (el) => {
         if (el && !sectionRefs.current.includes(el)) {
             sectionRefs.current.push(el);
+        }
+    };
+
+    const fetchPincodeDetails = async (pincode) => {
+        if (pincode.length !== 6) return;
+        setIsPincodeFetching(true);
+        try {
+            const response = await fetch(`https://api.postalpincode.in/pincode/${pincode}`);
+            const data = await response.json();
+            if (data[0]?.Status === 'Success' && data[0]?.PostOffice?.length > 0) {
+                const postOffice = data[0].PostOffice[0];
+                setAddressForm(prev => ({
+                    ...prev,
+                    city: postOffice.District || prev.city,
+                    state: postOffice.State || prev.state
+                }));
+            }
+        } catch (error) {
+            console.error('Failed to fetch pincode details:', error);
+        } finally {
+            setIsPincodeFetching(false);
         }
     };
 
@@ -721,8 +755,8 @@ const Shop = () => {
                                             onClick={() => {
                                                 setEditingAddressId(null);
                                                 setAddressForm({
-                                                    name: '',
-                                                    phone: '',
+                                                    name: profileData.name,
+                                                    phone: profileData.phone,
                                                     addressLine1: '',
                                                     addressLine2: '',
                                                     city: '',
@@ -862,40 +896,55 @@ const Shop = () => {
                                             </div>
 
                                             <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
-                                                <div className="col-span-1 space-y-2">
-                                                    <label className="text-xs font-bold text-gray-400 uppercase">City</label>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="City"
-                                                        className="w-full px-5 py-3.5 bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-secondary)]/10 rounded-2xl focus:border-[var(--color-secondary)] outline-none text-sm font-medium transition-colors placeholder-gray-400"
-                                                        value={addressForm.city}
-                                                        onChange={(e) => setAddressForm({ ...addressForm, city: e.target.value })}
-                                                    />
-                                                </div>
-                                                <div className="col-span-1 space-y-2">
-                                                    <label className="text-xs font-bold text-gray-400 uppercase">State</label>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="State"
-                                                        className="w-full px-5 py-3.5 bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-secondary)]/10 rounded-2xl focus:border-[var(--color-secondary)] outline-none text-sm font-medium transition-colors placeholder-gray-400"
-                                                        value={addressForm.state}
-                                                        onChange={(e) => setAddressForm({ ...addressForm, state: e.target.value })}
-                                                    />
-                                                </div>
                                                 <div className="col-span-2 md:col-span-1 space-y-2">
                                                     <label className="text-xs font-bold text-gray-400 uppercase">Pincode</label>
                                                     <input
                                                         type="text"
-                                                        min={6}
-                                                        max={6}
                                                         placeholder="Pin Code"
                                                         className="w-full px-5 py-3.5 bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-secondary)]/10 rounded-2xl focus:border-[var(--color-secondary)] outline-none text-sm font-medium transition-colors placeholder-gray-400"
                                                         value={addressForm.pincode}
                                                         onChange={(e) => {
                                                             const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 6);
                                                             setAddressForm({ ...addressForm, pincode: value });
+                                                            if (value.length === 6) {
+                                                                fetchPincodeDetails(value);
+                                                            }
                                                         }}
                                                     />
+                                                </div>
+                                                <div className="col-span-1 space-y-2">
+                                                    <label className="text-xs font-bold text-gray-400 uppercase">City</label>
+                                                    <div className="relative">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="City"
+                                                            className="w-full px-5 py-3.5 bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-secondary)]/10 rounded-2xl focus:border-[var(--color-secondary)] outline-none text-sm font-medium transition-colors placeholder-gray-400"
+                                                            value={addressForm.city}
+                                                            onChange={(e) => setAddressForm({ ...addressForm, city: e.target.value })}
+                                                        />
+                                                        {isPincodeFetching && (
+                                                            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                                                <div className="w-4 h-4 border-2 border-[var(--color-secondary)] border-t-transparent rounded-full animate-spin"></div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <div className="col-span-1 space-y-2">
+                                                    <label className="text-xs font-bold text-gray-400 uppercase">State</label>
+                                                    <div className="relative">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="State"
+                                                            className="w-full px-5 py-3.5 bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-secondary)]/10 rounded-2xl focus:border-[var(--color-secondary)] outline-none text-sm font-medium transition-colors placeholder-gray-400"
+                                                            value={addressForm.state}
+                                                            onChange={(e) => setAddressForm({ ...addressForm, state: e.target.value })}
+                                                        />
+                                                        {isPincodeFetching && (
+                                                            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                                                <div className="w-4 h-4 border-2 border-[var(--color-secondary)] border-t-transparent rounded-full animate-spin"></div>
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
 

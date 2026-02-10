@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { User, Mail, Lock, Phone, Calendar, Eye, EyeOff, ChevronDown } from 'lucide-react';
+import { User, Mail, Phone, ChevronDown } from 'lucide-react';
 import { createUserApi } from '../../api/user';
 import { saveToken } from '../../utils/auth';
 import { toast } from 'react-toastify';
@@ -12,14 +12,9 @@ const Registration = () => {
         firstName: '',
         lastName: '',
         phone: '',
-        dob: '',
         gender: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
+        email: ''
     });
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [showGenderDropdown, setShowGenderDropdown] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
@@ -55,10 +50,6 @@ const Registration = () => {
             newErrors.phone = 'Phone must start with 6,7,8,9 and be 10 digits';
         }
 
-        if (!formData.dob) {
-            newErrors.dob = 'Date of birth is required';
-        }
-
         if (!formData.gender) {
             newErrors.gender = 'Gender is required';
         }
@@ -67,18 +58,6 @@ const Registration = () => {
             newErrors.email = 'Email is required';
         } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
             newErrors.email = 'Email is invalid';
-        }
-
-        if (!formData.password) {
-            newErrors.password = 'Password is required';
-        } else if (formData.password.length < 6) {
-            newErrors.password = 'Password must be at least 6 characters';
-        }
-
-        if (!formData.confirmPassword) {
-            newErrors.confirmPassword = 'Confirm password is required';
-        } else if (formData.password !== formData.confirmPassword) {
-            newErrors.confirmPassword = 'Passwords do not match';
         }
 
         return newErrors;
@@ -96,22 +75,19 @@ const Registration = () => {
                     lastName: formData.lastName,
                     email: formData.email,
                     phone: formData.phone,
-                    password: formData.password,
-                    dateOfBirth: formData.dob,
                     gender: formData.gender.toLowerCase()
                 };
 
                 const response = await createUserApi(payload);
 
-                if (response.token) {
-                    saveToken(response.token);
-                    toast.success('Registration successful!');
-                    navigate('/');
+                if (response.message) {
+                    toast.success(response.message, { position: "top-right" });
+                    navigate('/login');
                 }
             } catch (error) {
                 console.error('Registration failed:', error);
                 const errorMessage = error.response?.data?.message || 'Registration failed. Please try again.';
-                toast.error(errorMessage);
+                toast.error(errorMessage, { position: "top-right" });
             } finally {
                 setIsLoading(false);
             }
@@ -165,86 +141,21 @@ const Registration = () => {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2">Password</label>
-                                <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
-                                    <input
-                                        type={showPassword ? 'text' : 'password'}
-                                        name="password"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        className={`w-full pl-12 pr-12 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.password ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
-                                        placeholder="Enter password"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300"
-                                    >
-                                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                                    </button>
-                                </div>
-                                {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password}</p>}
+                        <div>
+                            <label className="block text-sm font-bold text-gray-700 mb-2">Phone Number</label>
+                            <div className="relative">
+                                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
+                                <input
+                                    type="tel"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    className={`w-full pl-12 pr-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.phone ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
+                                    placeholder="Enter 10-digit phone number"
+                                    maxLength="10"
+                                />
                             </div>
-
-                            <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2">Confirm Password</label>
-                                <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
-                                    <input
-                                        type={showConfirmPassword ? 'text' : 'password'}
-                                        name="confirmPassword"
-                                        value={formData.confirmPassword}
-                                        onChange={handleChange}
-                                        className={`w-full pl-12 pr-12 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.confirmPassword ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
-                                        placeholder="Confirm password"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300"
-                                    >
-                                        {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                                    </button>
-                                </div>
-                                {errors.confirmPassword && <p className="text-red-400 text-sm mt-1">{errors.confirmPassword}</p>}
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2">Phone Number</label>
-                                <div className="relative">
-                                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
-                                    <input
-                                        type="tel"
-                                        name="phone"
-                                        value={formData.phone}
-                                        onChange={handleChange}
-                                        className={`w-full pl-12 pr-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.phone ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
-                                        placeholder="Enter 10-digit phone number"
-                                        maxLength="10"
-                                    />
-                                </div>
-                                {errors.phone && <p className="text-red-400 text-sm mt-1">{errors.phone}</p>}
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2">Date of Birth</label>
-                                <div className="relative">
-                                    <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
-                                    <input
-                                        type="date"
-                                        name="dob"
-                                        value={formData.dob}
-                                        onChange={handleChange}
-                                        className={`w-full pl-12 pr-4 py-3 bg-white border text-[var(--color-text)] rounded-xl focus:ring-2 focus:ring-[var(--color-secondary)] outline-none transition-all ${errors.dob ? 'border-red-500' : 'border-[var(--color-secondary)]/20'}`}
-                                    />
-                                </div>
-                                {errors.dob && <p className="text-red-400 text-sm mt-1">{errors.dob}</p>}
-                            </div>
+                            {errors.phone && <p className="text-red-400 text-sm mt-1">{errors.phone}</p>}
                         </div>
 
                         <div>
@@ -321,7 +232,7 @@ const Registration = () => {
                         <p className="text-gray-400">
                             Already have an account?{' '}
                             <Link to="/login" className="text-[var(--color-secondary)] font-bold hover:underline">
-                                Sign In
+                                Log In
                             </Link>
                         </p>
                     </div>
