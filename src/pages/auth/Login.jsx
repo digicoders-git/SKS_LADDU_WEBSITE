@@ -68,8 +68,8 @@ const Login = () => {
         try {
             const otpString = otp.join('');
             const response = await loginUserApi({ phone, otp: otpString });
-            toast.success(response.message || 'Login successful', { position: "top-right" });
             saveToken(response.token);
+            toast.success('Login successful!', { position: "top-right" });
             navigate('/');
         } catch (error) {
             toast.error(error.response?.data?.message || 'Login failed', { position: "top-right" });

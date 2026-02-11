@@ -82,7 +82,7 @@ const InvoiceModal = ({ order, isOpen, onClose }) => {
                 heightLeft -= pageHeight;
             }
             pdf.save(`Invoice_${order._id.slice(-6).toUpperCase()}.pdf`);
-            toast.success("Invoice downloaded successfully!");
+            toast.success("Invoice downloaded successfully!", { position: "top-right" });
         } catch (error) {
             console.error("PDF generation failed:", error);
             toast.error("Failed to download PDF. Try again.");
