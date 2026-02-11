@@ -76,10 +76,10 @@ const Profile = () => {
                     <div className="bg-[var(--color-muted)] rounded-2xl p-6 md:p-8 border border-[var(--color-secondary)]/20 mb-6">
                         <h2 className="text-xl md:text-2xl font-bold text-[var(--color-secondary)] mb-6">Profile Information</h2>
 
-                        <div className="space-y-10">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        <div className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-base font-bold text-gray-700 mb-3">First Name</label>
+                                    <label className="block text-sm font-bold text-gray-700 mb-2">First Name</label>
                                     <div className="relative">
                                         <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
                                         <input
@@ -87,13 +87,13 @@ const Profile = () => {
                                             name="firstName"
                                             value={profileData.firstName}
                                             disabled
-                                            className="w-full pl-10 pr-4 py-3.5 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-lg outline-none transition-all text-base opacity-60"
+                                            className="w-full pl-10 pr-4 py-3 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-lg outline-none transition-all opacity-60"
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-base font-bold text-gray-700 mb-3">Last Name</label>
+                                    <label className="block text-sm font-bold text-gray-700 mb-2">Last Name</label>
                                     <div className="relative">
                                         <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
                                         <input
@@ -101,15 +101,15 @@ const Profile = () => {
                                             name="lastName"
                                             value={profileData.lastName}
                                             disabled
-                                            className="w-full pl-10 pr-4 py-3.5 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-lg outline-none transition-all text-base opacity-60"
+                                            className="w-full pl-10 pr-4 py-3 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-lg outline-none transition-all opacity-60"
                                         />
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-base font-bold text-gray-700 mb-3">Email</label>
+                                    <label className="block text-sm font-bold text-gray-700 mb-2">Email</label>
                                     <div className="relative">
                                         <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
                                         <input
@@ -117,28 +117,13 @@ const Profile = () => {
                                             name="email"
                                             value={profileData.email}
                                             disabled
-                                            className="w-full pl-10 pr-4 py-3.5 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-lg outline-none transition-all text-base opacity-60"
+                                            className="w-full pl-10 pr-4 py-3 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-lg outline-none transition-all opacity-60"
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-base font-bold text-gray-700 mb-3">Gender</label>
-                                    <div className="relative">
-                                        <input
-                                            type="text"
-                                            name="gender"
-                                            value={profileData.gender}
-                                            disabled
-                                            className="w-full px-4 py-3.5 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-lg outline-none transition-all text-base opacity-60"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                                <div>
-                                    <label className="block text-base font-bold text-gray-700 mb-3">Phone Number</label>
+                                    <label className="block text-sm font-bold text-gray-700 mb-2">Phone Number</label>
                                     <div className="relative">
                                         <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
                                         <input
@@ -146,13 +131,26 @@ const Profile = () => {
                                             name="phone"
                                             value={profileData.phone}
                                             disabled
-                                            className="w-full pl-10 pr-4 py-3.5 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-lg outline-none transition-all text-base opacity-60"
+                                            className="w-full pl-10 pr-4 py-3 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-lg outline-none transition-all opacity-60"
                                             maxLength="10"
                                         />
                                     </div>
                                 </div>
+                            </div>
 
-
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-bold text-gray-700 mb-2">Gender</label>
+                                    <div className="relative">
+                                        <input
+                                            type="text"
+                                            name="gender"
+                                            value={profileData.gender}
+                                            disabled
+                                            className="w-full px-4 py-3 bg-white border border-[var(--color-secondary)]/20 text-[var(--color-text)] rounded-lg outline-none transition-all opacity-60"
+                                        />
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
