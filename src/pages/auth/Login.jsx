@@ -52,7 +52,10 @@ const Login = () => {
         setIsLoading(true);
         try {
             const response = await loginUserApi({ phone });
-            toast.success(response.message || 'OTP sent successfully', { position: "top-right" });
+            // Only show OTP sent toast on login page
+            if (response.message && response.message.toLowerCase().includes('otp')) {
+                toast.success('OTP sent successfully!', { position: "top-right" });
+            }
             setOtpSent(true);
             setTimeout(() => document.getElementById('otp-0')?.focus(), 100);
         } catch (error) {
@@ -68,11 +71,16 @@ const Login = () => {
         try {
             const otpString = otp.join('');
             const response = await loginUserApi({ phone, otp: otpString });
-            saveToken(response.token);
-            toast.success('Login successful!', { position: "top-right" });
-            navigate('/');
+            
+            // Save token first
+            if (response.token) {
+                saveToken(response.token);
+                // Only show login success toast, not OTP sent message
+                toast.success('Login successful!', { position: "top-right" });
+                navigate('/');
+            }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Login failed', { position: "top-right" });
+            toast.error(error.response?.data?.message || 'Invalid OTP. Please try again.', { position: "top-right" });
         } finally {
             setIsLoading(false);
         }
